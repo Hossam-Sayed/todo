@@ -5,11 +5,6 @@ import 'package:home/shared/cubit/cubit.dart';
 import 'package:home/shared/cubit/states.dart';
 import 'package:intl/intl.dart';
 
-// Create DB
-// Create tables
-// Open DB
-// insert, get, update delete from DB
-
 class HomeLayout extends StatelessWidget {
   var scaffoldKey = GlobalKey<ScaffoldState>();
   var formKey = GlobalKey<FormState>();
@@ -134,7 +129,6 @@ class HomeLayout extends StatelessWidget {
                             ),
                           ),
                         ),
-                        backgroundColor: const Color(0xFF696c73),
                         elevation: 50.0,
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.vertical(

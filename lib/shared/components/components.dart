@@ -23,9 +23,9 @@ Widget defaultTextFormField({
       validator: validator,
       onTap: onTap,
       decoration: InputDecoration(
-        filled: true,
+        // filled: true,
         labelText: label,
-        fillColor: Colors.white,
+        // fillColor: Colors.white,
         prefixIcon: Icon(
           prefixIcon,
         ),
@@ -64,26 +64,6 @@ Widget taskItem(Map model, context) => Dismissible(
         ),
         child: Row(
           children: [
-            // CircleAvatar(
-            //   radius: 40.0,
-            //   backgroundColor: Colors.white,
-            //   child: Text(
-            //     '${model['time']}',
-            //     style: const TextStyle(
-            //       fontSize: 15.0,
-            //       fontWeight: FontWeight.bold,
-            //       color: Colors.blue,
-            //     ),
-            //   ),
-            // ),
-            // const Icon(
-            //   Icons.task_outlined,
-            //   size: 45.0,
-            //   color: Colors.white,
-            // ),
-            // const SizedBox(
-            //   width: 20.0,
-            // ),
             Expanded(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -150,73 +130,35 @@ Widget taskItem(Map model, context) => Dismissible(
 Widget tasksBuilder({
   required List<Map> tasks,
   required AppStates state,
-}) {
-  // print('Building a Task =============================');
-  // print('State is $state');
-  // print('tasks are empty? ${tasks.isEmpty}');
-  if (tasks.isNotEmpty) {
-    return ListView.builder(
-      itemBuilder: (context, index) => taskItem(tasks[index], context),
-      itemCount: tasks.length,
-    );
-  } else if (state is AppGetDatabaseState ||
-      state is AppChangeBottomNavBarState ||
-      state is AppChangeBottomSheetState) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
-          Icon(
-            Icons.task,
-            size: 100.0,
-            color: Colors.grey,
-          ),
-          Text(
-            'No Tasks',
-            style: TextStyle(
-              fontSize: 20.0,
-              color: Colors.grey,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    );
-  } else {
-    return const Center(
-      child: CircularProgressIndicator(),
-    );
-  }
-  // return tasks.isNotEmpty
-  //     ? ListView.builder(
-  //         itemBuilder: (context, index) => taskItem(tasks[index], context),
-  //         itemCount: tasks.length,
-  //       )
-  //     : state is AppGetDatabaseLoadingState && state is! AppGetDatabaseState
-  //         ? const Center(
-  //             child: CircularProgressIndicator(),
-  //           )
-  //         : Center(
-  //             child: Column(
-  //               mainAxisAlignment: MainAxisAlignment.center,
-  //               children: const [
-  //                 Icon(
-  //                   Icons.task,
-  //                   size: 100.0,
-  //                   color: Colors.grey,
-  //                 ),
-  //                 Text(
-  //                   'No Tasks',
-  //                   style: TextStyle(
-  //                     fontSize: 20.0,
-  //                     color: Colors.grey,
-  //                     fontWeight: FontWeight.bold,
-  //                   ),
-  //                 ),
-  //               ],
-  //             ),
-  //           );
-}
-
-// ffa801
-// 1e272e
+}) =>
+    tasks.isNotEmpty
+        ? ListView.builder(
+            itemBuilder: (context, index) => taskItem(tasks[index], context),
+            itemCount: tasks.length,
+          )
+        : (state is AppGetDatabaseState ||
+                state is AppChangeBottomNavBarState ||
+                state is AppChangeBottomSheetState)
+            ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Icon(
+                      Icons.task,
+                      size: 100.0,
+                      color: Colors.grey,
+                    ),
+                    Text(
+                      'No Tasks',
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.grey,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            : const Center(
+                child: CircularProgressIndicator(),
+              );
