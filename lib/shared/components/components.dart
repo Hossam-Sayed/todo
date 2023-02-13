@@ -18,10 +18,21 @@ Widget defaultTextFormField({
       onChanged: onChanged,
       validator: validator,
       onTap: onTap,
+      focusNode: FocusNode(),
       decoration: InputDecoration(
+        filled: true,
         labelText: label,
-        prefixIcon: Icon(prefixIcon),
-        border: const OutlineInputBorder(),
+        fillColor: const Color(0xFF252e41),
+        prefixIcon: Icon(
+          prefixIcon,
+        ),
+        border: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(
+              10.0,
+            ),
+          ),
+        ),
       ),
     );
 
@@ -29,14 +40,19 @@ Widget taskItem(Map model, context) => Dismissible(
       key: Key(model['id'].toString()),
       child: Container(
         padding: const EdgeInsets.all(20.0),
-        margin: const EdgeInsets.all(20.0),
+        margin: const EdgeInsets.only(
+          top: 10.0,
+          bottom: 10.0,
+          right: 20.0,
+          left: 20.0,
+        ),
         decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(
             Radius.circular(
-              25.0,
+              10.0,
             ),
           ),
-          color: Color(0xFFE3E3E3),
+          color: Color(0xFF252e41),
         ),
         child: Row(
           children: [
@@ -44,7 +60,7 @@ Widget taskItem(Map model, context) => Dismissible(
             //   radius: 40.0,
             //   backgroundColor: Colors.white,
             //   child: Text(
-            //     '${model['date']}',
+            //     '${model['time']}',
             //     style: const TextStyle(
             //       fontSize: 15.0,
             //       fontWeight: FontWeight.bold,
@@ -52,44 +68,34 @@ Widget taskItem(Map model, context) => Dismissible(
             //     ),
             //   ),
             // ),
-            const Icon(
-              Icons.task_outlined,
-              size: 55.0,
-              color: Colors.blue,
-            ),
-            const SizedBox(
-              width: 20.0,
-            ),
+            // const Icon(
+            //   Icons.task_outlined,
+            //   size: 45.0,
+            //   color: Colors.white,
+            // ),
+            // const SizedBox(
+            //   width: 20.0,
+            // ),
             Expanded(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '${model['title']}'.toUpperCase(),
+                    '${model['title']}',
                     style: const TextStyle(
                       fontSize: 20.0,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF535353),
+                      color: Colors.white,
                     ),
                   ),
                   const SizedBox(
                     height: 5.0,
                   ),
                   Text(
-                    '${model['time']}',
+                    '${model['date']} ・ ${model['time']}',
                     style: const TextStyle(
-                      color: Color(0xFFC6C6C1),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 5.0,
-                  ),
-                  Text(
-                    '${model['date']}',
-                    style: const TextStyle(
-                      color: Color(0xFFC6C6C1),
+                      color: Color(0xFF696c73),
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -108,8 +114,8 @@ Widget taskItem(Map model, context) => Dismissible(
               },
               icon: const Icon(
                 Icons.check_box,
+                color: Color(0xFF0078eb),
               ),
-              color: Colors.blue,
             ),
             IconButton(
               onPressed: () {
@@ -120,7 +126,7 @@ Widget taskItem(Map model, context) => Dismissible(
               },
               icon: const Icon(
                 Icons.archive,
-                color: Colors.blue,
+                color: Color(0xFF0078eb),
               ),
             ),
           ],
@@ -134,15 +140,8 @@ Widget taskItem(Map model, context) => Dismissible(
     );
 
 Widget tasksBuilder({required List<Map> tasks}) => tasks.isNotEmpty
-    ? ListView.separated(
+    ? ListView.builder(
         itemBuilder: (context, index) => taskItem(tasks[index], context),
-        separatorBuilder: (context, index) => Padding(
-          padding: const EdgeInsetsDirectional.only(
-            start: 20.0,
-            end: 20.0,
-          ),
-          child: Container(),
-        ),
         itemCount: tasks.length,
       )
     : Center(
@@ -165,3 +164,6 @@ Widget tasksBuilder({required List<Map> tasks}) => tasks.isNotEmpty
           ],
         ),
       );
+
+// ffa801
+// 1e272e

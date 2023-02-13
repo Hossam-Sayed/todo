@@ -35,13 +35,19 @@ class HomeLayout extends StatelessWidget {
           return Scaffold(
             key: scaffoldKey,
             appBar: AppBar(
+              backgroundColor: const Color(0xFF1b2230),
+              foregroundColor: const Color(0xFF0078eb),
               title: Text(
                 cubit.titles[cubit.currentIndex],
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             body: state != AppGetDatabaseLoadingState()
                 ? cubit.screens[cubit.currentIndex]
                 : const Center(child: CircularProgressIndicator()),
+            backgroundColor: const Color(0xFF1b2230),
             floatingActionButton: FloatingActionButton(
               onPressed: () {
                 if (cubit.isBottomSheetShown) {
@@ -128,7 +134,8 @@ class HomeLayout extends StatelessWidget {
                             ),
                           ),
                         ),
-                        elevation: 20.0,
+                        backgroundColor: const Color(0xFF1b2230),
+                        elevation: 50.0,
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.vertical(
                             top: Radius.circular(
@@ -152,6 +159,9 @@ class HomeLayout extends StatelessWidget {
                   );
                 }
               },
+              backgroundColor: const Color(0x44f7f1e3),
+              foregroundColor: const Color(0xFF1b2230),
+              elevation: 10.0,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(
                   15.0,
@@ -168,6 +178,9 @@ class HomeLayout extends StatelessWidget {
                 AppCubit.get(context).changeIndex(index);
               },
               elevation: 10.0,
+              unselectedItemColor: const Color(0xFF696c73),
+              selectedItemColor: const Color(0xFF0078eb),
+              backgroundColor: const Color(0xFF1b2230),
               items: const [
                 BottomNavigationBarItem(
                   icon: Icon(
