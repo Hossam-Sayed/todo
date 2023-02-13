@@ -51,14 +51,13 @@ Widget taskItem(Map model, context) => Dismissible(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [Color(0xFF252e41), Color(0x00252e41)],
+            colors: [Color(0xFF2196F3), Color(0x00252e41)],
           ),
           borderRadius: BorderRadius.all(
             Radius.circular(
               10.0,
             ),
           ),
-          color: Color(0xFF252e41),
         ),
         child: Row(
           children: [
@@ -81,7 +80,7 @@ Widget taskItem(Map model, context) => Dismissible(
                   Text(
                     '${model['date']} ・ ${model['time']}',
                     style: const TextStyle(
-                      color: Color(0xFF696c73),
+                      color: Color(0x66FFFFFF),
                       fontWeight: FontWeight.bold,
                     ),
                   ),

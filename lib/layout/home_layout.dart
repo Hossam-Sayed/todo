@@ -25,8 +25,41 @@ class HomeLayout extends StatelessWidget {
           return Scaffold(
             key: scaffoldKey,
             appBar: AppBar(
-              backgroundColor: const Color(0xFF1b2230),
-              foregroundColor: const Color(0xFF0078eb),
+              actions: [
+                Container(
+                  margin: const EdgeInsets.only(
+                    right: 10.0,
+                  ),
+                  child: IconButton(
+                    tooltip: cubit.isLight ? 'Light Mode' : 'Dark Mode',
+                    icon: Icon(
+                      cubit.modeIcon,
+                      color: cubit.isLight ? Colors.orange : Colors.grey,
+                    ),
+                    onPressed: () {
+                      cubit.toggleMode(
+                        icon:
+                            !cubit.isLight ? Icons.light_mode : Icons.dark_mode,
+                        light: !cubit.isLight,
+                        appPrimaryColor: !cubit.isLight
+                            ? const Color(0xFF1b2230)
+                            : const Color(0xFFFFFFFF),
+                        appSecondaryColor: !cubit.isLight
+                            ? const Color(0xFF696c73)
+                            : const Color(0xFFFFFFFF),
+                        appTernaryColor: !cubit.isLight
+                            ? const Color(0xFF0078eb)
+                            : Colors.blue,
+                        fABColor: !cubit.isLight
+                            ? const Color(0x440078eb)
+                            : const Color(0x442196F3),
+                      );
+                    },
+                  ),
+                ),
+              ],
+              backgroundColor: cubit.primaryColor,
+              foregroundColor: cubit.tertiaryColor,
               title: Text(
                 cubit.titles[cubit.currentIndex],
                 style: const TextStyle(
@@ -40,7 +73,7 @@ class HomeLayout extends StatelessWidget {
               ),
               child: cubit.screens[cubit.currentIndex],
             ),
-            backgroundColor: const Color(0xFF1b2230),
+            backgroundColor: cubit.primaryColor,
             floatingActionButton: FloatingActionButton(
               onPressed: () {
                 if (cubit.isBottomSheetShown) {
@@ -156,8 +189,8 @@ class HomeLayout extends StatelessWidget {
                   );
                 }
               },
-              backgroundColor: const Color(0x440078eb),
-              foregroundColor: const Color(0xFF0078eb),
+              backgroundColor: cubit.fabColor,
+              foregroundColor: cubit.tertiaryColor,
               elevation: 15.0,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(
@@ -176,8 +209,8 @@ class HomeLayout extends StatelessWidget {
               },
               elevation: 10.0,
               unselectedItemColor: const Color(0xFF696c73),
-              selectedItemColor: const Color(0xFF0078eb),
-              backgroundColor: const Color(0xFF1b2230),
+              selectedItemColor: cubit.tertiaryColor,
+              backgroundColor: cubit.primaryColor,
               items: const [
                 BottomNavigationBarItem(
                   icon: Icon(
