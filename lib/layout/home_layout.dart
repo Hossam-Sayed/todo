@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:home/modules/archived_tasks/archived_tasks_screen.dart';
-import 'package:home/modules/done_tasks/done_tasks_screen.dart';
-import 'package:home/modules/new_tasks/new_tasks_screen.dart';
 import 'package:home/shared/components/components.dart';
-import 'package:home/shared/components/constants.dart';
 import 'package:home/shared/cubit/cubit.dart';
 import 'package:home/shared/cubit/states.dart';
 import 'package:intl/intl.dart';
-import 'package:sqflite/sqflite.dart';
 
 // Create DB
 // Create tables
@@ -44,9 +39,12 @@ class HomeLayout extends StatelessWidget {
                 ),
               ),
             ),
-            body: state != AppGetDatabaseLoadingState()
-                ? cubit.screens[cubit.currentIndex]
-                : const Center(child: CircularProgressIndicator()),
+            body: Container(
+              margin: const EdgeInsets.only(
+                top: 10.0,
+              ),
+              child: cubit.screens[cubit.currentIndex],
+            ),
             backgroundColor: const Color(0xFF1b2230),
             floatingActionButton: FloatingActionButton(
               onPressed: () {
@@ -85,6 +83,7 @@ class HomeLayout extends StatelessWidget {
                                 ),
                                 defaultTextFormField(
                                   controller: timeController,
+                                  readOnlyField: true,
                                   onTap: () {
                                     showTimePicker(
                                       context: context,
@@ -109,6 +108,7 @@ class HomeLayout extends StatelessWidget {
                                 ),
                                 defaultTextFormField(
                                   controller: dateController,
+                                  readOnlyField: true,
                                   onTap: () {
                                     showDatePicker(
                                       context: context,
@@ -134,7 +134,7 @@ class HomeLayout extends StatelessWidget {
                             ),
                           ),
                         ),
-                        backgroundColor: const Color(0xFF1b2230),
+                        backgroundColor: const Color(0xFF696c73),
                         elevation: 50.0,
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.vertical(
@@ -151,6 +151,9 @@ class HomeLayout extends StatelessWidget {
                       icon: Icons.add_task,
                       label: 'Add Task',
                     );
+                    titleController.clear();
+                    timeController.clear();
+                    dateController.clear();
                   });
                   cubit.changeBottomSheetState(
                     isShown: true,
@@ -159,9 +162,9 @@ class HomeLayout extends StatelessWidget {
                   );
                 }
               },
-              backgroundColor: const Color(0x44f7f1e3),
-              foregroundColor: const Color(0xFF1b2230),
-              elevation: 10.0,
+              backgroundColor: const Color(0x440078eb),
+              foregroundColor: const Color(0xFF0078eb),
+              elevation: 15.0,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(
                   15.0,

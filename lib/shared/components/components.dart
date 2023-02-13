@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:home/shared/cubit/cubit.dart';
+import 'package:home/shared/cubit/states.dart';
 
 Widget defaultTextFormField({
   required TextEditingController controller,
@@ -7,6 +8,7 @@ Widget defaultTextFormField({
   required String? Function(String?) validator,
   required String label,
   required IconData prefixIcon,
+  bool readOnlyField = false,
   VoidCallback? onTap,
   Function(String)? onFieldSubmitted,
   Function(String)? onChanged,
@@ -15,14 +17,15 @@ Widget defaultTextFormField({
       controller: controller,
       keyboardType: type,
       onFieldSubmitted: onFieldSubmitted,
+      readOnly: readOnlyField,
+      showCursor: true,
       onChanged: onChanged,
       validator: validator,
       onTap: onTap,
-      focusNode: FocusNode(),
       decoration: InputDecoration(
         filled: true,
         labelText: label,
-        fillColor: const Color(0xFF252e41),
+        fillColor: Colors.white,
         prefixIcon: Icon(
           prefixIcon,
         ),
@@ -47,6 +50,11 @@ Widget taskItem(Map model, context) => Dismissible(
           left: 20.0,
         ),
         decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFF252e41), Color(0x00252e41)],
+          ),
           borderRadius: BorderRadius.all(
             Radius.circular(
               10.0,
@@ -139,31 +147,76 @@ Widget taskItem(Map model, context) => Dismissible(
       },
     );
 
-Widget tasksBuilder({required List<Map> tasks}) => tasks.isNotEmpty
-    ? ListView.builder(
-        itemBuilder: (context, index) => taskItem(tasks[index], context),
-        itemCount: tasks.length,
-      )
-    : Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Icon(
-              Icons.task,
-              size: 100.0,
+Widget tasksBuilder({
+  required List<Map> tasks,
+  required AppStates state,
+}) {
+  // print('Building a Task =============================');
+  // print('State is $state');
+  // print('tasks are empty? ${tasks.isEmpty}');
+  if (tasks.isNotEmpty) {
+    return ListView.builder(
+      itemBuilder: (context, index) => taskItem(tasks[index], context),
+      itemCount: tasks.length,
+    );
+  } else if (state is AppGetDatabaseState ||
+      state is AppChangeBottomNavBarState ||
+      state is AppChangeBottomSheetState) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const [
+          Icon(
+            Icons.task,
+            size: 100.0,
+            color: Colors.grey,
+          ),
+          Text(
+            'No Tasks',
+            style: TextStyle(
+              fontSize: 20.0,
               color: Colors.grey,
+              fontWeight: FontWeight.bold,
             ),
-            Text(
-              'No Tasks',
-              style: TextStyle(
-                fontSize: 20.0,
-                color: Colors.grey,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-      );
+          ),
+        ],
+      ),
+    );
+  } else {
+    return const Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+  // return tasks.isNotEmpty
+  //     ? ListView.builder(
+  //         itemBuilder: (context, index) => taskItem(tasks[index], context),
+  //         itemCount: tasks.length,
+  //       )
+  //     : state is AppGetDatabaseLoadingState && state is! AppGetDatabaseState
+  //         ? const Center(
+  //             child: CircularProgressIndicator(),
+  //           )
+  //         : Center(
+  //             child: Column(
+  //               mainAxisAlignment: MainAxisAlignment.center,
+  //               children: const [
+  //                 Icon(
+  //                   Icons.task,
+  //                   size: 100.0,
+  //                   color: Colors.grey,
+  //                 ),
+  //                 Text(
+  //                   'No Tasks',
+  //                   style: TextStyle(
+  //                     fontSize: 20.0,
+  //                     color: Colors.grey,
+  //                     fontWeight: FontWeight.bold,
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //           );
+}
 
 // ffa801
 // 1e272e

@@ -13,7 +13,7 @@ class DoneTasksScreen extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         var tasks = AppCubit.get(context).doneTasks;
-        return tasksBuilder(tasks: tasks);
+        return tasksBuilder(tasks: tasks, state: state);
       },
     );
   }
