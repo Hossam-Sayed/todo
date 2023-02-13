@@ -23,9 +23,7 @@ Widget defaultTextFormField({
       validator: validator,
       onTap: onTap,
       decoration: InputDecoration(
-        // filled: true,
         labelText: label,
-        // fillColor: Colors.white,
         prefixIcon: Icon(
           prefixIcon,
         ),
@@ -93,30 +91,7 @@ Widget taskItem(Map model, context) => Dismissible(
             const SizedBox(
               width: 20.0,
             ),
-            IconButton(
-              onPressed: () {
-                AppCubit.get(context).updateDB(
-                  status: 'done',
-                  id: model['id'],
-                );
-              },
-              icon: const Icon(
-                Icons.check_box,
-                color: Color(0xFF0078eb),
-              ),
-            ),
-            IconButton(
-              onPressed: () {
-                AppCubit.get(context).updateDB(
-                  status: 'archive',
-                  id: model['id'],
-                );
-              },
-              icon: const Icon(
-                Icons.archive,
-                color: Color(0xFF0078eb),
-              ),
-            ),
+            addTaskControls(model, context),
           ],
         ),
       ),
@@ -126,6 +101,67 @@ Widget taskItem(Map model, context) => Dismissible(
         );
       },
     );
+
+Widget addTaskControls(Map model, context) {
+  if (model['status'] == 'archive') {
+    return IconButton(
+      onPressed: () {
+        AppCubit.get(context).updateDB(
+          status: 'done',
+          id: model['id'],
+        );
+      },
+      icon: doneIcon(),
+      tooltip: 'Mark as done',
+    );
+  }
+  else if (model['status'] == 'done') {
+    return IconButton(
+      onPressed: () {
+        AppCubit.get(context).updateDB(
+          status: 'archive',
+          id: model['id'],
+        );
+      },
+      icon: archiveIcon(),
+      tooltip: 'Archive task',
+    );
+  } else {
+    return Row(
+      children: [
+        IconButton(
+          onPressed: () {
+            AppCubit.get(context).updateDB(
+              status: 'done',
+              id: model['id'],
+            );
+          },
+          icon: doneIcon(),
+          tooltip: 'Mark as done',
+        ),
+        IconButton(
+          onPressed: () {
+            AppCubit.get(context).updateDB(
+              status: 'archive',
+              id: model['id'],
+            );
+          },
+          icon: archiveIcon(),
+          tooltip: 'Archive task',
+        ),
+      ],
+    );
+  }
+}
+
+Icon doneIcon() => const Icon(
+  Icons.check_circle,
+  color: Color(0xFF0078eb),
+);
+Icon archiveIcon() => const Icon(
+  Icons.archive,
+  color: Color(0xFF0078eb),
+);
 
 Widget tasksBuilder({
   required List<Map> tasks,
@@ -160,5 +196,7 @@ Widget tasksBuilder({
                 ),
               )
             : const Center(
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(
+                  color: Color(0xFF0078eb),
+                ),
               );
