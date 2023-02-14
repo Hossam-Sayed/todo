@@ -34,7 +34,7 @@ class HomeLayout extends StatelessWidget {
                     tooltip: cubit.isLight ? 'Light Mode' : 'Dark Mode',
                     icon: Icon(
                       cubit.modeIcon,
-                      color: cubit.isLight ? Colors.orange : Colors.grey,
+                      color: cubit.isLight ? Colors.orange : const Color(0xFF1b2230),
                     ),
                     onPressed: () {
                       cubit.toggleMode(
@@ -45,9 +45,6 @@ class HomeLayout extends StatelessWidget {
                             ? const Color(0xFF1b2230)
                             : const Color(0xFFFFFFFF),
                         appSecondaryColor: !cubit.isLight
-                            ? const Color(0xFF696c73)
-                            : const Color(0xFFFFFFFF),
-                        appTernaryColor: !cubit.isLight
                             ? const Color(0xFF0078eb)
                             : Colors.blue,
                         fABColor: !cubit.isLight
@@ -59,7 +56,7 @@ class HomeLayout extends StatelessWidget {
                 ),
               ],
               backgroundColor: cubit.primaryColor,
-              foregroundColor: cubit.tertiaryColor,
+              foregroundColor: cubit.secondaryColor,
               title: Text(
                 cubit.titles[cubit.currentIndex],
                 style: const TextStyle(
@@ -68,9 +65,9 @@ class HomeLayout extends StatelessWidget {
               ),
             ),
             body: Container(
-              margin: const EdgeInsets.only(
-                top: 10.0,
-              ),
+              // margin: const EdgeInsets.only(
+              //   top: 10.0,
+              // ),
               child: cubit.screens[cubit.currentIndex],
             ),
             backgroundColor: cubit.primaryColor,
@@ -94,6 +91,17 @@ class HomeLayout extends StatelessWidget {
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
+                                Container(
+                                  height: 5.0,
+                                  width: 100.0,
+                                  decoration: const BoxDecoration(
+                                    color: Color(0xFF1b2230),
+                                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 10.0,
+                                ),
                                 defaultTextFormField(
                                   controller: titleController,
                                   type: TextInputType.text,
@@ -162,7 +170,7 @@ class HomeLayout extends StatelessWidget {
                             ),
                           ),
                         ),
-                        elevation: 50.0,
+                        elevation: 5.0,
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.vertical(
                             top: Radius.circular(
@@ -190,7 +198,7 @@ class HomeLayout extends StatelessWidget {
                 }
               },
               backgroundColor: cubit.fabColor,
-              foregroundColor: cubit.tertiaryColor,
+              foregroundColor: cubit.secondaryColor,
               elevation: 15.0,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(
@@ -209,7 +217,7 @@ class HomeLayout extends StatelessWidget {
               },
               elevation: 10.0,
               unselectedItemColor: const Color(0xFF696c73),
-              selectedItemColor: cubit.tertiaryColor,
+              selectedItemColor: cubit.secondaryColor,
               backgroundColor: cubit.primaryColor,
               items: const [
                 BottomNavigationBarItem(

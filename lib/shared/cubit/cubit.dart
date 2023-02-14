@@ -139,8 +139,7 @@ class AppCubit extends Cubit<AppStates> {
   bool isLight = true;
   IconData modeIcon = Icons.light_mode;
   Color primaryColor = const Color(0xFF1b2230);
-  Color secondaryColor = const Color(0xFF696c73);
-  Color tertiaryColor = const Color(0xFF0078eb);
+  Color secondaryColor = const Color(0xFF0078eb);
   Color fabColor = const Color(0x440078eb);
 
   void toggleMode({
@@ -148,14 +147,12 @@ class AppCubit extends Cubit<AppStates> {
     required bool light,
     required Color appPrimaryColor,
     required Color appSecondaryColor,
-    required Color appTernaryColor,
     required Color fABColor,
   }) {
     isLight = light;
     modeIcon = icon;
     primaryColor = appPrimaryColor;
     secondaryColor = appSecondaryColor;
-    tertiaryColor = appTernaryColor;
     fabColor = fABColor;
     emit(AppChangeAppMode());
   }
