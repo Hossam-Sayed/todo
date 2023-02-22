@@ -26,10 +26,6 @@ jobs:
       
       - name: Setup Flutter SDK
         uses: flutter-actions/setup-flutter@v2.2
-        
-      - name: Update Dart
-      - run: choco upgrade dart-sdk
-
 
       - name: Install dependencies
         run: dart pub get
