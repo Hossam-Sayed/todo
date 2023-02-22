@@ -128,11 +128,9 @@ class AppCubit extends Cubit<AppStates> {
   void changeBottomSheetState({
     required bool isShown,
     required IconData icon,
-    required String label,
   }) {
     isBottomSheetShown = isShown;
     fabIcon = icon;
-    fabLabel = label;
     emit(AppChangeBottomSheetState());
   }
 

@@ -34,7 +34,9 @@ class HomeLayout extends StatelessWidget {
                     tooltip: cubit.isLight ? 'Light Mode' : 'Dark Mode',
                     icon: Icon(
                       cubit.modeIcon,
-                      color: cubit.isLight ? Colors.orange : const Color(0xFF1b2230),
+                      color: cubit.isLight
+                          ? Colors.orange
+                          : const Color(0xFF1b2230),
                     ),
                     onPressed: () {
                       cubit.toggleMode(
@@ -65,9 +67,6 @@ class HomeLayout extends StatelessWidget {
               ),
             ),
             body: Container(
-              // margin: const EdgeInsets.only(
-              //   top: 10.0,
-              // ),
               child: cubit.screens[cubit.currentIndex],
             ),
             backgroundColor: cubit.primaryColor,
@@ -96,7 +95,8 @@ class HomeLayout extends StatelessWidget {
                                   width: 100.0,
                                   decoration: const BoxDecoration(
                                     color: Color(0xFF1b2230),
-                                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(5.0)),
                                   ),
                                 ),
                                 const SizedBox(
@@ -170,7 +170,7 @@ class HomeLayout extends StatelessWidget {
                             ),
                           ),
                         ),
-                        elevation: 5.0,
+                        elevation: 15.0,
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.vertical(
                             top: Radius.circular(
@@ -184,7 +184,6 @@ class HomeLayout extends StatelessWidget {
                     cubit.changeBottomSheetState(
                       isShown: false,
                       icon: Icons.add_task,
-                      label: 'Add Task',
                     );
                     titleController.clear();
                     timeController.clear();
@@ -193,13 +192,12 @@ class HomeLayout extends StatelessWidget {
                   cubit.changeBottomSheetState(
                     isShown: true,
                     icon: Icons.add,
-                    label: 'Confirm Task',
                   );
                 }
               },
               backgroundColor: cubit.fabColor,
               foregroundColor: cubit.secondaryColor,
-              elevation: 15.0,
+              elevation: 10.0,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(
                   15.0,

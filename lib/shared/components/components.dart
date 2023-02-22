@@ -264,12 +264,13 @@ Widget tasksBuilder({
             child: ListView.builder(
               itemBuilder: (context, index) => taskItem(tasks[index], context),
               itemCount: tasks.length,
-              physics: BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
             ),
           )
         : (state is AppGetDatabaseState ||
                 state is AppChangeBottomNavBarState ||
-                state is AppChangeBottomSheetState)
+                state is AppChangeBottomSheetState ||
+                state is AppChangeAppMode)
             ? Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
