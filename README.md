@@ -1,4 +1,8 @@
+<div align="center">
+
 [![Dart](https://github.com/Hossam-Sayed/fancy-todo-app/actions/workflows/dart.yml/badge.svg)](https://github.com/Hossam-Sayed/fancy-todo-app/actions/workflows/dart.yml)
+
+<div align="left">
 
 # To-Do App
 
