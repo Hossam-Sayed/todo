@@ -1,4 +1,6 @@
-# home
+[![Dart](https://github.com/Hossam-Sayed/fancy-todo-app/actions/workflows/dart.yml/badge.svg)](https://github.com/Hossam-Sayed/fancy-todo-app/actions/workflows/dart.yml)
+
+# To-Do App
 
 A new Flutter project.
 
