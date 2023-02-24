@@ -1,5 +1,8 @@
 import 'package:bloc/bloc.dart';
 
+import '../cubit/cubit.dart';
+
+late AppCubit cubit;
 
 class MyBlocObserver extends BlocObserver {
   @override

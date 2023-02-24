@@ -5,6 +5,8 @@ import 'package:home/shared/cubit/cubit.dart';
 import 'package:home/shared/cubit/states.dart';
 import 'package:intl/intl.dart';
 
+import '../shared/components/constants.dart';
+
 class HomeLayout extends StatelessWidget {
   var scaffoldKey = GlobalKey<ScaffoldState>();
   var formKey = GlobalKey<FormState>();
@@ -21,10 +23,11 @@ class HomeLayout extends StatelessWidget {
           if (state is AppInsertDatabaseState) Navigator.pop(context);
         },
         builder: (BuildContext context, AppStates state) {
-          AppCubit cubit = AppCubit.get(context);
+          cubit = AppCubit.get(context);
           return Scaffold(
             key: scaffoldKey,
             appBar: AppBar(
+              elevation: 0.0,
               actions: [
                 Container(
                   margin: const EdgeInsets.only(
@@ -35,8 +38,8 @@ class HomeLayout extends StatelessWidget {
                     icon: Icon(
                       cubit.modeIcon,
                       color: cubit.isLight
-                          ? Colors.orange
-                          : const Color(0xFF1b2230),
+                          ? Colors.white
+                          : Colors.black,
                     ),
                     onPressed: () {
                       cubit.toggleMode(
@@ -44,14 +47,14 @@ class HomeLayout extends StatelessWidget {
                             !cubit.isLight ? Icons.light_mode : Icons.dark_mode,
                         light: !cubit.isLight,
                         appPrimaryColor: !cubit.isLight
-                            ? const Color(0xFF1b2230)
-                            : const Color(0xFFFFFFFF),
+                            ? Colors.black
+                            : Colors.white,
                         appSecondaryColor: !cubit.isLight
-                            ? const Color(0xFF0078eb)
-                            : Colors.blue,
+                            ? Colors.white
+                            : Colors.black,
                         fABColor: !cubit.isLight
-                            ? const Color(0x440078eb)
-                            : const Color(0x442196F3),
+                            ? const Color(0x44696c73)
+                            : const Color(0x44696c73),
                       );
                     },
                   ),
@@ -197,7 +200,7 @@ class HomeLayout extends StatelessWidget {
               },
               backgroundColor: cubit.fabColor,
               foregroundColor: cubit.secondaryColor,
-              elevation: 10.0,
+              elevation: 0.0,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(
                   15.0,

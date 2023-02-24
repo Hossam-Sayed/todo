@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:home/shared/cubit/cubit.dart';
 import 'package:home/shared/cubit/states.dart';
 
+import 'constants.dart';
+
 Widget defaultTextFormField({
   required TextEditingController controller,
   required TextInputType type,
@@ -37,29 +39,18 @@ Widget defaultTextFormField({
       ),
     );
 
-Widget taskItem(Map model, context) => Dismissible(
+Widget taskItem(Map model, context, Color color) => Dismissible(
       key: Key(model['id'].toString()),
       background: Row(
         children: [
           Expanded(
             child: Container(
-              padding: const EdgeInsets.all(20.0),
-              margin: const EdgeInsets.only(
-                top: 10.0,
-                bottom: 10.0,
+              padding: const EdgeInsets.only(
+                left: 20.0,
+                right: 20.0,
               ),
               alignment: AlignmentDirectional.centerStart,
-              decoration: const BoxDecoration(
-                color: Colors.red,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(
-                    10.0,
-                  ),
-                  bottomLeft: Radius.circular(
-                    10.0,
-                  ),
-                ),
-              ),
+              color: Colors.red,
               child: const Icon(
                 Icons.delete,
                 color: Colors.white,
@@ -68,23 +59,12 @@ Widget taskItem(Map model, context) => Dismissible(
           ),
           Expanded(
             child: Container(
-              padding: const EdgeInsets.all(20.0),
-              margin: const EdgeInsets.only(
-                top: 10.0,
-                bottom: 10.0,
+              padding: const EdgeInsets.only(
+                left: 20.0,
+                right: 20.0,
               ),
               alignment: AlignmentDirectional.centerEnd,
-              decoration: const BoxDecoration(
-                color: Colors.red,
-                borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(
-                    10.0,
-                  ),
-                  bottomRight: Radius.circular(
-                    10.0,
-                  ),
-                ),
-              ),
+              color: Colors.red,
               child: const Icon(
                 Icons.delete,
                 color: Colors.white,
@@ -95,24 +75,6 @@ Widget taskItem(Map model, context) => Dismissible(
       ),
       child: Container(
         padding: const EdgeInsets.all(20.0),
-        margin: const EdgeInsets.only(
-          top: 10.0,
-          bottom: 10.0,
-          // right: 20.0,
-          // left: 20.0,
-        ),
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Color(0xFF2196F3), Colors.transparent],
-          ),
-          borderRadius: BorderRadius.all(
-            Radius.circular(
-              10.0,
-            ),
-          ),
-        ),
         child: Row(
           children: [
             Expanded(
@@ -122,10 +84,10 @@ Widget taskItem(Map model, context) => Dismissible(
                 children: [
                   Text(
                     '${model['title']}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 20.0,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: color,
                     ),
                   ),
                   const SizedBox(
@@ -134,7 +96,7 @@ Widget taskItem(Map model, context) => Dismissible(
                   Text(
                     '${model['date']} ・ ${model['time']}',
                     style: const TextStyle(
-                      color: Color(0x66FFFFFF),
+                      color: Color(0x998D8D8D),
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -198,7 +160,7 @@ Widget addTaskControls(Map model, context) {
           id: model['id'],
         );
       },
-      icon: doneIcon(),
+      icon: doneIcon(cubit.secondaryColor),
       tooltip: 'Mark as done',
     );
   } else if (model['status'] == 'done') {
@@ -209,7 +171,7 @@ Widget addTaskControls(Map model, context) {
           id: model['id'],
         );
       },
-      icon: archiveIcon(),
+      icon: archiveIcon(cubit.secondaryColor),
       tooltip: 'Archive task',
     );
   } else {
@@ -222,7 +184,7 @@ Widget addTaskControls(Map model, context) {
               id: model['id'],
             );
           },
-          icon: doneIcon(),
+          icon: doneIcon(cubit.secondaryColor),
           tooltip: 'Mark as done',
         ),
         IconButton(
@@ -232,7 +194,7 @@ Widget addTaskControls(Map model, context) {
               id: model['id'],
             );
           },
-          icon: archiveIcon(),
+          icon: archiveIcon(cubit.secondaryColor),
           tooltip: 'Archive task',
         ),
       ],
@@ -240,14 +202,14 @@ Widget addTaskControls(Map model, context) {
   }
 }
 
-Icon doneIcon() => const Icon(
+Icon doneIcon(Color color) => Icon(
       Icons.check_circle,
-      color: Color(0xFF0078eb),
+      color: color,
     );
 
-Icon archiveIcon() => const Icon(
+Icon archiveIcon(Color color) => Icon(
       Icons.archive,
-      color: Color(0xFF0078eb),
+      color: color,
     );
 
 Widget tasksBuilder({
@@ -255,17 +217,22 @@ Widget tasksBuilder({
   required AppStates state,
 }) =>
     tasks.isNotEmpty
-        ? Container(
-            padding: const EdgeInsets.only(
-              right: 10.0,
-              left: 10.0,
+        ? ListView.separated(
+            itemBuilder: (context, index) => taskItem(
+              tasks[index],
+              context,
+              cubit.secondaryColor,
             ),
-            color: Colors.transparent,
-            child: ListView.builder(
-              itemBuilder: (context, index) => taskItem(tasks[index], context),
-              itemCount: tasks.length,
-              physics: const BouncingScrollPhysics(),
+            separatorBuilder: (context, index) => Container(
+              margin: const EdgeInsets.only(
+                left: 20.0,
+                right: 20.0,
+              ),
+              height: 1.0,
+              color: cubit.secondaryColor,
             ),
+            itemCount: tasks.length,
+            physics: const BouncingScrollPhysics(),
           )
         : (state is AppGetDatabaseState ||
                 state is AppChangeBottomNavBarState ||
@@ -274,25 +241,25 @@ Widget tasksBuilder({
             ? Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
+                  children: [
                     Icon(
                       Icons.task,
                       size: 100.0,
-                      color: Colors.grey,
+                      color: cubit.secondaryColor,
                     ),
                     Text(
                       'No Tasks',
                       style: TextStyle(
                         fontSize: 20.0,
-                        color: Colors.grey,
+                        color: cubit.secondaryColor,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ],
                 ),
               )
-            : const Center(
+            : Center(
                 child: CircularProgressIndicator(
-                  color: Color(0xFF0078eb),
+                  color: cubit.secondaryColor,
                 ),
               );
