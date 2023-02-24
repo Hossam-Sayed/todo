@@ -1,6 +1,14 @@
 <div align="center">
 
+
+![alt text](https://github.com/Hossam-Sayed/fancy-todo-app/blob/master/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_todo_round.png)
+
+## To-Do
+
+
 [![Dart](https://github.com/Hossam-Sayed/fancy-todo-app/actions/workflows/dart.yml/badge.svg)](https://github.com/Hossam-Sayed/fancy-todo-app/actions/workflows/dart.yml)
+
+[![forthebadge](https://forthebadge.com/images/badges/built-for-android.svg)](https://forthebadge.com) [![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
 
 <div align="left">
 
