@@ -34,27 +34,24 @@ class HomeLayout extends StatelessWidget {
                     right: 10.0,
                   ),
                   child: IconButton(
-                    tooltip: cubit.isLight ? 'Light Mode' : 'Dark Mode',
+                    tooltip: !cubit.isLight ? 'Light Mode' : 'Dark Mode',
                     icon: Icon(
                       cubit.modeIcon,
-                      color: cubit.isLight
+                      color: !cubit.isLight
                           ? Colors.white
                           : Colors.black,
                     ),
                     onPressed: () {
                       cubit.toggleMode(
-                        icon:
-                            !cubit.isLight ? Icons.light_mode : Icons.dark_mode,
                         light: !cubit.isLight,
-                        appPrimaryColor: !cubit.isLight
+                        icon:
+                            cubit.isLight ? Icons.light_mode : Icons.dark_mode,
+                        appPrimaryColor: cubit.isLight
                             ? Colors.black
                             : Colors.white,
-                        appSecondaryColor: !cubit.isLight
+                        appSecondaryColor: cubit.isLight
                             ? Colors.white
                             : Colors.black,
-                        fABColor: !cubit.isLight
-                            ? const Color(0x44696c73)
-                            : const Color(0x44696c73),
                       );
                     },
                   ),
@@ -97,7 +94,7 @@ class HomeLayout extends StatelessWidget {
                                   height: 5.0,
                                   width: 100.0,
                                   decoration: const BoxDecoration(
-                                    color: Color(0xFF1b2230),
+                                    color: Colors.black,
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(5.0)),
                                   ),
@@ -173,6 +170,7 @@ class HomeLayout extends StatelessWidget {
                             ),
                           ),
                         ),
+                        backgroundColor: Colors.white,
                         elevation: 15.0,
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.vertical(
@@ -198,7 +196,7 @@ class HomeLayout extends StatelessWidget {
                   );
                 }
               },
-              backgroundColor: cubit.fabColor,
+              backgroundColor: const Color(0x44696c73),
               foregroundColor: cubit.secondaryColor,
               elevation: 0.0,
               shape: RoundedRectangleBorder(
