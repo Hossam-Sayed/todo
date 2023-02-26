@@ -11,6 +11,12 @@
 ![GitHub repo size](https://img.shields.io/github/repo-size/Hossam-Sayed/fancy-todo-app?) ![GitHub last commit](https://img.shields.io/github/last-commit/Hossam-Sayed/fancy-todo-app) ![GitHub top language](https://img.shields.io/github/languages/top/Hossam-Sayed/fancy-todo-app)
 
 [![forthebadge](https://forthebadge.com/images/badges/built-for-android.svg)](https://forthebadge.com) [![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
+  
+<div align=right>
+
+**[`🔝`](#top)**
+
+</div>
 
 <div align="left">
 
@@ -30,3 +36,11 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+  
+<div align=right>
+
+**[`🔝`](#top)**
+
+</div>
+</div>
+</div>
