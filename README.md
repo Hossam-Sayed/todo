@@ -1,7 +1,7 @@
 <div align="center">
 
 
-![alt text](https://github.com/Hossam-Sayed/fancy-todo-app/blob/master/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png)
+<img src="https://github.com/Hossam-Sayed/fancy-todo-app/blob/master/to_do_logo.svg" width="200"/>
 
 ## To-Do
 
