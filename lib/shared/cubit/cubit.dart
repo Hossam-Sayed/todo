@@ -1,11 +1,12 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:home/modules/archived_tasks/archived_tasks_screen.dart';
 import 'package:home/modules/done_tasks/done_tasks_screen.dart';
 import 'package:home/modules/new_tasks/new_tasks_screen.dart';
 import 'package:home/shared/cubit/states.dart';
 import 'package:sqflite/sqflite.dart';
+
+import '../../modules/trash/trash_screen.dart';
 
 class AppCubit extends Cubit<AppStates> {
   AppCubit() : super(AppInitialState());
@@ -14,20 +15,20 @@ class AppCubit extends Cubit<AppStates> {
 
   List<Map> newTasks = [];
   List<Map> doneTasks = [];
-  List<Map> archivedTasks = [];
+  List<Map> trash = [];
 
   int currentIndex = 0;
 
   List<Widget> screens = [
-    NewTasksScreen(),
-    DoneTasksScreen(),
-    ArchivedTasksScreen(),
+    const NewTasksScreen(),
+    const DoneTasksScreen(),
+    const TrashScreen(),
   ];
 
   List<String> titles = [
     'New Tasks',
     'Done Tasks',
-    'Archived Tasks',
+    'Trash',
   ];
 
   late Database database;
@@ -85,7 +86,7 @@ class AppCubit extends Cubit<AppStates> {
   void getDataFromDB(Database database) {
     newTasks = [];
     doneTasks = [];
-    archivedTasks = [];
+    trash = [];
     emit(AppGetDatabaseLoadingState());
     database.rawQuery('SELECT * FROM tasks').then((list) {
       for (var element in list) {
@@ -94,7 +95,7 @@ class AppCubit extends Cubit<AppStates> {
         } else if (element['status'] == 'done') {
           doneTasks.add(element);
         } else {
-          archivedTasks.add(element);
+          trash.add(element);
         }
       }
       emit(AppGetDatabaseState());

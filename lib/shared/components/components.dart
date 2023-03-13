@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:home/shared/cubit/cubit.dart';
 import 'package:home/shared/cubit/states.dart';
-
 import 'constants.dart';
 
 Widget defaultTextFormField({
@@ -41,37 +40,29 @@ Widget defaultTextFormField({
 
 Widget taskItem(Map model, context, Color color) => Dismissible(
       key: Key(model['id'].toString()),
-      background: Row(
-        children: [
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.only(
-                left: 20.0,
-                right: 20.0,
-              ),
-              alignment: AlignmentDirectional.centerStart,
-              color: Colors.red,
-              child: const Icon(
-                Icons.delete,
-                color: Colors.white,
-              ),
-            ),
-          ),
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.only(
-                left: 20.0,
-                right: 20.0,
-              ),
-              alignment: AlignmentDirectional.centerEnd,
-              color: Colors.red,
-              child: const Icon(
-                Icons.delete,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ],
+      background: Container(
+        padding: const EdgeInsets.only(
+          left: 20.0,
+          right: 20.0,
+        ),
+        alignment: AlignmentDirectional.centerStart,
+        color: Colors.blue,
+        child: Icon(
+          (model['status'] == 'new') ? Icons.task_alt : Icons.unpublished,
+          color: Colors.white,
+        ),
+      ),
+      secondaryBackground: Container(
+        padding: const EdgeInsets.only(
+          left: 20.0,
+          right: 20.0,
+        ),
+        alignment: AlignmentDirectional.centerEnd,
+        color: Colors.red,
+        child: const Icon(
+          Icons.delete,
+          color: Colors.white,
+        ),
       ),
       child: Container(
         padding: const EdgeInsets.all(20.0),
@@ -106,111 +97,135 @@ Widget taskItem(Map model, context, Color color) => Dismissible(
             const SizedBox(
               width: 20.0,
             ),
-            addTaskControls(model, context),
+            // addTaskControls(model, context),
           ],
         ),
       ),
       onDismissed: (direction) {},
       confirmDismiss: (direction) {
-        return showDialog(
-          context: context,
-          builder: (newContext) {
-            return AlertDialog(
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(
-                    20.0,
-                  ),
-                ),
-              ),
-              title: const Text('Delete Task?'),
-              content: const Text('Task will be deleted permanently'),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    AppCubit.get(context).deleteDB(
-                      id: model['id'],
-                    );
-                    return Navigator.pop(context);
-                  },
-                  child: const Text(
-                    'DELETE',
-                    style: TextStyle(
-                      color: Colors.red,
-                    ),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(false),
-                  child: const Text('CANCEL'),
-                ),
-              ],
-            );
-          },
-        );
+        if (direction == DismissDirection.endToStart) {
+          return showDialog(
+            context: context,
+            builder: (newContext) {
+              return showAlert(context, model);
+            },
+          );
+        } else if (model['status'] == 'done' || model['status'] == 'delete') {
+          AppCubit.get(context).updateDB(
+            status: 'new',
+            id: model['id'],
+          );
+        } else {
+          AppCubit.get(context).updateDB(
+            status: 'done',
+            id: model['id'],
+          );
+        }
+        return Future.value(true);
       },
     );
 
-Widget addTaskControls(Map model, context) {
-  if (model['status'] == 'archive') {
-    return IconButton(
-      onPressed: () {
-        AppCubit.get(context).updateDB(
-          status: 'done',
-          id: model['id'],
-        );
-      },
-      icon: doneIcon(cubit.secondaryColor),
-      tooltip: 'Mark as done',
-    );
-  } else if (model['status'] == 'done') {
-    return IconButton(
-      onPressed: () {
-        AppCubit.get(context).updateDB(
-          status: 'archive',
-          id: model['id'],
-        );
-      },
-      icon: archiveIcon(cubit.secondaryColor),
-      tooltip: 'Archive task',
-    );
-  } else {
-    return Row(
-      children: [
-        IconButton(
-          onPressed: () {
-            AppCubit.get(context).updateDB(
-              status: 'done',
-              id: model['id'],
-            );
-          },
-          icon: doneIcon(cubit.secondaryColor),
-          tooltip: 'Mark as done',
+Widget showAlert(context, model) => AlertDialog(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(
+            10.0,
+          ),
         ),
-        IconButton(
+      ),
+      title: (model['status'] == 'delete')
+          ? const Text('Delete Task?')
+          : const Text('Move to Trash?'),
+      content: (model['status'] == 'delete')
+          ? const Text('Task will be deleted permanently')
+          : const Text('Task will be moved to trash'),
+      actions: [
+        TextButton(
           onPressed: () {
-            AppCubit.get(context).updateDB(
-              status: 'archive',
-              id: model['id'],
-            );
+            (model['status'] == 'delete')
+                ? AppCubit.get(context).deleteDB(
+                    id: model['id'],
+                  )
+                : AppCubit.get(context).updateDB(
+                    status: 'delete',
+                    id: model['id'],
+                  );
+            return Navigator.pop(context);
           },
-          icon: archiveIcon(cubit.secondaryColor),
-          tooltip: 'Archive task',
+          child: Text(
+            (model['status'] == 'delete') ? 'DELETE' : 'TRASH',
+            style: const TextStyle(
+              color: Colors.red,
+            ),
+          ),
+        ),
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: const Text('CANCEL'),
         ),
       ],
     );
-  }
-}
 
-Icon doneIcon(Color color) => Icon(
-      Icons.check_circle,
-      color: color,
-    );
+// Widget addTaskControls(Map model, context) {
+//   if (model['status'] == 'delete') {
+//     return IconButton(
+//       onPressed: () {
+//         AppCubit.get(context).updateDB(
+//           status: 'done',
+//           id: model['id'],
+//         );
+//       },
+//       icon: doneIcon(cubit.secondaryColor),
+//       tooltip: 'Mark as done',
+//     );
+//   } else if (model['status'] == 'done') {
+//     return IconButton(
+//       onPressed: () {
+//         AppCubit.get(context).updateDB(
+//           status: 'delete',
+//           id: model['id'],
+//         );
+//       },
+//       icon: archiveIcon(cubit.secondaryColor),
+//       tooltip: 'Trash',
+//     );
+//   } else {
+//     return Row(
+//       children: [
+//         IconButton(
+//           onPressed: () {
+//             AppCubit.get(context).updateDB(
+//               status: 'done',
+//               id: model['id'],
+//             );
+//           },
+//           icon: doneIcon(cubit.secondaryColor),
+//           tooltip: 'Mark as done',
+//         ),
+//         IconButton(
+//           onPressed: () {
+//             AppCubit.get(context).updateDB(
+//               status: 'delete',
+//               id: model['id'],
+//             );
+//           },
+//           icon: archiveIcon(cubit.secondaryColor),
+//           tooltip: 'Trash',
+//         ),
+//       ],
+//     );
+//   }
+// }
 
-Icon archiveIcon(Color color) => Icon(
-      Icons.archive,
-      color: color,
-    );
+// Icon doneIcon(Color color) => Icon(
+//       Icons.check_circle,
+//       color: color,
+//     );
+
+// Icon archiveIcon(Color color) => Icon(
+//       Icons.archive,
+//       color: color,
+//     );
 
 Widget tasksBuilder({
   required List<Map> tasks,

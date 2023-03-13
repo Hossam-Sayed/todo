@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:home/shared/components/components.dart';
 import 'package:home/shared/cubit/cubit.dart';
@@ -37,21 +38,17 @@ class HomeLayout extends StatelessWidget {
                     tooltip: !cubit.isLight ? 'Light Mode' : 'Dark Mode',
                     icon: Icon(
                       cubit.modeIcon,
-                      color: !cubit.isLight
-                          ? Colors.white
-                          : Colors.black,
+                      color: !cubit.isLight ? Colors.white : Colors.black,
                     ),
                     onPressed: () {
                       cubit.toggleMode(
                         light: !cubit.isLight,
                         icon:
                             cubit.isLight ? Icons.light_mode : Icons.dark_mode,
-                        appPrimaryColor: cubit.isLight
-                            ? Colors.black
-                            : Colors.white,
-                        appSecondaryColor: cubit.isLight
-                            ? Colors.white
-                            : Colors.black,
+                        appPrimaryColor:
+                            cubit.isLight ? Colors.black : Colors.white,
+                        appSecondaryColor:
+                            cubit.isLight ? Colors.white : Colors.black,
                       );
                     },
                   ),
@@ -189,6 +186,9 @@ class HomeLayout extends StatelessWidget {
                     titleController.clear();
                     timeController.clear();
                     dateController.clear();
+                    SystemChrome.setEnabledSystemUIMode(
+                      SystemUiMode.immersiveSticky,
+                    );
                   });
                   cubit.changeBottomSheetState(
                     isShown: true,
@@ -241,13 +241,13 @@ class HomeLayout extends StatelessWidget {
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(
-                    Icons.archive_outlined,
+                    Icons.delete_outline,
                   ),
-                  label: 'Archived',
+                  label: 'Trash',
                   activeIcon: Icon(
-                    Icons.archive,
+                    Icons.delete,
                   ),
-                  tooltip: 'Archived Tasks',
+                  tooltip: 'Trash',
                 ),
               ],
             ),
