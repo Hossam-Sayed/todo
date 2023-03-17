@@ -10,9 +10,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:home/main.dart';
 
 void main() {
-  testWidgets('App starts with New Tasks screen', (WidgetTester tester) async {
+  testWidgets('App starts with Active Tasks screen', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const MyApp());
-    expect(find.text('New Tasks'), findsOneWidget);
+    expect(find.text('Active Tasks'), findsOneWidget);
   });
 }

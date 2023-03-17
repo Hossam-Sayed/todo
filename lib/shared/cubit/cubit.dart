@@ -69,7 +69,7 @@ class AppCubit extends Cubit<AppStates> {
     return await database.transaction((txn) async {
       txn
           .rawInsert(
-        'INSERT INTO tasks(title, time, date, status) VALUES("$title", "$time", "$date", "new")',
+        'INSERT INTO tasks(title, time, date, status) VALUES("$title", "$time", "$date", "active")',
       )
           .then((value) {
         print('$value inserted successfully');
@@ -88,7 +88,7 @@ class AppCubit extends Cubit<AppStates> {
     emit(AppGetDatabaseLoadingState());
     database.rawQuery('SELECT * FROM tasks').then((list) {
       for (var element in list) {
-        if (element['status'] == 'new') {
+        if (element['status'] == 'active') {
           activeTasks.add(element);
           // activeTasks.sort((t1, t2) => DateTime.parse(t1['date']).compareTo(DateTime.parse(t2['date'])));
         } else if (element['status'] == 'done') {

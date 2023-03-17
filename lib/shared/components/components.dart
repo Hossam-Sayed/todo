@@ -48,7 +48,7 @@ Widget taskItem(Map model, context, Color color) => Dismissible(
         alignment: AlignmentDirectional.centerStart,
         color: Colors.blue,
         child: Icon(
-          (model['status'] == 'new') ? Icons.task_alt : Icons.unpublished,
+          (model['status'] == 'active') ? Icons.task_alt : Icons.unpublished,
           color: Colors.white,
         ),
       ),
@@ -112,7 +112,7 @@ Widget taskItem(Map model, context, Color color) => Dismissible(
           );
         } else if (model['status'] == 'done' || model['status'] == 'delete') {
           AppCubit.get(context).updateDB(
-            status: 'new',
+            status: 'active',
             id: model['id'],
           );
         } else {
