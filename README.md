@@ -23,7 +23,7 @@
 
 # To-Do App
 
-A new Flutter project.
+With To-Do, you'll never miss an important appointment, todos or even taking notes and more.
 
 ## Getting Started
 
