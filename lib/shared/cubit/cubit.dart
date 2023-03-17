@@ -1,11 +1,9 @@
-import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:home/modules/done_tasks/done_tasks_screen.dart';
-import 'package:home/modules/new_tasks/new_tasks_screen.dart';
 import 'package:home/shared/cubit/states.dart';
 import 'package:sqflite/sqflite.dart';
-
+import '../../modules/active_tasks/active_tasks_screen.dart';
 import '../../modules/trash/trash_screen.dart';
 
 class AppCubit extends Cubit<AppStates> {
@@ -13,20 +11,20 @@ class AppCubit extends Cubit<AppStates> {
 
   static AppCubit get(context) => BlocProvider.of(context);
 
-  List<Map> newTasks = [];
+  List<Map> activeTasks = [];
   List<Map> doneTasks = [];
   List<Map> trash = [];
 
   int currentIndex = 0;
 
   List<Widget> screens = [
-    const NewTasksScreen(),
+    const ActiveTasksScreen(),
     const DoneTasksScreen(),
     const TrashScreen(),
   ];
 
   List<String> titles = [
-    'New Tasks',
+    'Active Tasks',
     'Done Tasks',
     'Trash',
   ];
@@ -84,18 +82,21 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   void getDataFromDB(Database database) {
-    newTasks = [];
+    activeTasks = [];
     doneTasks = [];
     trash = [];
     emit(AppGetDatabaseLoadingState());
     database.rawQuery('SELECT * FROM tasks').then((list) {
       for (var element in list) {
         if (element['status'] == 'new') {
-          newTasks.add(element);
+          activeTasks.add(element);
+          // activeTasks.sort((t1, t2) => DateTime.parse(t1['date']).compareTo(DateTime.parse(t2['date'])));
         } else if (element['status'] == 'done') {
           doneTasks.add(element);
+          // doneTasks.sort((t1, t2) => DateTime.parse(t1['date']).compareTo(DateTime.parse(t2['date'])));
         } else {
           trash.add(element);
+          // trash.sort((t1, t2) => DateTime.parse(t1['date']).compareTo(DateTime.parse(t2['date'])));
         }
       }
       emit(AppGetDatabaseState());

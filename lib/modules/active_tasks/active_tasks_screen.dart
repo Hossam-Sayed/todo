@@ -4,15 +4,15 @@ import 'package:home/shared/components/components.dart';
 import 'package:home/shared/cubit/cubit.dart';
 import 'package:home/shared/cubit/states.dart';
 
-class NewTasksScreen extends StatelessWidget {
-  const NewTasksScreen({Key? key}) : super(key: key);
+class ActiveTasksScreen extends StatelessWidget {
+  const ActiveTasksScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) {},
       builder: (context, state) {
-        var tasks = AppCubit.get(context).newTasks;
+        var tasks = AppCubit.get(context).activeTasks;
         return tasksBuilder(tasks: tasks, state: state);
       },
     );
