@@ -12,14 +12,14 @@
 [![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com) [![forthebadge](https://forthebadge.com/images/badges/built-for-android.svg)](https://forthebadge.com)
 
 📝 To-Do is a tasks and to-do app, built for Android with Flutter.
+
+</div>
   
 <div align=right>
 
 **[`🔝`](#top)**
 
 </div>
-
-<div align="left">
 
 # To-Do App
 
@@ -29,6 +29,5 @@ With To-Do, you'll never miss an important appointment, todos or even taking not
 
 **[`🔝`](#top)**
 
-</div>
-</div>
+
 </div>
