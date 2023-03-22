@@ -23,7 +23,7 @@
 
 # To-Do App
 
-With To-Do, you'll never miss an important appointment, todos or even taking notes and more.
+With To-Do, you'll never miss an important appointment, writing down todos, taking notes and more.
   
 <div align=right>
 
