@@ -24,10 +24,12 @@
 # To-Do App
 
 With To-Do, you'll never miss an important appointment, writing down todos, taking notes and more.
+
+### Versions
+
+The app is still in the development phase.
   
 <div align=right>
 
 **[`🔝`](#top)**
-
-
 </div>
