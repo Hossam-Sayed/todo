@@ -17,8 +17,7 @@
   
 <div align=right>
 
-**[`🔝`](#top)**
-
+**[`↑ TOP ↑`](#top)**
 </div>
 
 # To-Do App
@@ -31,5 +30,5 @@ The app is still in the development phase.
   
 <div align=right>
 
-**[`🔝`](#top)**
+**[`↑ TOP ↑`](#top)**
 </div>
