@@ -97,7 +97,10 @@ Widget taskItem(Map model, context, Color color) => Dismissible(
             const SizedBox(
               width: 20.0,
             ),
-            // addTaskControls(model, context),
+            buildPriorityCircle(model['priority']),
+            const SizedBox(
+              width: 20.0,
+            ),
           ],
         ),
       ),
@@ -123,6 +126,17 @@ Widget taskItem(Map model, context, Color color) => Dismissible(
         }
         return Future.value(true);
       },
+    );
+
+Widget buildPriorityCircle(int priority) => CircleAvatar(
+      backgroundColor: (priority == 0)
+          ? Colors.red
+          : (priority == 1)
+              ? Colors.orange
+              : (priority == 2)
+                  ? Colors.green
+                  : Colors.deepPurpleAccent,
+      maxRadius: 6.0,
     );
 
 Widget showAlert(context, model) => AlertDialog(
@@ -153,7 +167,7 @@ Widget showAlert(context, model) => AlertDialog(
             return Navigator.pop(context);
           },
           child: Text(
-            (model['status'] == 'delete') ? 'DELETE' : 'TRASH',
+            (model['status'] == 'delete') ? 'DELETE' : 'MOVE TO TRASH',
             style: const TextStyle(
               color: Colors.red,
             ),
@@ -165,67 +179,6 @@ Widget showAlert(context, model) => AlertDialog(
         ),
       ],
     );
-
-// Widget addTaskControls(Map model, context) {
-//   if (model['status'] == 'delete') {
-//     return IconButton(
-//       onPressed: () {
-//         AppCubit.get(context).updateDB(
-//           status: 'done',
-//           id: model['id'],
-//         );
-//       },
-//       icon: doneIcon(cubit.secondaryColor),
-//       tooltip: 'Mark as done',
-//     );
-//   } else if (model['status'] == 'done') {
-//     return IconButton(
-//       onPressed: () {
-//         AppCubit.get(context).updateDB(
-//           status: 'delete',
-//           id: model['id'],
-//         );
-//       },
-//       icon: archiveIcon(cubit.secondaryColor),
-//       tooltip: 'Trash',
-//     );
-//   } else {
-//     return Row(
-//       children: [
-//         IconButton(
-//           onPressed: () {
-//             AppCubit.get(context).updateDB(
-//               status: 'done',
-//               id: model['id'],
-//             );
-//           },
-//           icon: doneIcon(cubit.secondaryColor),
-//           tooltip: 'Mark as done',
-//         ),
-//         IconButton(
-//           onPressed: () {
-//             AppCubit.get(context).updateDB(
-//               status: 'delete',
-//               id: model['id'],
-//             );
-//           },
-//           icon: archiveIcon(cubit.secondaryColor),
-//           tooltip: 'Trash',
-//         ),
-//       ],
-//     );
-//   }
-// }
-
-// Icon doneIcon(Color color) => Icon(
-//       Icons.check_circle,
-//       color: color,
-//     );
-
-// Icon archiveIcon(Color color) => Icon(
-//       Icons.archive,
-//       color: color,
-//     );
 
 Widget tasksBuilder({
   required List<Map> tasks,
@@ -278,3 +231,42 @@ Widget tasksBuilder({
                   color: cubit.secondaryColor,
                 ),
               );
+
+Widget buildChip({
+  required String label,
+  required Color color,
+  required int chipIndex,
+}) =>
+    ChoiceChip(
+      labelPadding: const EdgeInsets.all(2.0),
+      avatar: const CircleAvatar(
+        backgroundColor: Colors.white30,
+        child: Icon(
+          Icons.priority_high_rounded,
+          color: Colors.white,
+          size: 15.0,
+        ),
+      ),
+      label: Text(
+        label.toUpperCase(),
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
+      ),
+      backgroundColor: Colors.grey[400],
+      selectedColor: color,
+      padding: const EdgeInsets.all(8.0),
+      selected: cubit.selectedIndex == chipIndex,
+      onSelected: (bool selected) {
+        if (selected) {
+          cubit.toggleCheck(chipIndex);
+        }
+      },
+    );
+
+Widget createImportanceButton(String label, Color color) => TextButton(
+      onPressed: () {},
+      style: TextButton.styleFrom(foregroundColor: color),
+      child: Text(label),
+    );

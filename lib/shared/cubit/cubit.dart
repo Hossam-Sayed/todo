@@ -38,12 +38,12 @@ class AppCubit extends Cubit<AppStates> {
 
   void createDB() {
     openDatabase(
-      'todo.db',
+      'todo1.db',
       version: 1,
       onCreate: (database, version) {
         database
             .execute(
-                'CREATE TABLE tasks (id INTEGER PRIMARY KEY, title TEXT, date TEXT, time TEXT, status TEXT)')
+                'CREATE TABLE tasks (id INTEGER PRIMARY KEY, title TEXT, date TEXT, time TEXT, status TEXT, priority INTEGER)')
             .then((value) {
           print('Table Created');
         }).catchError((error) {
@@ -65,11 +65,12 @@ class AppCubit extends Cubit<AppStates> {
     required String title,
     required String time,
     required String date,
+    required int priority,
   }) async {
     return await database.transaction((txn) async {
       txn
           .rawInsert(
-        'INSERT INTO tasks(title, time, date, status) VALUES("$title", "$time", "$date", "active")',
+        'INSERT INTO tasks(title, time, date, status, priority) VALUES("$title", "$time", "$date", "active", "$priority")',
       )
           .then((value) {
         print('$value inserted successfully');
@@ -152,5 +153,11 @@ class AppCubit extends Cubit<AppStates> {
     primaryColor = appPrimaryColor;
     secondaryColor = appSecondaryColor;
     emit(AppChangeAppMode());
+  }
+
+  int selectedIndex = 2;
+  void toggleCheck(int index) {
+    selectedIndex = index;
+    emit(AppToggleCheckedChip());
   }
 }
