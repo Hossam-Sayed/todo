@@ -264,9 +264,3 @@ Widget buildChip({
         }
       },
     );
-
-Widget createImportanceButton(String label, Color color) => TextButton(
-      onPressed: () {},
-      style: TextButton.styleFrom(foregroundColor: color),
-      child: Text(label),
-    );
