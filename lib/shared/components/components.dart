@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:home/layout/home_layout.dart';
 import 'package:home/shared/cubit/cubit.dart';
 import 'package:home/shared/cubit/states.dart';
 import 'constants.dart';
@@ -23,10 +24,38 @@ Widget defaultTextFormField({
       onChanged: onChanged,
       validator: validator,
       onTap: onTap,
+      style: TextStyle(
+        color: cubit.secondaryColor,
+      ),
+      cursorColor: cubit.secondaryColor,
       decoration: InputDecoration(
         labelText: label,
+        labelStyle: TextStyle(
+          color: cubit.secondaryColor,
+        ),
         prefixIcon: Icon(
           prefixIcon,
+          color: cubit.secondaryColor,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: cubit.secondaryColor,
+          ),
+          borderRadius: const BorderRadius.all(
+            Radius.circular(
+              10.0,
+            ),
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: cubit.secondaryColor,
+          ),
+          borderRadius: const BorderRadius.all(
+            Radius.circular(
+              10.0,
+            ),
+          ),
         ),
         border: const OutlineInputBorder(
           borderRadius: BorderRadius.all(
@@ -99,7 +128,7 @@ Widget taskItem(Map model, context, Color color) => Dismissible(
             ),
             buildPriorityCircle(model['priority']),
             const SizedBox(
-              width: 20.0,
+              width: 10.0,
             ),
           ],
         ),
@@ -129,14 +158,18 @@ Widget taskItem(Map model, context, Color color) => Dismissible(
     );
 
 Widget buildPriorityCircle(int priority) => CircleAvatar(
-      backgroundColor: (priority == 0)
-          ? Colors.red
-          : (priority == 1)
-              ? Colors.orange
-              : (priority == 2)
-                  ? Colors.green
-                  : Colors.deepPurpleAccent,
-      maxRadius: 6.0,
+      backgroundColor: cubit.isLight ? Colors.grey[100] : Colors.white10,
+      maxRadius: 15.0,
+      child: Icon(
+        Icons.priority_high_rounded,
+        color: (priority == 0)
+            ? Colors.red
+            : (priority == 1)
+                ? Colors.orange
+                : (priority == 2)
+                    ? Colors.green
+                    : Colors.deepPurpleAccent,
+      ),
     );
 
 Widget showAlert(context, model) => AlertDialog(
@@ -236,6 +269,7 @@ Widget buildChip({
   required String label,
   required Color color,
   required int chipIndex,
+  required setState,
 }) =>
     ChoiceChip(
       labelPadding: const EdgeInsets.all(2.0),
@@ -254,13 +288,16 @@ Widget buildChip({
           color: Colors.white,
         ),
       ),
+      pressElevation: 0.0,
       backgroundColor: Colors.grey[400],
       selectedColor: color,
       padding: const EdgeInsets.all(8.0),
-      selected: cubit.selectedIndex == chipIndex,
+      selected: HomeLayout.choiceIndex == chipIndex,
       onSelected: (bool selected) {
         if (selected) {
-          cubit.toggleCheck(chipIndex);
+          setState(() {
+            HomeLayout.choiceIndex = chipIndex;
+          });
         }
       },
     );

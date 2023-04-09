@@ -8,8 +8,6 @@ class AppChangeBottomSheetState extends AppStates {}
 
 class AppChangeAppMode extends AppStates {}
 
-class AppToggleCheckedChip extends AppStates {}
-
 class AppCreateDatabaseState extends AppStates {}
 
 class AppInsertDatabaseState extends AppStates {}

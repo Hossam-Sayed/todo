@@ -154,10 +154,4 @@ class AppCubit extends Cubit<AppStates> {
     secondaryColor = appSecondaryColor;
     emit(AppChangeAppMode());
   }
-
-  int selectedIndex = 2;
-  void toggleCheck(int index) {
-    selectedIndex = index;
-    emit(AppToggleCheckedChip());
-  }
 }

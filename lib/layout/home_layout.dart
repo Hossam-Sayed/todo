@@ -8,7 +8,15 @@ import 'package:intl/intl.dart';
 
 import '../shared/components/constants.dart';
 
-class HomeLayout extends StatelessWidget {
+class HomeLayout extends StatefulWidget {
+  const HomeLayout({super.key});
+
+  @override
+  State<HomeLayout> createState() => _HomeLayoutState();
+  static int choiceIndex = 2;
+}
+
+class _HomeLayoutState extends State<HomeLayout> {
   var scaffoldKey = GlobalKey<ScaffoldState>();
   var formKey = GlobalKey<FormState>();
   var titleController = TextEditingController();
@@ -75,7 +83,7 @@ class HomeLayout extends StatelessWidget {
                       title: titleController.text,
                       time: timeController.text,
                       date: dateController.text,
-                      priority: cubit.selectedIndex,
+                      priority: HomeLayout.choiceIndex,
                     );
                   }
                 } else {
@@ -91,10 +99,10 @@ class HomeLayout extends StatelessWidget {
                                 Container(
                                   height: 5.0,
                                   width: 100.0,
-                                  decoration: const BoxDecoration(
-                                    color: Colors.black,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5.0)),
+                                  decoration: BoxDecoration(
+                                    color: cubit.secondaryColor,
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(5.0)),
                                   ),
                                 ),
                                 const SizedBox(
@@ -171,40 +179,52 @@ class HomeLayout extends StatelessWidget {
                                 const SizedBox(
                                   height: 15.0,
                                 ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    buildChip(
-                                      label: 'Critical',
-                                      color: Colors.red,
-                                      chipIndex: 0,
-                                    ),
-                                    buildChip(
-                                      label: 'High',
-                                      color: Colors.orange,
-                                      chipIndex: 1,
-                                    ),
-                                    buildChip(
-                                      label: 'Normal',
-                                      color: Colors.green,
-                                      chipIndex: 2,
-                                    ),
-                                    buildChip(
-                                      label: 'Low',
-                                      color: Colors.deepPurpleAccent,
-                                      chipIndex: 3,
-                                    ),
-                                  ],
+                                StatefulBuilder(
+                                  builder: (BuildContext context,
+                                          StateSetter changeState) =>
+                                      Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      buildChip(
+                                        label: 'Critical',
+                                        color: Colors.red,
+                                        chipIndex: 0,
+                                        setState: changeState,
+                                      ),
+                                      buildChip(
+                                        label: 'High',
+                                        color: Colors.deepOrangeAccent,
+                                        chipIndex: 1,
+                                        setState: changeState,
+                                      ),
+                                      buildChip(
+                                        label: 'Normal',
+                                        color: Colors.green,
+                                        chipIndex: 2,
+                                        setState: changeState,
+                                      ),
+                                      buildChip(
+                                        label: 'Low',
+                                        color: Colors.deepPurpleAccent,
+                                        chipIndex: 3,
+                                        setState: changeState,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
                           ),
                         ),
-                        backgroundColor: Colors.white,
+                        backgroundColor: cubit.primaryColor,
                         elevation: 15.0,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
+                        shape: RoundedRectangleBorder(
+                          side: BorderSide(
+                            strokeAlign: 1.0,
+                            color: cubit.secondaryColor,
+                          ),
+                          borderRadius: const BorderRadius.vertical(
                             top: Radius.circular(
                               25.0,
                             ),
@@ -217,7 +237,7 @@ class HomeLayout extends StatelessWidget {
                       isShown: false,
                       icon: Icons.add_task,
                     );
-                    cubit.toggleCheck(2);
+                    HomeLayout.choiceIndex = 2;
                     titleController.clear();
                     timeController.clear();
                     dateController.clear();
@@ -231,9 +251,9 @@ class HomeLayout extends StatelessWidget {
                   );
                 }
               },
-              backgroundColor: const Color(0x44696c73),
-              foregroundColor: cubit.secondaryColor,
-              elevation: 0.0,
+              backgroundColor: cubit.secondaryColor,
+              foregroundColor: cubit.primaryColor,
+              elevation: 2.0,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(
                   15.0,
