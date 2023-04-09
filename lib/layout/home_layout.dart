@@ -75,6 +75,7 @@ class HomeLayout extends StatelessWidget {
                       title: titleController.text,
                       time: timeController.text,
                       date: dateController.text,
+                      priority: cubit.selectedIndex,
                     );
                   }
                 } else {
@@ -122,8 +123,10 @@ class HomeLayout extends StatelessWidget {
                                       context: context,
                                       initialTime: TimeOfDay.now(),
                                     ).then((value) {
-                                      timeController.text =
-                                          value!.format(context).toString();
+                                      if (value != null) {
+                                        timeController.text =
+                                            value.format(context).toString();
+                                      }
                                     });
                                   },
                                   type: TextInputType.datetime,
@@ -149,8 +152,10 @@ class HomeLayout extends StatelessWidget {
                                       firstDate: DateTime.now(),
                                       lastDate: DateTime.parse('2030-01-01'),
                                     ).then((value) {
-                                      dateController.text =
-                                          DateFormat.yMMMd().format(value!);
+                                      if (value != null) {
+                                        dateController.text =
+                                            DateFormat.yMMMd().format(value);
+                                      }
                                     });
                                   },
                                   type: TextInputType.datetime,
@@ -162,6 +167,35 @@ class HomeLayout extends StatelessWidget {
                                   },
                                   label: 'Task Date',
                                   prefixIcon: Icons.date_range,
+                                ),
+                                const SizedBox(
+                                  height: 15.0,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    buildChip(
+                                      label: 'Critical',
+                                      color: Colors.red,
+                                      chipIndex: 0,
+                                    ),
+                                    buildChip(
+                                      label: 'High',
+                                      color: Colors.orange,
+                                      chipIndex: 1,
+                                    ),
+                                    buildChip(
+                                      label: 'Normal',
+                                      color: Colors.green,
+                                      chipIndex: 2,
+                                    ),
+                                    buildChip(
+                                      label: 'Low',
+                                      color: Colors.deepPurpleAccent,
+                                      chipIndex: 3,
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
@@ -183,6 +217,7 @@ class HomeLayout extends StatelessWidget {
                       isShown: false,
                       icon: Icons.add_task,
                     );
+                    cubit.toggleCheck(2);
                     titleController.clear();
                     timeController.clear();
                     dateController.clear();
