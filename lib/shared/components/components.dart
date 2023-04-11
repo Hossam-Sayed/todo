@@ -158,7 +158,7 @@ Widget taskItem(Map model, context, Color color) => Dismissible(
     );
 
 Widget buildPriorityCircle(int priority) => CircleAvatar(
-      backgroundColor: cubit.isLight ? Colors.grey[100] : Colors.white10,
+      backgroundColor: cubit.isLight ? Colors.grey[100] : Colors.grey[900],
       maxRadius: 15.0,
       child: Icon(
         Icons.priority_high_rounded,
