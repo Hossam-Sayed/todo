@@ -142,16 +142,17 @@ class AppCubit extends Cubit<AppStates> {
   Color primaryColor = Colors.white;
   Color secondaryColor = Colors.black;
 
-  void toggleMode({
-    required IconData icon,
-    required bool light,
-    required Color appPrimaryColor,
-    required Color appSecondaryColor,
-  }) {
-    isLight = light;
-    modeIcon = icon;
-    primaryColor = appPrimaryColor;
-    secondaryColor = appSecondaryColor;
+  void toggleMode() {
+    isLight = !isLight;
+    if (isLight) {
+      modeIcon = Icons.dark_mode;
+      primaryColor = Colors.white;
+      secondaryColor = Colors.black;
+    } else {
+      modeIcon = Icons.light_mode;
+      primaryColor = Colors.black;
+      secondaryColor = Colors.white;
+    }
     emit(AppChangeAppMode());
   }
 }

@@ -5,7 +5,6 @@ import 'package:home/shared/components/components.dart';
 import 'package:home/shared/cubit/cubit.dart';
 import 'package:home/shared/cubit/states.dart';
 import 'package:intl/intl.dart';
-
 import '../shared/components/constants.dart';
 
 class HomeLayout extends StatefulWidget {
@@ -43,21 +42,13 @@ class _HomeLayoutState extends State<HomeLayout> {
                     right: 10.0,
                   ),
                   child: IconButton(
-                    tooltip: !cubit.isLight ? 'Light Mode' : 'Dark Mode',
+                    tooltip: cubit.isLight ? 'Dark Mode' : 'Light Mode',
                     icon: Icon(
                       cubit.modeIcon,
-                      color: !cubit.isLight ? Colors.white : Colors.black,
+                      color: cubit.secondaryColor,
                     ),
                     onPressed: () {
-                      cubit.toggleMode(
-                        light: !cubit.isLight,
-                        icon:
-                            cubit.isLight ? Icons.light_mode : Icons.dark_mode,
-                        appPrimaryColor:
-                            cubit.isLight ? Colors.black : Colors.white,
-                        appSecondaryColor:
-                            cubit.isLight ? Colors.white : Colors.black,
-                      );
+                      cubit.toggleMode();
                     },
                   ),
                 ),
@@ -67,6 +58,7 @@ class _HomeLayoutState extends State<HomeLayout> {
               title: Text(
                 cubit.titles[cubit.currentIndex],
                 style: const TextStyle(
+                  fontSize: 23.0,
                   fontWeight: FontWeight.bold,
                 ),
               ),
