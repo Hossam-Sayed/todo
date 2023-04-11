@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:home/modules/done_tasks/done_tasks_screen.dart';
 import 'package:home/shared/cubit/states.dart';
+import 'package:home/shared/network/local/cache_helper.dart';
 import 'package:sqflite/sqflite.dart';
 import '../../modules/active_tasks/active_tasks_screen.dart';
 import '../../modules/trash/trash_screen.dart';
@@ -142,17 +143,33 @@ class AppCubit extends Cubit<AppStates> {
   Color primaryColor = Colors.white;
   Color secondaryColor = Colors.black;
 
-  void toggleMode() {
-    isLight = !isLight;
-    if (isLight) {
-      modeIcon = Icons.dark_mode;
-      primaryColor = Colors.white;
-      secondaryColor = Colors.black;
+  void toggleMode({bool? modeBool}) {
+    if (modeBool != null) {
+      isLight = modeBool;
+      if (isLight) {
+        modeIcon = Icons.dark_mode;
+        primaryColor = Colors.white;
+        secondaryColor = Colors.black;
+      } else {
+        modeIcon = Icons.light_mode;
+        primaryColor = Colors.black;
+        secondaryColor = Colors.white;
+      }
+      emit(AppChangeAppMode());
     } else {
-      modeIcon = Icons.light_mode;
-      primaryColor = Colors.black;
-      secondaryColor = Colors.white;
+      isLight = !isLight;
+      CacheHelper.setModeData(key: 'isLight', value: isLight).then((value) {
+        if (isLight) {
+          modeIcon = Icons.dark_mode;
+          primaryColor = Colors.white;
+          secondaryColor = Colors.black;
+        } else {
+          modeIcon = Icons.light_mode;
+          primaryColor = Colors.black;
+          secondaryColor = Colors.white;
+        }
+        emit(AppChangeAppMode());
+      });
     }
-    emit(AppChangeAppMode());
   }
 }
