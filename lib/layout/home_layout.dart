@@ -8,7 +8,9 @@ import 'package:intl/intl.dart';
 import '../shared/components/constants.dart';
 
 class HomeLayout extends StatefulWidget {
-  const HomeLayout({super.key});
+  final bool? mode;
+
+  const HomeLayout(this.mode, {super.key});
 
   @override
   State<HomeLayout> createState() => _HomeLayoutState();
@@ -25,7 +27,9 @@ class _HomeLayoutState extends State<HomeLayout> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) => AppCubit()..createDB(),
+      create: (BuildContext context) => AppCubit()
+        ..createDB()
+        ..toggleMode(modeBool: widget.mode),
       child: BlocConsumer<AppCubit, AppStates>(
         listener: (BuildContext context, AppStates state) {
           if (state is AppInsertDatabaseState) Navigator.pop(context);
