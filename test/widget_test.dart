@@ -12,7 +12,7 @@ import 'package:home/main.dart';
 void main() {
   testWidgets('App starts with Active Tasks screen', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+    await tester.pumpWidget(const MyApp(true));
     expect(find.text('Active Tasks'), findsOneWidget);
   });
 }
