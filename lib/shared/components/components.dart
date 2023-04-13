@@ -162,15 +162,17 @@ Widget buildPriorityCircle(int priority) => CircleAvatar(
       maxRadius: 15.0,
       child: Icon(
         Icons.priority_high_rounded,
-        color: (priority == 0)
-            ? Colors.red
-            : (priority == 1)
-                ? Colors.orange
-                : (priority == 2)
-                    ? Colors.green
-                    : Colors.deepPurpleAccent,
+        color: getChipColor(priority),
       ),
     );
+
+Color getChipColor(priority) => (priority == 0)
+    ? Colors.red
+    : (priority == 1)
+        ? Colors.orange
+        : (priority == 2)
+            ? Colors.green
+            : Colors.deepPurpleAccent;
 
 Widget showAlert(context, model) => AlertDialog(
       shape: const RoundedRectangleBorder(
@@ -301,3 +303,69 @@ Widget buildChip({
         }
       },
     );
+
+Theme applyDatePickerTheme(context, child) => (cubit.isLight)
+    ? Theme(
+        data: Theme.of(context).copyWith(
+          colorScheme: ColorScheme.light(
+            primary: cubit.secondaryColor,
+            onPrimary: cubit.primaryColor,
+            onSurface: cubit.secondaryColor,
+          ),
+          textButtonTheme: TextButtonThemeData(
+            style: TextButton.styleFrom(
+              foregroundColor: cubit.secondaryColor,
+            ),
+          ),
+        ),
+        child: child!,
+      )
+    : Theme(
+        data: Theme.of(context).copyWith(
+          colorScheme: ColorScheme.dark(
+            primary: cubit.primaryColor,
+            onPrimary: cubit.secondaryColor,
+            brightness: Brightness.light,
+            onSurface: cubit.primaryColor,
+          ),
+          textButtonTheme: TextButtonThemeData(
+            style: TextButton.styleFrom(
+              foregroundColor: cubit.primaryColor,
+            ),
+          ),
+        ),
+        child: child!,
+      );
+
+Theme applyTimePickerTheme(context, child) => (cubit.isLight)
+    ? Theme(
+  data: Theme.of(context).copyWith(
+    colorScheme: ColorScheme.light(
+      primary: cubit.secondaryColor,
+      onPrimary: cubit.primaryColor,
+      onSurface: cubit.secondaryColor,
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        foregroundColor: cubit.secondaryColor,
+      ),
+    ),
+  ),
+  child: child!,
+)
+    : Theme(
+  data: Theme.of(context).copyWith(
+    colorScheme: ColorScheme.dark(
+      primary: cubit.secondaryColor,
+      onPrimary: cubit.primaryColor,
+      onSurface: cubit.secondaryColor,
+      surface: cubit.primaryColor
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        foregroundColor: cubit.secondaryColor,
+      ),
+    ),
+  ),
+  child: child!,
+);
