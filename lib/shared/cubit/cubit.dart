@@ -53,7 +53,7 @@ class AppCubit extends Cubit<AppStates> {
         print("database created");
       },
       onOpen: (database) {
-        getDataFromDB(database);
+        getDataFromDB(database, 'SELECT * FROM tasks');
         print("database opened");
       },
     ).then((value) {
@@ -76,19 +76,41 @@ class AppCubit extends Cubit<AppStates> {
           .then((value) {
         print('$value inserted successfully');
         emit(AppInsertDatabaseState());
-        getDataFromDB(database);
+        getDataFromDB(database, 'SELECT * FROM tasks');
       }).catchError((error) {
         print('Error while inserting new record, ${error.toString()}');
       });
     });
   }
 
-  void getDataFromDB(Database database) {
+  // void getPriorityFromDB(Database database) {
+  //   activeTasks = [];
+  //   doneTasks = [];
+  //   trash = [];
+  //   emit(AppGetDatabaseLoadingState());
+  //   database.rawQuery('SELECT * FROM tasks ORDER BY priority').then((list) {
+  //     for (var element in list) {
+  //       if (element['status'] == 'active') {
+  //         activeTasks.add(element);
+  //         // activeTasks.sort((t1, t2) => DateTime.parse(t1['date']).compareTo(DateTime.parse(t2['date'])));
+  //       } else if (element['status'] == 'done') {
+  //         doneTasks.add(element);
+  //         // doneTasks.sort((t1, t2) => DateTime.parse(t1['date']).compareTo(DateTime.parse(t2['date'])));
+  //       } else {
+  //         trash.add(element);
+  //         // trash.sort((t1, t2) => DateTime.parse(t1['date']).compareTo(DateTime.parse(t2['date'])));
+  //       }
+  //     }
+  //     emit(AppGetDatabaseState());
+  //   });
+  // }
+
+  void getDataFromDB(Database database, String query) {
     activeTasks = [];
     doneTasks = [];
     trash = [];
     emit(AppGetDatabaseLoadingState());
-    database.rawQuery('SELECT * FROM tasks').then((list) {
+    database.rawQuery(query).then((list) {
       for (var element in list) {
         if (element['status'] == 'active') {
           activeTasks.add(element);
@@ -111,7 +133,7 @@ class AppCubit extends Cubit<AppStates> {
   }) async {
     database.rawUpdate(
         'UPDATE tasks SET status = ? WHERE id = ?', [status, id]).then((value) {
-      getDataFromDB(database);
+      getDataFromDB(database, 'SELECT * FROM tasks');
       emit(AppUpdateDatabaseState());
     });
   }
@@ -120,7 +142,7 @@ class AppCubit extends Cubit<AppStates> {
     required int id,
   }) async {
     database.rawDelete('DELETE FROM tasks WHERE id = ?', [id]).then((value) {
-      getDataFromDB(database);
+      getDataFromDB(database, 'SELECT * FROM tasks');
       emit(AppDeleteDatabaseState());
     });
   }

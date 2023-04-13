@@ -41,21 +41,85 @@ class _HomeLayoutState extends State<HomeLayout> {
             appBar: AppBar(
               elevation: 0.0,
               actions: [
-                Container(
-                  margin: const EdgeInsets.only(
-                    right: 10.0,
+                IconButton(
+                  tooltip: cubit.isLight ? 'Dark Mode' : 'Light Mode',
+                  icon: Icon(
+                    cubit.modeIcon,
+                    color: cubit.secondaryColor,
                   ),
-                  child: IconButton(
-                    tooltip: cubit.isLight ? 'Dark Mode' : 'Light Mode',
-                    icon: Icon(
-                      cubit.modeIcon,
-                      color: cubit.secondaryColor,
-                    ),
-                    onPressed: () {
-                      cubit.toggleMode();
-                    },
-                  ),
+                  onPressed: () {
+                    cubit.toggleMode();
+                  },
                 ),
+                PopupMenuButton(
+                  icon: const Icon(Icons.sort_rounded),
+                  offset: Offset(0.0, AppBar().preferredSize.height),
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(8.0),
+                      bottomRight: Radius.circular(8.0),
+                      topLeft: Radius.circular(8.0),
+                      topRight: Radius.circular(8.0),
+                    ),
+                  ),
+                  itemBuilder: (ctx) => [
+                    PopupMenuItem(
+                      onTap: () {
+                        cubit.getDataFromDB(cubit.database,
+                            'SELECT * FROM tasks ORDER BY priority');
+                      },
+                      child: Row(
+                        children: const [
+                          Icon(
+                            Icons.priority_high_rounded,
+                            color: Colors.black,
+                          ),
+                          SizedBox(
+                            width: 10.0,
+                          ),
+                          Text('By Priority'),
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem(
+                      onTap: () {
+                        cubit.getDataFromDB(
+                            cubit.database, 'SELECT * FROM tasks');
+                      },
+                      child: Row(
+                        children: const [
+                          Icon(
+                            Icons.timer,
+                            color: Colors.black,
+                          ),
+                          SizedBox(
+                            width: 10.0,
+                          ),
+                          Text('By Task Time'),
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem(
+                      onTap: () {
+                        cubit.getDataFromDB(
+                            cubit.database, 'SELECT * FROM tasks');
+                      },
+                      child: Row(
+                        children: const [
+                          Icon(
+                            Icons.date_range_rounded,
+                            color: Colors.black,
+                          ),
+                          SizedBox(
+                            width: 10.0,
+                          ),
+                          Text('By Date Created'),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(width: 10.0),
               ],
               backgroundColor: cubit.primaryColor,
               foregroundColor: cubit.secondaryColor,
@@ -126,6 +190,8 @@ class _HomeLayoutState extends State<HomeLayout> {
                                     showTimePicker(
                                       context: context,
                                       initialTime: TimeOfDay.now(),
+                                      builder: (context, child) =>
+                                          applyTimePickerTheme(context, child),
                                     ).then((value) {
                                       if (value != null) {
                                         timeController.text =
@@ -155,6 +221,8 @@ class _HomeLayoutState extends State<HomeLayout> {
                                       initialDate: DateTime.now(),
                                       firstDate: DateTime.now(),
                                       lastDate: DateTime.parse('2030-01-01'),
+                                      builder: (context, child) =>
+                                          applyDatePickerTheme(context, child),
                                     ).then((value) {
                                       if (value != null) {
                                         dateController.text =
