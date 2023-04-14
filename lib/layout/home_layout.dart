@@ -184,35 +184,6 @@ class _HomeLayoutState extends State<HomeLayout> {
                                   height: 15.0,
                                 ),
                                 defaultTextFormField(
-                                  controller: timeController,
-                                  readOnlyField: true,
-                                  onTap: () {
-                                    showTimePicker(
-                                      context: context,
-                                      initialTime: TimeOfDay.now(),
-                                      builder: (context, child) =>
-                                          applyTimePickerTheme(context, child),
-                                    ).then((value) {
-                                      if (value != null) {
-                                        timeController.text =
-                                            value.format(context).toString();
-                                      }
-                                    });
-                                  },
-                                  type: TextInputType.datetime,
-                                  validator: (String? value) {
-                                    if (value!.isEmpty) {
-                                      return 'Time must not be empty';
-                                    }
-                                    return null;
-                                  },
-                                  label: 'Task Time',
-                                  prefixIcon: Icons.watch_later_outlined,
-                                ),
-                                const SizedBox(
-                                  height: 15.0,
-                                ),
-                                defaultTextFormField(
                                   controller: dateController,
                                   readOnlyField: true,
                                   onTap: () {
@@ -239,6 +210,35 @@ class _HomeLayoutState extends State<HomeLayout> {
                                   },
                                   label: 'Task Date',
                                   prefixIcon: Icons.date_range,
+                                ),
+                                const SizedBox(
+                                  height: 15.0,
+                                ),
+                                defaultTextFormField(
+                                  controller: timeController,
+                                  readOnlyField: true,
+                                  onTap: () {
+                                    showTimePicker(
+                                      context: context,
+                                      initialTime: TimeOfDay.now(),
+                                      builder: (context, child) =>
+                                          applyTimePickerTheme(context, child),
+                                    ).then((value) {
+                                      if (value != null) {
+                                        timeController.text =
+                                            value.format(context).toString();
+                                      }
+                                    });
+                                  },
+                                  type: TextInputType.datetime,
+                                  validator: (String? value) {
+                                    if (value!.isEmpty) {
+                                      return 'Time must not be empty';
+                                    }
+                                    return null;
+                                  },
+                                  label: 'Task Time',
+                                  prefixIcon: Icons.watch_later_outlined,
                                 ),
                                 const SizedBox(
                                   height: 15.0,
