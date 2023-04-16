@@ -194,4 +194,24 @@ class AppCubit extends Cubit<AppStates> {
       });
     }
   }
+
+  bool isFabVisible = true;
+
+  void setFabVisibility(bool isVisible) {
+    isFabVisible = isVisible;
+    emit(AppChangeFabVisibility());
+    if (!isFabVisible) {
+      setFabEnable(false);
+    }
+  }
+
+  bool isFabEnabled = true;
+
+  void setFabEnable(bool isEnabled) {
+    isFabEnabled = isEnabled;
+    emit(AppChangeFabEnabled());
+    if (isFabEnabled) {
+      setFabVisibility(true);
+    }
+  }
 }

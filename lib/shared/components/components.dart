@@ -218,24 +218,38 @@ Widget showAlert(context, model) => AlertDialog(
 Widget tasksBuilder({
   required List<Map> tasks,
   required AppStates state,
+  required ScrollController controller,
 }) =>
     tasks.isNotEmpty
-        ? ListView.separated(
-            itemBuilder: (context, index) => taskItem(
-              tasks[index],
-              context,
-              cubit.secondaryColor,
-            ),
-            separatorBuilder: (context, index) => Container(
-              margin: const EdgeInsets.only(
-                left: 20.0,
-                right: 20.0,
+        ? NotificationListener(
+            onNotification: (notification) {
+              if (controller.position.pixels <= 100 && !cubit.isFabVisible) {
+                cubit.setFabEnable(true);
+              } else if (controller.position.pixels > 100 &&
+                  cubit.isFabEnabled) {
+                cubit.setFabVisibility(false);
+              }
+              print(controller.position.pixels);
+              return true;
+            },
+            child: ListView.separated(
+              controller: controller,
+              itemBuilder: (context, index) => taskItem(
+                tasks[index],
+                context,
+                cubit.secondaryColor,
               ),
-              height: 1.0,
-              color: cubit.secondaryColor,
+              separatorBuilder: (context, index) => Container(
+                margin: const EdgeInsets.only(
+                  left: 20.0,
+                  right: 20.0,
+                ),
+                height: 1.0,
+                color: cubit.secondaryColor,
+              ),
+              itemCount: tasks.length,
+              physics: const BouncingScrollPhysics(),
             ),
-            itemCount: tasks.length,
-            physics: const BouncingScrollPhysics(),
           )
         : (state is AppGetDatabaseState ||
                 state is AppChangeBottomNavBarState ||
@@ -339,33 +353,33 @@ Theme applyDatePickerTheme(context, child) => (cubit.isLight)
 
 Theme applyTimePickerTheme(context, child) => (cubit.isLight)
     ? Theme(
-  data: Theme.of(context).copyWith(
-    colorScheme: ColorScheme.light(
-      primary: cubit.secondaryColor,
-      onPrimary: cubit.primaryColor,
-      onSurface: cubit.secondaryColor,
-    ),
-    textButtonTheme: TextButtonThemeData(
-      style: TextButton.styleFrom(
-        foregroundColor: cubit.secondaryColor,
-      ),
-    ),
-  ),
-  child: child!,
-)
+        data: Theme.of(context).copyWith(
+          colorScheme: ColorScheme.light(
+            primary: cubit.secondaryColor,
+            onPrimary: cubit.primaryColor,
+            onSurface: cubit.secondaryColor,
+          ),
+          textButtonTheme: TextButtonThemeData(
+            style: TextButton.styleFrom(
+              foregroundColor: cubit.secondaryColor,
+            ),
+          ),
+        ),
+        child: child!,
+      )
     : Theme(
-  data: Theme.of(context).copyWith(
-    colorScheme: ColorScheme.dark(
-      primary: cubit.secondaryColor,
-      onPrimary: cubit.primaryColor,
-      onSurface: cubit.secondaryColor,
-      surface: cubit.primaryColor
-    ),
-    textButtonTheme: TextButtonThemeData(
-      style: TextButton.styleFrom(
-        foregroundColor: cubit.secondaryColor,
-      ),
-    ),
-  ),
-  child: child!,
-);
+        data: Theme.of(context).copyWith(
+          colorScheme: ColorScheme.dark(
+              primary: cubit.secondaryColor,
+              onPrimary: cubit.primaryColor,
+              onSurface: cubit.secondaryColor,
+              surface: cubit.primaryColor),
+          textButtonTheme: TextButtonThemeData(
+            style: TextButton.styleFrom(
+              foregroundColor: cubit.secondaryColor,
+            ),
+          ),
+        ),
+        child: child!,
+      );
+// Scrollable.of(context).position.pixels
