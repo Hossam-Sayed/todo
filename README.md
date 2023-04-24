@@ -13,11 +13,12 @@
 
 </div>
  
- 
+<!-- 
 <div align=right>
 
 **[`↑ To Top`](#top)**
 </div>
+-->
 
 # To-Do App
 
