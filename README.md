@@ -1,6 +1,5 @@
 <div align="center">
 
-
 <img src="https://github.com/Hossam-Sayed/fancy-todo-app/blob/master/to_do_logo.svg" width="200"/>
 
 ## To-Do
