@@ -19,11 +19,11 @@
 </div>
 -->
 
-# To-Do App
+# To-Do App 📝
 
 With To-Do, you'll never miss an important appointment, writing down todos, taking notes and more.
 
-### Versions
+### Versions ⚙
 
 The app is still in the development phase.
   
