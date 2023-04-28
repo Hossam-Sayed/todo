@@ -1,6 +1,5 @@
 <div align="center">
 
-
 <img src="https://github.com/Hossam-Sayed/fancy-todo-app/blob/master/to_do_logo.svg" width="200"/>
 
 ## To-Do
@@ -13,17 +12,18 @@
 
 </div>
  
- 
+<!-- 
 <div align=right>
 
 **[`↑ To Top`](#top)**
 </div>
+-->
 
-# To-Do App
+# To-Do App 📝
 
 With To-Do, you'll never miss an important appointment, writing down todos, taking notes and more.
 
-### Versions
+### Versions ⚙
 
 The app is still in the development phase.
   
