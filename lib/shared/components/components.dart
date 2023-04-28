@@ -229,7 +229,7 @@ Widget tasksBuilder({
                   cubit.isFabEnabled) {
                 cubit.setFabVisibility(false);
               }
-              print(controller.position.pixels);
+              // print(controller.position.pixels);
               return true;
             },
             child: ListView.separated(
