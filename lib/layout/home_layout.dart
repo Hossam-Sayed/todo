@@ -138,7 +138,7 @@ class _HomeLayoutState extends State<HomeLayout> {
             floatingActionButton: AnimatedOpacity(
               opacity: cubit.isFabVisible ? 1 : 0,
               curve: Curves.ease,
-                duration: const Duration(milliseconds: 1000),
+              duration: const Duration(milliseconds: 1000),
               child: Visibility(
                 visible: cubit.isFabEnabled,
                 child: FloatingActionButton(
@@ -155,16 +155,14 @@ class _HomeLayoutState extends State<HomeLayout> {
                     } else {
                       scaffoldKey.currentState
                           ?.showBottomSheet(
-                            (context) => Padding(
-                              padding: const EdgeInsets.all(20.0),
-                              child: Form(
-                                key: formKey,
+                            (context) => SingleChildScrollView(
+                              child: Padding(
+                                padding: const EdgeInsets.all(20.0),
                                 child: Column(
-                                  mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Container(
                                       height: 5.0,
-                                      width: 100.0,
+                                      width: 50.0,
                                       decoration: BoxDecoration(
                                         color: cubit.secondaryColor,
                                         borderRadius: const BorderRadius.all(
@@ -174,115 +172,132 @@ class _HomeLayoutState extends State<HomeLayout> {
                                     const SizedBox(
                                       height: 10.0,
                                     ),
-                                    defaultTextFormField(
-                                      controller: titleController,
-                                      type: TextInputType.text,
-                                      validator: (String? value) {
-                                        if (value!.isEmpty) {
-                                          return 'Title must not be empty';
-                                        }
-                                        return null;
-                                      },
-                                      label: 'Task Title',
-                                      prefixIcon: Icons.title,
-                                    ),
-                                    const SizedBox(
-                                      height: 15.0,
-                                    ),
-                                    defaultTextFormField(
-                                      controller: dateController,
-                                      readOnlyField: true,
-                                      onTap: () {
-                                        showDatePicker(
-                                          context: context,
-                                          initialDate: DateTime.now(),
-                                          firstDate: DateTime.now(),
-                                          lastDate: DateTime.parse('2030-01-01'),
-                                          builder: (context, child) =>
-                                              applyDatePickerTheme(context, child),
-                                        ).then((value) {
-                                          if (value != null) {
-                                            dateController.text =
-                                                DateFormat.yMMMd().format(value);
-                                          }
-                                        });
-                                      },
-                                      type: TextInputType.datetime,
-                                      validator: (String? value) {
-                                        if (value!.isEmpty) {
-                                          return 'Date must not be empty';
-                                        }
-                                        return null;
-                                      },
-                                      label: 'Task Date',
-                                      prefixIcon: Icons.date_range,
-                                    ),
-                                    const SizedBox(
-                                      height: 15.0,
-                                    ),
-                                    defaultTextFormField(
-                                      controller: timeController,
-                                      readOnlyField: true,
-                                      onTap: () {
-                                        showTimePicker(
-                                          context: context,
-                                          initialTime: TimeOfDay.now(),
-                                          builder: (context, child) =>
-                                              applyTimePickerTheme(context, child),
-                                        ).then((value) {
-                                          if (value != null) {
-                                            timeController.text =
-                                                value.format(context).toString();
-                                          }
-                                        });
-                                      },
-                                      type: TextInputType.datetime,
-                                      validator: (String? value) {
-                                        if (value!.isEmpty) {
-                                          return 'Time must not be empty';
-                                        }
-                                        return null;
-                                      },
-                                      label: 'Task Time',
-                                      prefixIcon: Icons.watch_later_outlined,
-                                    ),
-                                    const SizedBox(
-                                      height: 15.0,
-                                    ),
-                                    StatefulBuilder(
-                                      builder: (BuildContext context,
-                                              StateSetter changeState) =>
-                                          Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                    Form(
+                                      key: formKey,
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          buildChip(
-                                            label: 'Critical',
-                                            color: Colors.red,
-                                            chipIndex: 0,
-                                            setState: changeState,
+                                          defaultTextFormField(
+                                            controller: titleController,
+                                            type: TextInputType.text,
+                                            validator: (String? value) {
+                                              if (value!.isEmpty) {
+                                                return 'Title must not be empty';
+                                              }
+                                              return null;
+                                            },
+                                            label: 'Task Title',
+                                            prefixIcon: Icons.title,
                                           ),
-                                          buildChip(
-                                            label: 'High',
-                                            color: Colors.deepOrangeAccent,
-                                            chipIndex: 1,
-                                            setState: changeState,
+                                          const SizedBox(
+                                            height: 15.0,
                                           ),
-                                          buildChip(
-                                            label: 'Normal',
-                                            color: Colors.green,
-                                            chipIndex: 2,
-                                            setState: changeState,
+                                          defaultTextFormField(
+                                            controller: dateController,
+                                            readOnlyField: true,
+                                            onTap: () {
+                                              showDatePicker(
+                                                context: context,
+                                                initialDate: DateTime.now(),
+                                                firstDate: DateTime.now(),
+                                                lastDate: DateTime.parse(
+                                                    '2030-01-01'),
+                                                builder: (context, child) =>
+                                                    applyDatePickerTheme(
+                                                        context, child),
+                                              ).then((value) {
+                                                if (value != null) {
+                                                  dateController.text =
+                                                      DateFormat.yMMMd()
+                                                          .format(value);
+                                                }
+                                              });
+                                            },
+                                            type: TextInputType.datetime,
+                                            validator: (String? value) {
+                                              if (value!.isEmpty) {
+                                                return 'Date must not be empty';
+                                              }
+                                              return null;
+                                            },
+                                            label: 'Task Date',
+                                            prefixIcon: Icons.date_range,
                                           ),
-                                          buildChip(
-                                            label: 'Low',
-                                            color: Colors.deepPurpleAccent,
-                                            chipIndex: 3,
-                                            setState: changeState,
+                                          const SizedBox(
+                                            height: 15.0,
+                                          ),
+                                          defaultTextFormField(
+                                            controller: timeController,
+                                            readOnlyField: true,
+                                            onTap: () {
+                                              showTimePicker(
+                                                context: context,
+                                                initialTime: TimeOfDay.now(),
+                                                builder: (context, child) =>
+                                                    applyTimePickerTheme(
+                                                        context, child),
+                                              ).then((value) {
+                                                if (value != null) {
+                                                  timeController.text = value
+                                                      .format(context)
+                                                      .toString();
+                                                }
+                                              });
+                                            },
+                                            type: TextInputType.datetime,
+                                            validator: (String? value) {
+                                              if (value!.isEmpty) {
+                                                return 'Time must not be empty';
+                                              }
+                                              return null;
+                                            },
+                                            label: 'Task Time',
+                                            prefixIcon:
+                                                Icons.watch_later_outlined,
+                                          ),
+                                          const SizedBox(
+                                            height: 15.0,
+                                          ),
+                                          StatefulBuilder(
+                                            builder: (BuildContext context,
+                                                    StateSetter changeState) =>
+                                                Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                buildChip(
+                                                  label: 'Critical',
+                                                  color: Colors.red,
+                                                  chipIndex: 0,
+                                                  setState: changeState,
+                                                ),
+                                                buildChip(
+                                                  label: 'High',
+                                                  color:
+                                                      Colors.deepOrangeAccent,
+                                                  chipIndex: 1,
+                                                  setState: changeState,
+                                                ),
+                                                buildChip(
+                                                  label: 'Normal',
+                                                  color: Colors.green,
+                                                  chipIndex: 2,
+                                                  setState: changeState,
+                                                ),
+                                                buildChip(
+                                                  label: 'Low',
+                                                  color:
+                                                      Colors.deepPurpleAccent,
+                                                  chipIndex: 3,
+                                                  setState: changeState,
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ],
                                       ),
-                                    ),
+                                    )
                                   ],
                                 ),
                               ),
