@@ -11,11 +11,13 @@
 📝 To-Do is a tasks and to-do app, built for Android with Flutter.
 </div>
  
+<!--
  
 <div align=right>
 
 **[`↑ To Top`](#top)**
 </div>
+-->
 
 # To-Do App 📝
 
