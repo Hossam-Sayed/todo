@@ -21,9 +21,21 @@
 
 With To-Do, you'll never miss an important appointment, writing down todos, taking notes and more.
 
+### Features :sparkles:
+
+The app supports the following:
+1. Light/Dark mode.
+2. Adding tasks, marking tasks as done, and deleting tasks.
+3. Specifying the priority level of a task.
+4. Sorting tasks with various options.
+5. Saving deleted tasks to the trash before permanently deleting them.
+6. and many more...
+
+You experience all features while enjoying a high quality software design and smooth performance with no glitches.
+  
 ### Versions ⚙
 
-The app is still in the development phase.
+The app is still in the development phase 🚧
   
 <div align=right>
 
