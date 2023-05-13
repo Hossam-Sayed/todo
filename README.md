@@ -35,7 +35,7 @@ You experience all features while enjoying a high quality software design and sm
   
 ### Versions ⚙
 
-The app is still in the development phase 🚧
+The app is still under development 🚧
   
 <div align=right>
 
