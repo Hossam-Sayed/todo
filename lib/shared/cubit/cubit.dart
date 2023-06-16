@@ -6,6 +6,7 @@ import 'package:home/shared/network/local/cache_helper.dart';
 import 'package:sqflite/sqflite.dart';
 import '../../modules/active_tasks/active_tasks_screen.dart';
 import '../../modules/trash/trash_screen.dart';
+import '../components/constants.dart';
 
 class AppCubit extends Cubit<AppStates> {
   AppCubit() : super(AppInitialState());
@@ -162,20 +163,20 @@ class AppCubit extends Cubit<AppStates> {
 
   bool isLight = true;
   IconData modeIcon = Icons.dark_mode;
-  Color primaryColor = Colors.white;
-  Color secondaryColor = Colors.black;
+  Color primaryColor = brightColor;
+  Color secondaryColor = darkColor;
 
   void toggleMode({bool? modeBool}) {
     if (modeBool != null) {
       isLight = modeBool;
       if (isLight) {
         modeIcon = Icons.dark_mode;
-        primaryColor = Colors.white;
-        secondaryColor = Colors.black;
+        primaryColor = brightColor;
+        secondaryColor = darkColor;
       } else {
         modeIcon = Icons.light_mode;
-        primaryColor = Colors.black;
-        secondaryColor = Colors.white;
+        primaryColor = darkColor;
+        secondaryColor = brightColor;
       }
       emit(AppChangeAppMode());
     } else {
@@ -183,12 +184,12 @@ class AppCubit extends Cubit<AppStates> {
       CacheHelper.setModeData(key: 'isLight', value: isLight).then((value) {
         if (isLight) {
           modeIcon = Icons.dark_mode;
-          primaryColor = Colors.white;
-          secondaryColor = Colors.black;
+          primaryColor = brightColor;
+          secondaryColor = darkColor;
         } else {
           modeIcon = Icons.light_mode;
-          primaryColor = Colors.black;
-          secondaryColor = Colors.white;
+          primaryColor = darkColor;
+          secondaryColor = brightColor;
         }
         emit(AppChangeAppMode());
       });

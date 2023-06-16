@@ -126,7 +126,7 @@ Widget taskItem(Map model, context, Color color) => Dismissible(
             const SizedBox(
               width: 20.0,
             ),
-            buildPriorityCircle(model['priority']),
+            buildPriorityBadge(model['priority']),
             const SizedBox(
               width: 10.0,
             ),
@@ -163,6 +163,24 @@ Widget buildPriorityCircle(int priority) => CircleAvatar(
       child: Icon(
         Icons.priority_high_rounded,
         color: getChipColor(priority),
+      ),
+    );
+
+Widget buildPriorityBadge(int priority) => Container(
+      height: 25.0,
+      width: 100.0,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5.0),
+        color: cubit.isLight ? Colors.grey[100] : Colors.grey[900],
+      ),
+      alignment: AlignmentDirectional.center,
+      child: Text(
+        HomeLayout.priority[priority],
+        style: TextStyle(
+          fontFamily: 'Operator',
+          fontSize: 15.0,
+          color: getChipColor(priority),
+        ),
       ),
     );
 
