@@ -11,6 +11,7 @@ class HomeLayout extends StatefulWidget {
   final bool? mode;
 
   const HomeLayout(this.mode, {super.key});
+  static const List<String> priority = ['Critical', 'High', 'Normal', 'Low'];
 
   @override
   State<HomeLayout> createState() => _HomeLayoutState();
@@ -267,26 +268,26 @@ class _HomeLayoutState extends State<HomeLayout> {
                                                       .spaceBetween,
                                               children: [
                                                 buildChip(
-                                                  label: 'Critical',
+                                                  label: HomeLayout.priority[0],
                                                   color: Colors.red,
                                                   chipIndex: 0,
                                                   setState: changeState,
                                                 ),
                                                 buildChip(
-                                                  label: 'High',
+                                                  label: HomeLayout.priority[1],
                                                   color:
                                                       Colors.deepOrangeAccent,
                                                   chipIndex: 1,
                                                   setState: changeState,
                                                 ),
                                                 buildChip(
-                                                  label: 'Normal',
+                                                  label: HomeLayout.priority[2],
                                                   color: Colors.green,
                                                   chipIndex: 2,
                                                   setState: changeState,
                                                 ),
                                                 buildChip(
-                                                  label: 'Low',
+                                                  label: HomeLayout.priority[3],
                                                   color:
                                                       Colors.deepPurpleAccent,
                                                   chipIndex: 3,
@@ -360,6 +361,7 @@ class _HomeLayoutState extends State<HomeLayout> {
               unselectedItemColor: const Color(0xFF696c73),
               selectedItemColor: cubit.secondaryColor,
               backgroundColor: cubit.primaryColor,
+              showUnselectedLabels: false,
               items: const [
                 BottomNavigationBarItem(
                   icon: Icon(
