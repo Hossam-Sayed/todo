@@ -31,6 +31,8 @@ Widget defaultTextFormField({
       decoration: InputDecoration(
         labelText: label,
         labelStyle: TextStyle(
+          fontFamily: 'Nunito',
+          fontWeight: FontWeight.bold,
           color: cubit.secondaryColor,
         ),
         prefixIcon: Icon(
@@ -67,8 +69,8 @@ Widget defaultTextFormField({
       ),
     );
 
-Widget taskItem(Map model, context, Color color) => Dismissible(
-      key: Key(model['id'].toString()),
+Widget taskItem(Map task, context, Color color) => Dismissible(
+      key: Key(task['id'].toString()),
       background: Container(
         padding: const EdgeInsets.only(
           left: 20.0,
@@ -76,9 +78,26 @@ Widget taskItem(Map model, context, Color color) => Dismissible(
         ),
         alignment: AlignmentDirectional.centerStart,
         color: Colors.blue,
-        child: Icon(
-          (model['status'] == 'active') ? Icons.task_alt : Icons.unpublished,
-          color: Colors.white,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Icon(
+              (task['status'] == 'active') ? Icons.task_alt : Icons.unpublished,
+              color: Colors.white,
+            ),
+            const SizedBox(
+              width: 10.0,
+            ),
+            Text(
+              (task['status'] == 'active') ? 'Mark as done' : 'Mark as undone',
+              style: const TextStyle(
+                fontFamily: 'Nunito',
+                fontSize: 15.0,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
         ),
       ),
       secondaryBackground: Container(
@@ -88,9 +107,26 @@ Widget taskItem(Map model, context, Color color) => Dismissible(
         ),
         alignment: AlignmentDirectional.centerEnd,
         color: Colors.red,
-        child: const Icon(
-          Icons.delete,
-          color: Colors.white,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text(
+              (task['status'] == 'delete') ? 'Delete' : 'Move to trash',
+              style: const TextStyle(
+                fontFamily: 'Nunito',
+                fontSize: 15.0,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(
+              width: 10.0,
+            ),
+            const Icon(
+              Icons.delete,
+              color: Colors.white,
+            ),
+          ],
         ),
       ),
       child: Container(
@@ -103,9 +139,10 @@ Widget taskItem(Map model, context, Color color) => Dismissible(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '${model['title']}',
+                    '${task['title']}',
                     style: TextStyle(
                       fontSize: 20.0,
+                      fontFamily: 'Nunito',
                       fontWeight: FontWeight.bold,
                       color: color,
                     ),
@@ -114,11 +151,11 @@ Widget taskItem(Map model, context, Color color) => Dismissible(
                     height: 5.0,
                   ),
                   Text(
-                    '${model['date']} ・ ${model['time']}',
+                    '${task['date']} ・ ${task['time']}',
                     style: const TextStyle(
-                      color: Color(0x998D8D8D),
-                      fontWeight: FontWeight.bold,
-                    ),
+                        color: Color(0x998D8D8D),
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Nunito'),
                   ),
                 ],
               ),
@@ -126,7 +163,7 @@ Widget taskItem(Map model, context, Color color) => Dismissible(
             const SizedBox(
               width: 20.0,
             ),
-            buildPriorityBadge(model['priority']),
+            buildPriorityBadge(task['priority']),
             const SizedBox(
               width: 10.0,
             ),
@@ -139,31 +176,22 @@ Widget taskItem(Map model, context, Color color) => Dismissible(
           return showDialog(
             context: context,
             builder: (newContext) {
-              return showAlert(context, model);
+              return showAlert(context, task);
             },
           );
-        } else if (model['status'] == 'done' || model['status'] == 'delete') {
+        } else if (task['status'] == 'done' || task['status'] == 'delete') {
           AppCubit.get(context).updateDB(
             status: 'active',
-            id: model['id'],
+            id: task['id'],
           );
         } else {
           AppCubit.get(context).updateDB(
             status: 'done',
-            id: model['id'],
+            id: task['id'],
           );
         }
         return Future.value(true);
       },
-    );
-
-Widget buildPriorityCircle(int priority) => CircleAvatar(
-      backgroundColor: cubit.isLight ? Colors.grey[100] : Colors.grey[900],
-      maxRadius: 15.0,
-      child: Icon(
-        Icons.priority_high_rounded,
-        color: getChipColor(priority),
-      ),
     );
 
 Widget buildPriorityBadge(int priority) => Container(
@@ -171,28 +199,20 @@ Widget buildPriorityBadge(int priority) => Container(
       width: 100.0,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5.0),
-        color: cubit.isLight ? Colors.grey[100] : Colors.grey[900],
+        color: prioritiesColors[priority],
       ),
       alignment: AlignmentDirectional.center,
       child: Text(
-        HomeLayout.priority[priority],
+        prioritiesLabels[priority],
         style: TextStyle(
           fontFamily: 'Operator',
           fontSize: 15.0,
-          color: getChipColor(priority),
+          color: cubit.primaryColor,
         ),
       ),
     );
 
-Color getChipColor(priority) => (priority == 0)
-    ? Colors.red
-    : (priority == 1)
-        ? Colors.orange
-        : (priority == 2)
-            ? Colors.green
-            : Colors.deepPurpleAccent;
-
-Widget showAlert(context, model) => AlertDialog(
+Widget showAlert(context, task) => AlertDialog(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(
           Radius.circular(
@@ -200,27 +220,27 @@ Widget showAlert(context, model) => AlertDialog(
           ),
         ),
       ),
-      title: (model['status'] == 'delete')
+      title: (task['status'] == 'delete')
           ? const Text('Delete Task?')
           : const Text('Move to Trash?'),
-      content: (model['status'] == 'delete')
+      content: (task['status'] == 'delete')
           ? const Text('Task will be deleted permanently')
           : const Text('Task will be moved to trash'),
       actions: [
         TextButton(
           onPressed: () {
-            (model['status'] == 'delete')
+            (task['status'] == 'delete')
                 ? AppCubit.get(context).deleteDB(
-                    id: model['id'],
+                    id: task['id'],
                   )
                 : AppCubit.get(context).updateDB(
                     status: 'delete',
-                    id: model['id'],
+                    id: task['id'],
                   );
             return Navigator.pop(context);
           },
           child: Text(
-            (model['status'] == 'delete') ? 'DELETE' : 'MOVE TO TRASH',
+            (task['status'] == 'delete') ? 'DELETE' : 'MOVE TO TRASH',
             style: const TextStyle(
               color: Colors.red,
             ),
@@ -286,6 +306,7 @@ Widget tasksBuilder({
                       'No Tasks',
                       style: TextStyle(
                         fontSize: 20.0,
+                        fontFamily: 'Nunito',
                         color: cubit.secondaryColor,
                         fontWeight: FontWeight.bold,
                       ),
@@ -316,9 +337,9 @@ Widget buildChip({
         ),
       ),
       label: Text(
-        label.toUpperCase(),
+        label,
         style: const TextStyle(
-          fontWeight: FontWeight.bold,
+          fontFamily: 'Operator',
           color: Colors.white,
         ),
       ),

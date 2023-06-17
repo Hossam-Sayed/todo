@@ -11,7 +11,6 @@ class HomeLayout extends StatefulWidget {
   final bool? mode;
 
   const HomeLayout(this.mode, {super.key});
-  static const List<String> priority = ['Critical', 'High', 'Normal', 'Low'];
 
   @override
   State<HomeLayout> createState() => _HomeLayoutState();
@@ -49,10 +48,12 @@ class _HomeLayoutState extends State<HomeLayout> {
                     color: cubit.secondaryColor,
                   ),
                   onPressed: () {
+                    if (cubit.isBottomSheetShown) Navigator.pop(context);
                     cubit.toggleMode();
                   },
                 ),
                 PopupMenuButton(
+                  tooltip: 'Sort Tasks',
                   icon: const Icon(Icons.sort_rounded),
                   offset: Offset(0.0, AppBar().preferredSize.height),
                   shape: const RoundedRectangleBorder(
@@ -85,7 +86,7 @@ class _HomeLayoutState extends State<HomeLayout> {
                     PopupMenuItem(
                       onTap: () {
                         cubit.getDataFromDB(
-                            cubit.database, 'SELECT * FROM tasks');
+                            cubit.database, 'SELECT * FROM tasks ORDER BY date');
                       },
                       child: Row(
                         children: const [
@@ -127,8 +128,9 @@ class _HomeLayoutState extends State<HomeLayout> {
               title: Text(
                 cubit.titles[cubit.currentIndex],
                 style: const TextStyle(
-                  fontSize: 23.0,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 25.0,
+                  fontFamily: 'Poppins',
+                  // fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -268,28 +270,26 @@ class _HomeLayoutState extends State<HomeLayout> {
                                                       .spaceBetween,
                                               children: [
                                                 buildChip(
-                                                  label: HomeLayout.priority[0],
-                                                  color: Colors.red,
+                                                  label: prioritiesLabels[0],
+                                                  color: prioritiesColors[0],
                                                   chipIndex: 0,
                                                   setState: changeState,
                                                 ),
                                                 buildChip(
-                                                  label: HomeLayout.priority[1],
-                                                  color:
-                                                      Colors.deepOrangeAccent,
+                                                  label: prioritiesLabels[1],
+                                                  color: prioritiesColors[1],
                                                   chipIndex: 1,
                                                   setState: changeState,
                                                 ),
                                                 buildChip(
-                                                  label: HomeLayout.priority[2],
-                                                  color: Colors.green,
+                                                  label: prioritiesLabels[2],
+                                                  color: prioritiesColors[2],
                                                   chipIndex: 2,
                                                   setState: changeState,
                                                 ),
                                                 buildChip(
-                                                  label: HomeLayout.priority[3],
-                                                  color:
-                                                      Colors.deepPurpleAccent,
+                                                  label: prioritiesLabels[3],
+                                                  color: prioritiesColors[3],
                                                   chipIndex: 3,
                                                   setState: changeState,
                                                 ),
@@ -367,7 +367,7 @@ class _HomeLayoutState extends State<HomeLayout> {
                   icon: Icon(
                     Icons.task_outlined,
                   ),
-                  label: 'Tasks',
+                  label: 'Active',
                   activeIcon: Icon(
                     Icons.task,
                   ),

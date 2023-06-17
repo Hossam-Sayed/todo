@@ -81,8 +81,16 @@ flutter:
   fonts:
     - family: Operator
       fonts:
-        - asset: assets/font/OperatorMono-BoldItalic.otf
+        - asset: assets/fonts/OperatorMono-BoldItalic.otf
           style: italic
+
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/poppins.ttf
+
+    - family: Nunito
+      fonts:
+        - asset: assets/fonts/nunito.ttf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
