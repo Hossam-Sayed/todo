@@ -5,6 +5,13 @@ import '../cubit/cubit.dart';
 late AppCubit cubit;
 const brightColor = Colors.white;
 const Color darkColor = Color(0xFF171a1c);
+const List<String> prioritiesLabels = ['Critical', 'High', 'Normal', 'Low'];
+const List<ColorSwatch> prioritiesColors = [
+  Colors.red,
+  Colors.orange,
+  Colors.green,
+  Colors.deepPurpleAccent
+];
 
 class MyBlocObserver extends BlocObserver {
   @override
