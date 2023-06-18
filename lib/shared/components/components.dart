@@ -31,8 +31,6 @@ Widget defaultTextFormField({
       decoration: InputDecoration(
         labelText: label,
         labelStyle: TextStyle(
-          fontFamily: 'Nunito',
-          fontWeight: FontWeight.bold,
           color: cubit.secondaryColor,
         ),
         prefixIcon: Icon(
@@ -69,7 +67,54 @@ Widget defaultTextFormField({
       ),
     );
 
-Widget taskItem(Map task, context, Color color) => Dismissible(
+Widget tasksBuilder({
+  required List<Map> tasks,
+  required AppStates state,
+  required ScrollController controller,
+  required bool isActive,
+}) =>
+    tasks.isNotEmpty
+        ? NotificationListener(
+            onNotification: (notification) {
+              if (controller.position.pixels <= 100 && !cubit.isFabVisible) {
+                cubit.setFabEnable(true);
+              } else if (controller.position.pixels > 100 &&
+                  cubit.isFabEnabled) {
+                cubit.setFabVisibility(false);
+              }
+              // print(controller.position.pixels);
+              return true;
+            },
+            child: ListView.separated(
+              controller: controller,
+              itemBuilder: (context, index) => buildTaskItem(
+                tasks[index],
+                context,
+                cubit.secondaryColor,
+              ),
+              separatorBuilder: (context, index) => Container(
+                margin: const EdgeInsets.only(
+                  left: 20.0,
+                  right: 20.0,
+                ),
+                height: 1.0,
+                color: cubit.secondaryColor,
+              ),
+              itemCount: tasks.length,
+              physics: const BouncingScrollPhysics(),
+            ),
+          )
+        : (state is AppGetDatabaseLoadingState)
+            ? Center(
+                child: CircularProgressIndicator(
+                  color: cubit.secondaryColor,
+                ),
+              )
+            : Center(
+                child: isActive ? buildNoTasksActive() : buildNoTasksDone(),
+              );
+
+Widget buildTaskItem(Map task, context, Color color) => Dismissible(
       key: Key(task['id'].toString()),
       background: Container(
         padding: const EdgeInsets.only(
@@ -91,7 +136,6 @@ Widget taskItem(Map task, context, Color color) => Dismissible(
             Text(
               (task['status'] == 'active') ? 'Mark as done' : 'Mark as undone',
               style: const TextStyle(
-                fontFamily: 'Nunito',
                 fontSize: 15.0,
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
@@ -113,7 +157,6 @@ Widget taskItem(Map task, context, Color color) => Dismissible(
             Text(
               (task['status'] == 'delete') ? 'Delete' : 'Move to trash',
               style: const TextStyle(
-                fontFamily: 'Nunito',
                 fontSize: 15.0,
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
@@ -142,7 +185,6 @@ Widget taskItem(Map task, context, Color color) => Dismissible(
                     '${task['title']}',
                     style: TextStyle(
                       fontSize: 20.0,
-                      fontFamily: 'Nunito',
                       fontWeight: FontWeight.bold,
                       color: color,
                     ),
@@ -154,8 +196,7 @@ Widget taskItem(Map task, context, Color color) => Dismissible(
                     '${task['date']} ・ ${task['time']}',
                     style: const TextStyle(
                         color: Color(0x998D8D8D),
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Nunito'),
+                        fontWeight: FontWeight.bold,),
                   ),
                 ],
               ),
@@ -194,6 +235,88 @@ Widget taskItem(Map task, context, Color color) => Dismissible(
       },
     );
 
+Widget buildNoTasksDone() => Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Image(
+          image: AssetImage(
+            "assets/images/no_tasks.png",
+          ),
+          width: 150.0,
+        ),
+        const SizedBox(
+          height: 20.0,
+        ),
+        Text(
+          'No Tasks',
+          style: TextStyle(
+            fontSize: 25.0,
+            color: cubit.secondaryColor,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const Text(
+          textAlign: TextAlign.center,
+          'Time to get some tasks done!',
+          style: TextStyle(
+            fontSize: 20.0,
+            color: Colors.grey,
+          ),
+        ),
+      ],
+    );
+
+Widget buildNoTasksActive() => Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const SizedBox(
+          height: 150.0,
+        ),
+        const Image(
+          image: AssetImage(
+            "assets/images/no_tasks.png",
+          ),
+          width: 150.0,
+        ),
+        const SizedBox(
+          height: 20.0,
+        ),
+        Text(
+          'No Tasks',
+          style: TextStyle(
+            fontSize: 25.0,
+            color: cubit.secondaryColor,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const Text(
+          textAlign: TextAlign.center,
+          'Tap the + button below to add\nthe thing you need to do!',
+          style: TextStyle(
+            fontSize: 20.0,
+            color: Colors.grey,
+          ),
+        ),
+        const SizedBox(
+          height: 10.0,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            SizedBox(
+              width: 160.0,
+            ),
+            Image(
+              image: AssetImage(
+                "assets/images/arrow.png",
+              ),
+              width: 150.0,
+            ),
+          ],
+        ),
+      ],
+    );
+
 Widget buildPriorityBadge(int priority) => Container(
       height: 25.0,
       width: 100.0,
@@ -203,10 +326,10 @@ Widget buildPriorityBadge(int priority) => Container(
       ),
       alignment: AlignmentDirectional.center,
       child: Text(
-        prioritiesLabels[priority],
+        prioritiesLabels[priority].toUpperCase(),
         style: TextStyle(
-          fontFamily: 'Operator',
-          fontSize: 15.0,
+          fontSize: 12.0,
+          fontWeight: FontWeight.bold,
           color: cubit.primaryColor,
         ),
       ),
@@ -253,73 +376,6 @@ Widget showAlert(context, task) => AlertDialog(
       ],
     );
 
-Widget tasksBuilder({
-  required List<Map> tasks,
-  required AppStates state,
-  required ScrollController controller,
-}) =>
-    tasks.isNotEmpty
-        ? NotificationListener(
-            onNotification: (notification) {
-              if (controller.position.pixels <= 100 && !cubit.isFabVisible) {
-                cubit.setFabEnable(true);
-              } else if (controller.position.pixels > 100 &&
-                  cubit.isFabEnabled) {
-                cubit.setFabVisibility(false);
-              }
-              // print(controller.position.pixels);
-              return true;
-            },
-            child: ListView.separated(
-              controller: controller,
-              itemBuilder: (context, index) => taskItem(
-                tasks[index],
-                context,
-                cubit.secondaryColor,
-              ),
-              separatorBuilder: (context, index) => Container(
-                margin: const EdgeInsets.only(
-                  left: 20.0,
-                  right: 20.0,
-                ),
-                height: 1.0,
-                color: cubit.secondaryColor,
-              ),
-              itemCount: tasks.length,
-              physics: const BouncingScrollPhysics(),
-            ),
-          )
-        : (state is AppGetDatabaseState ||
-                state is AppChangeBottomNavBarState ||
-                state is AppChangeBottomSheetState ||
-                state is AppChangeAppMode)
-            ? Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.task,
-                      size: 100.0,
-                      color: cubit.secondaryColor,
-                    ),
-                    Text(
-                      'No Tasks',
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        fontFamily: 'Nunito',
-                        color: cubit.secondaryColor,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            : Center(
-                child: CircularProgressIndicator(
-                  color: cubit.secondaryColor,
-                ),
-              );
-
 Widget buildChip({
   required String label,
   required Color color,
@@ -337,10 +393,11 @@ Widget buildChip({
         ),
       ),
       label: Text(
-        label,
+        label.toUpperCase(),
         style: const TextStyle(
-          fontFamily: 'Operator',
           color: Colors.white,
+          fontSize: 12.0,
+          fontWeight: FontWeight.bold,
         ),
       ),
       pressElevation: 0.0,

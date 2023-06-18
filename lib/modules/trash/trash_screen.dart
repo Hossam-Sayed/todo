@@ -14,7 +14,12 @@ class TrashScreen extends StatelessWidget {
       builder: (context, state) {
         ScrollController scrollController = ScrollController();
         var tasks = AppCubit.get(context).trash;
-        return tasksBuilder(tasks: tasks, state: state, controller: scrollController);
+        return tasksBuilder(
+          tasks: tasks,
+          state: state,
+          controller: scrollController,
+          isActive: false,
+        );
       },
     );
   }
