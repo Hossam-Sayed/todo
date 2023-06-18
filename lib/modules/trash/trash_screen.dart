@@ -19,6 +19,7 @@ class TrashScreen extends StatelessWidget {
           state: state,
           controller: scrollController,
           isActive: false,
+          isDone: false,
         );
       },
     );

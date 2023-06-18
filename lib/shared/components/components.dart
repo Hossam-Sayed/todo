@@ -72,37 +72,26 @@ Widget tasksBuilder({
   required AppStates state,
   required ScrollController controller,
   required bool isActive,
+  bool isDone = true,
 }) =>
     tasks.isNotEmpty
-        ? NotificationListener(
-            onNotification: (notification) {
-              if (controller.position.pixels <= 100 && !cubit.isFabVisible) {
-                cubit.setFabEnable(true);
-              } else if (controller.position.pixels > 100 &&
-                  cubit.isFabEnabled) {
-                cubit.setFabVisibility(false);
-              }
-              // print(controller.position.pixels);
-              return true;
-            },
-            child: ListView.separated(
-              controller: controller,
-              itemBuilder: (context, index) => buildTaskItem(
-                tasks[index],
-                context,
-                cubit.secondaryColor,
-              ),
-              separatorBuilder: (context, index) => Container(
-                margin: const EdgeInsets.only(
-                  left: 20.0,
-                  right: 20.0,
-                ),
-                height: 1.0,
-                color: cubit.secondaryColor,
-              ),
-              itemCount: tasks.length,
-              physics: const BouncingScrollPhysics(),
+        ? ListView.separated(
+            controller: controller,
+            itemBuilder: (context, index) => buildTaskItem(
+              tasks[index],
+              context,
+              cubit.secondaryColor,
             ),
+            separatorBuilder: (context, index) => Container(
+              margin: const EdgeInsets.only(
+                left: 20.0,
+                right: 20.0,
+              ),
+              height: 1.0,
+              color: cubit.secondaryColor,
+            ),
+            itemCount: tasks.length,
+            physics: const BouncingScrollPhysics(),
           )
         : (state is AppGetDatabaseLoadingState)
             ? Center(
@@ -111,7 +100,8 @@ Widget tasksBuilder({
                 ),
               )
             : Center(
-                child: isActive ? buildNoTasksActive() : buildNoTasksDone(),
+                child:
+                    isActive ? buildNoTasksActive() : buildNoTasksDone(isDone),
               );
 
 Widget buildTaskItem(Map task, context, Color color) => Dismissible(
@@ -134,7 +124,7 @@ Widget buildTaskItem(Map task, context, Color color) => Dismissible(
               width: 10.0,
             ),
             Text(
-              (task['status'] == 'active') ? 'Mark as done' : 'Mark as undone',
+              (task['status'] == 'active') ? 'Mark as done' : 'Mark as active',
               style: const TextStyle(
                 fontSize: 15.0,
                 color: Colors.white,
@@ -189,14 +179,35 @@ Widget buildTaskItem(Map task, context, Color color) => Dismissible(
                       color: color,
                     ),
                   ),
-                  const SizedBox(
-                    height: 5.0,
-                  ),
-                  Text(
-                    '${task['date']} ・ ${task['time']}',
-                    style: const TextStyle(
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.calendar_month,
+                        size: 15.0,
                         color: Color(0x998D8D8D),
-                        fontWeight: FontWeight.bold,),
+                      ),
+                      const SizedBox(width: 5.0,),
+                      Text(
+                        '${task['date']} ・ ',
+                        style: const TextStyle(
+                          color: Color(0x998D8D8D),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const Icon(
+                        Icons.access_time_filled,
+                        size: 15.0,
+                        color: Color(0x998D8D8D),
+                      ),
+                      const SizedBox(width: 5.0,),
+                      Text(
+                        '${task['time']}',
+                        style: const TextStyle(
+                          color: Color(0x998D8D8D),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -235,37 +246,6 @@ Widget buildTaskItem(Map task, context, Color color) => Dismissible(
       },
     );
 
-Widget buildNoTasksDone() => Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Image(
-          image: AssetImage(
-            "assets/images/no_tasks.png",
-          ),
-          width: 150.0,
-        ),
-        const SizedBox(
-          height: 20.0,
-        ),
-        Text(
-          'No Tasks',
-          style: TextStyle(
-            fontSize: 25.0,
-            color: cubit.secondaryColor,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const Text(
-          textAlign: TextAlign.center,
-          'Time to get some tasks done!',
-          style: TextStyle(
-            fontSize: 20.0,
-            color: Colors.grey,
-          ),
-        ),
-      ],
-    );
-
 Widget buildNoTasksActive() => Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -284,7 +264,7 @@ Widget buildNoTasksActive() => Column(
         Text(
           'No Tasks',
           style: TextStyle(
-            fontSize: 25.0,
+            fontSize: 20.0,
             color: cubit.secondaryColor,
             fontWeight: FontWeight.bold,
           ),
@@ -293,7 +273,7 @@ Widget buildNoTasksActive() => Column(
           textAlign: TextAlign.center,
           'Tap the + button below to add\nthe thing you need to do!',
           style: TextStyle(
-            fontSize: 20.0,
+            fontSize: 18.0,
             color: Colors.grey,
           ),
         ),
@@ -313,6 +293,39 @@ Widget buildNoTasksActive() => Column(
               width: 150.0,
             ),
           ],
+        ),
+      ],
+    );
+
+Widget buildNoTasksDone(bool isDone) => Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Image(
+          image: AssetImage(
+            "assets/images/no_tasks.png",
+          ),
+          width: 150.0,
+        ),
+        const SizedBox(
+          height: 20.0,
+        ),
+        Text(
+          'No Tasks',
+          style: TextStyle(
+            fontSize: 20.0,
+            color: cubit.secondaryColor,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Text(
+          textAlign: TextAlign.center,
+          isDone
+              ? 'Time to get some tasks done!'
+              : 'Temporarily deleted tasks\nwill appear here!',
+          style: const TextStyle(
+            fontSize: 18.0,
+            color: Colors.grey,
+          ),
         ),
       ],
     );

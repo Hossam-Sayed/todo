@@ -126,7 +126,6 @@ class AppCubit extends Cubit<AppStates> {
 
   bool isBottomSheetShown = false;
   IconData fabIcon = Icons.add_task;
-  String fabLabel = 'Add Task';
 
   void changeBottomSheetState({
     required bool isShown,
@@ -138,7 +137,6 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   bool isLight = true;
-  IconData modeIcon = Icons.dark_mode;
   Color primaryColor = brightColor;
   Color secondaryColor = darkColor;
 
@@ -146,11 +144,9 @@ class AppCubit extends Cubit<AppStates> {
     if (modeBool != null) {
       isLight = modeBool;
       if (isLight) {
-        modeIcon = Icons.dark_mode;
         primaryColor = brightColor;
         secondaryColor = darkColor;
       } else {
-        modeIcon = Icons.light_mode;
         primaryColor = darkColor;
         secondaryColor = brightColor;
       }
@@ -159,47 +155,14 @@ class AppCubit extends Cubit<AppStates> {
       isLight = !isLight;
       CacheHelper.setModeData(key: 'isLight', value: isLight).then((value) {
         if (isLight) {
-          modeIcon = Icons.dark_mode;
           primaryColor = brightColor;
           secondaryColor = darkColor;
         } else {
-          modeIcon = Icons.light_mode;
           primaryColor = darkColor;
           secondaryColor = brightColor;
         }
         emit(AppChangeAppMode());
       });
     }
-  }
-
-  bool isFabVisible = true;
-
-  void setFabVisibility(bool isVisible) {
-    isFabVisible = isVisible;
-    emit(AppChangeFabVisibility());
-    if (!isFabVisible) {
-      setFabEnable(false);
-    }
-  }
-
-  bool isFabEnabled = true;
-
-  void setFabEnable(bool isEnabled) {
-    isFabEnabled = isEnabled;
-    emit(AppChangeFabEnabled());
-    if (isFabEnabled) {
-      setFabVisibility(true);
-    }
-  }
-
-  bool isSearchTextFieldVisible = false;
-
-  void toggleSearchTextField(bool isVisible) {}
-
-  bool isSettingsRotated = false;
-
-  void toggleSettingsRotation() {
-    isSettingsRotated = !isSettingsRotated;
-    emit(AppRotateSearchState());
   }
 }

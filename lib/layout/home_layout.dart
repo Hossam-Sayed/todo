@@ -44,7 +44,7 @@ class _HomeLayoutState extends State<HomeLayout> {
                 IconButton(
                   tooltip: cubit.isLight ? 'Dark Mode' : 'Light Mode',
                   icon: Icon(
-                    cubit.modeIcon,
+                    cubit.isLight ? Icons.dark_mode_rounded : Icons.light_mode,
                     color: cubit.secondaryColor,
                   ),
                   onPressed: () {
@@ -52,28 +52,8 @@ class _HomeLayoutState extends State<HomeLayout> {
                     cubit.toggleMode();
                   },
                 ),
-                IconButton(
-                  tooltip: 'Search Tasks',
-                  icon: Icon(
-                    Icons.search_rounded,
-                    color: cubit.secondaryColor,
-                  ),
-                  onPressed: () {},
-                ),
-                RotatedBox(
-                  quarterTurns: cubit.isSettingsRotated ? 1 : 0,
-                  child: IconButton(
-                    tooltip: 'Settings',
-                    icon: Icon(
-                      Icons.settings_rounded,
-                      color: cubit.secondaryColor,
-                    ),
-                    onPressed: () {
-                      cubit.toggleSettingsRotation();
-                    },
-                  ),
-                ),
                 PopupMenuButton(
+                  enabled: true,
                   tooltip: 'Sort Tasks',
                   icon: const Icon(Icons.sort_rounded),
                   offset: Offset(0.0, AppBar().preferredSize.height),
@@ -169,14 +149,15 @@ class _HomeLayoutState extends State<HomeLayout> {
               selectedItemColor: cubit.secondaryColor,
               backgroundColor: cubit.primaryColor,
               showUnselectedLabels: false,
+              selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
               items: [
                 const BottomNavigationBarItem(
                   icon: Icon(
-                    Icons.task_outlined,
+                    Icons.dashboard_outlined,
                   ),
                   label: 'Active',
                   activeIcon: Icon(
-                    Icons.task,
+                    Icons.dashboard_rounded,
                   ),
                   tooltip: 'Active Tasks',
                 ),
