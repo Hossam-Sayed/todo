@@ -12,6 +12,12 @@ const List<ColorSwatch> prioritiesColors = [
   Colors.green,
   Colors.deepPurpleAccent
 ];
+List<dynamic> prioritiesLightColors = [
+  Colors.red[50],
+  Colors.orange[50],
+  Colors.green[50],
+  Colors.deepPurple[50]
+];
 
 class MyBlocObserver extends BlocObserver {
   @override

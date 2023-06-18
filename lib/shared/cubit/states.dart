@@ -23,5 +23,3 @@ class AppUpdateDatabaseState extends AppStates {}
 class AppDeleteDatabaseState extends AppStates {}
 
 class AppGetDatabaseLoadingState extends AppStates {}
-
-class AppRotateSearchState extends AppStates {}
