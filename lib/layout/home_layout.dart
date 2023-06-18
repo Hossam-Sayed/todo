@@ -52,6 +52,27 @@ class _HomeLayoutState extends State<HomeLayout> {
                     cubit.toggleMode();
                   },
                 ),
+                IconButton(
+                  tooltip: 'Search Tasks',
+                  icon: Icon(
+                    Icons.search_rounded,
+                    color: cubit.secondaryColor,
+                  ),
+                  onPressed: () {},
+                ),
+                RotatedBox(
+                  quarterTurns: cubit.isSettingsRotated ? 1 : 0,
+                  child: IconButton(
+                    tooltip: 'Settings',
+                    icon: Icon(
+                      Icons.settings_rounded,
+                      color: cubit.secondaryColor,
+                    ),
+                    onPressed: () {
+                      cubit.toggleSettingsRotation();
+                    },
+                  ),
+                ),
                 PopupMenuButton(
                   tooltip: 'Sort Tasks',
                   icon: const Icon(Icons.sort_rounded),
@@ -79,14 +100,14 @@ class _HomeLayoutState extends State<HomeLayout> {
                           SizedBox(
                             width: 10.0,
                           ),
-                          Text('By Priority'),
+                          Text('Sort by Priority'),
                         ],
                       ),
                     ),
                     PopupMenuItem(
                       onTap: () {
-                        cubit.getDataFromDB(
-                            cubit.database, 'SELECT * FROM tasks ORDER BY date');
+                        cubit.getDataFromDB(cubit.database,
+                            'SELECT * FROM tasks ORDER BY date');
                       },
                       child: Row(
                         children: const [
@@ -97,7 +118,7 @@ class _HomeLayoutState extends State<HomeLayout> {
                           SizedBox(
                             width: 10.0,
                           ),
-                          Text('By Task Time'),
+                          Text('Sort by Task Time'),
                         ],
                       ),
                     ),
@@ -115,7 +136,7 @@ class _HomeLayoutState extends State<HomeLayout> {
                           SizedBox(
                             width: 10.0,
                           ),
-                          Text('By Date Created'),
+                          Text('Sort by Date Created'),
                         ],
                       ),
                     ),
@@ -129,8 +150,7 @@ class _HomeLayoutState extends State<HomeLayout> {
                 cubit.titles[cubit.currentIndex],
                 style: const TextStyle(
                   fontSize: 25.0,
-                  fontFamily: 'Poppins',
-                  // fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -138,232 +158,19 @@ class _HomeLayoutState extends State<HomeLayout> {
               child: cubit.screens[cubit.currentIndex],
             ),
             backgroundColor: cubit.primaryColor,
-            floatingActionButton: AnimatedOpacity(
-              opacity: cubit.isFabVisible ? 1 : 0,
-              curve: Curves.ease,
-              duration: const Duration(milliseconds: 1000),
-              child: Visibility(
-                visible: cubit.isFabEnabled,
-                child: FloatingActionButton(
-                  onPressed: () {
-                    if (cubit.isBottomSheetShown) {
-                      if (formKey.currentState!.validate()) {
-                        cubit.insertToDB(
-                          title: titleController.text,
-                          time: timeController.text,
-                          date: dateController.text,
-                          priority: HomeLayout.choiceIndex,
-                        );
-                      }
-                    } else {
-                      scaffoldKey.currentState
-                          ?.showBottomSheet(
-                            (context) => SingleChildScrollView(
-                              child: Padding(
-                                padding: const EdgeInsets.all(20.0),
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      height: 5.0,
-                                      width: 50.0,
-                                      decoration: BoxDecoration(
-                                        color: cubit.secondaryColor,
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(5.0)),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 10.0,
-                                    ),
-                                    Form(
-                                      key: formKey,
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          defaultTextFormField(
-                                            controller: titleController,
-                                            type: TextInputType.text,
-                                            validator: (String? value) {
-                                              if (value!.isEmpty) {
-                                                return 'Title must not be empty';
-                                              }
-                                              return null;
-                                            },
-                                            label: 'Task Title',
-                                            prefixIcon: Icons.title,
-                                          ),
-                                          const SizedBox(
-                                            height: 15.0,
-                                          ),
-                                          defaultTextFormField(
-                                            controller: dateController,
-                                            readOnlyField: true,
-                                            onTap: () {
-                                              showDatePicker(
-                                                context: context,
-                                                initialDate: DateTime.now(),
-                                                firstDate: DateTime.now(),
-                                                lastDate: DateTime.parse(
-                                                    '2030-01-01'),
-                                                builder: (context, child) =>
-                                                    applyDatePickerTheme(
-                                                        context, child),
-                                              ).then((value) {
-                                                if (value != null) {
-                                                  dateController.text =
-                                                      DateFormat.yMMMd()
-                                                          .format(value);
-                                                }
-                                              });
-                                            },
-                                            type: TextInputType.datetime,
-                                            validator: (String? value) {
-                                              if (value!.isEmpty) {
-                                                return 'Date must not be empty';
-                                              }
-                                              return null;
-                                            },
-                                            label: 'Task Date',
-                                            prefixIcon: Icons.date_range,
-                                          ),
-                                          const SizedBox(
-                                            height: 15.0,
-                                          ),
-                                          defaultTextFormField(
-                                            controller: timeController,
-                                            readOnlyField: true,
-                                            onTap: () {
-                                              showTimePicker(
-                                                context: context,
-                                                initialTime: TimeOfDay.now(),
-                                                builder: (context, child) =>
-                                                    applyTimePickerTheme(
-                                                        context, child),
-                                              ).then((value) {
-                                                if (value != null) {
-                                                  timeController.text = value
-                                                      .format(context)
-                                                      .toString();
-                                                }
-                                              });
-                                            },
-                                            type: TextInputType.datetime,
-                                            validator: (String? value) {
-                                              if (value!.isEmpty) {
-                                                return 'Time must not be empty';
-                                              }
-                                              return null;
-                                            },
-                                            label: 'Task Time',
-                                            prefixIcon:
-                                                Icons.watch_later_outlined,
-                                          ),
-                                          const SizedBox(
-                                            height: 15.0,
-                                          ),
-                                          StatefulBuilder(
-                                            builder: (BuildContext context,
-                                                    StateSetter changeState) =>
-                                                Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                buildChip(
-                                                  label: prioritiesLabels[0],
-                                                  color: prioritiesColors[0],
-                                                  chipIndex: 0,
-                                                  setState: changeState,
-                                                ),
-                                                buildChip(
-                                                  label: prioritiesLabels[1],
-                                                  color: prioritiesColors[1],
-                                                  chipIndex: 1,
-                                                  setState: changeState,
-                                                ),
-                                                buildChip(
-                                                  label: prioritiesLabels[2],
-                                                  color: prioritiesColors[2],
-                                                  chipIndex: 2,
-                                                  setState: changeState,
-                                                ),
-                                                buildChip(
-                                                  label: prioritiesLabels[3],
-                                                  color: prioritiesColors[3],
-                                                  chipIndex: 3,
-                                                  setState: changeState,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                            backgroundColor: cubit.primaryColor,
-                            elevation: 15.0,
-                            shape: RoundedRectangleBorder(
-                              side: BorderSide(
-                                strokeAlign: 1.0,
-                                color: cubit.secondaryColor,
-                              ),
-                              borderRadius: const BorderRadius.vertical(
-                                top: Radius.circular(
-                                  25.0,
-                                ),
-                              ),
-                            ),
-                          )
-                          .closed
-                          .then((value) {
-                        cubit.changeBottomSheetState(
-                          isShown: false,
-                          icon: Icons.add_task,
-                        );
-                        HomeLayout.choiceIndex = 2;
-                        titleController.clear();
-                        timeController.clear();
-                        dateController.clear();
-                        SystemChrome.setEnabledSystemUIMode(
-                          SystemUiMode.immersiveSticky,
-                        );
-                      });
-                      cubit.changeBottomSheetState(
-                        isShown: true,
-                        icon: Icons.add,
-                      );
-                    }
-                  },
-                  backgroundColor: cubit.secondaryColor,
-                  foregroundColor: cubit.primaryColor,
-                  elevation: 2.0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      15.0,
-                    ),
-                  ),
-                  child: Icon(
-                    cubit.fabIcon,
-                  ),
-                ),
-              ),
-            ),
             bottomNavigationBar: BottomNavigationBar(
               type: BottomNavigationBarType.fixed,
               currentIndex: AppCubit.get(context).currentIndex,
               onTap: (index) {
                 AppCubit.get(context).changeIndex(index);
               },
-              elevation: 10.0,
+              elevation: 5.0,
               unselectedItemColor: const Color(0xFF696c73),
               selectedItemColor: cubit.secondaryColor,
               backgroundColor: cubit.primaryColor,
               showUnselectedLabels: false,
-              items: const [
-                BottomNavigationBarItem(
+              items: [
+                const BottomNavigationBarItem(
                   icon: Icon(
                     Icons.task_outlined,
                   ),
@@ -373,17 +180,17 @@ class _HomeLayoutState extends State<HomeLayout> {
                   ),
                   tooltip: 'Active Tasks',
                 ),
-                BottomNavigationBarItem(
+                const BottomNavigationBarItem(
                   icon: Icon(
-                    Icons.check_circle_outline,
+                    Icons.done_outline_rounded,
                   ),
                   label: 'Done',
                   activeIcon: Icon(
-                    Icons.check_circle,
+                    Icons.done_rounded,
                   ),
                   tooltip: 'Done Tasks',
                 ),
-                BottomNavigationBarItem(
+                const BottomNavigationBarItem(
                   icon: Icon(
                     Icons.delete_outline,
                   ),
@@ -393,6 +200,215 @@ class _HomeLayoutState extends State<HomeLayout> {
                   ),
                   tooltip: 'Trash',
                 ),
+                BottomNavigationBarItem(
+                  label: '',
+                  icon: FloatingActionButton(
+                    onPressed: () {
+                      if (cubit.isBottomSheetShown) {
+                        if (formKey.currentState!.validate()) {
+                          cubit.insertToDB(
+                            title: titleController.text,
+                            time: timeController.text,
+                            date: dateController.text,
+                            priority: HomeLayout.choiceIndex,
+                          );
+                        }
+                      } else {
+                        scaffoldKey.currentState
+                            ?.showBottomSheet(
+                              (context) => SingleChildScrollView(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(20.0),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        height: 5.0,
+                                        width: 50.0,
+                                        decoration: BoxDecoration(
+                                          color: cubit.secondaryColor,
+                                          borderRadius: const BorderRadius.all(
+                                              Radius.circular(5.0)),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 10.0,
+                                      ),
+                                      Form(
+                                        key: formKey,
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            defaultTextFormField(
+                                              controller: titleController,
+                                              type: TextInputType.text,
+                                              validator: (String? value) {
+                                                if (value!.isEmpty) {
+                                                  return 'Title must not be empty';
+                                                }
+                                                return null;
+                                              },
+                                              label: 'Task Title',
+                                              prefixIcon: Icons.title,
+                                            ),
+                                            const SizedBox(
+                                              height: 15.0,
+                                            ),
+                                            defaultTextFormField(
+                                              controller: dateController,
+                                              readOnlyField: true,
+                                              onTap: () {
+                                                showDatePicker(
+                                                  context: context,
+                                                  initialDate: DateTime.now(),
+                                                  firstDate: DateTime.now(),
+                                                  lastDate: DateTime.parse(
+                                                      '2030-01-01'),
+                                                  builder: (context, child) =>
+                                                      applyDatePickerTheme(
+                                                          context, child),
+                                                ).then((value) {
+                                                  if (value != null) {
+                                                    dateController.text =
+                                                        DateFormat.yMMMd()
+                                                            .format(value);
+                                                  }
+                                                });
+                                              },
+                                              type: TextInputType.datetime,
+                                              validator: (String? value) {
+                                                if (value!.isEmpty) {
+                                                  return 'Date must not be empty';
+                                                }
+                                                return null;
+                                              },
+                                              label: 'Task Date',
+                                              prefixIcon: Icons.date_range,
+                                            ),
+                                            const SizedBox(
+                                              height: 15.0,
+                                            ),
+                                            defaultTextFormField(
+                                              controller: timeController,
+                                              readOnlyField: true,
+                                              onTap: () {
+                                                showTimePicker(
+                                                  context: context,
+                                                  initialTime: TimeOfDay.now(),
+                                                  builder: (context, child) =>
+                                                      applyTimePickerTheme(
+                                                          context, child),
+                                                ).then((value) {
+                                                  if (value != null) {
+                                                    timeController.text = value
+                                                        .format(context)
+                                                        .toString();
+                                                  }
+                                                });
+                                              },
+                                              type: TextInputType.datetime,
+                                              validator: (String? value) {
+                                                if (value!.isEmpty) {
+                                                  return 'Time must not be empty';
+                                                }
+                                                return null;
+                                              },
+                                              label: 'Task Time',
+                                              prefixIcon:
+                                                  Icons.watch_later_outlined,
+                                            ),
+                                            const SizedBox(
+                                              height: 15.0,
+                                            ),
+                                            StatefulBuilder(
+                                              builder: (BuildContext context,
+                                                      StateSetter
+                                                          changeState) =>
+                                                  Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  buildChip(
+                                                    label: prioritiesLabels[0],
+                                                    color: prioritiesColors[0],
+                                                    chipIndex: 0,
+                                                    setState: changeState,
+                                                  ),
+                                                  buildChip(
+                                                    label: prioritiesLabels[1],
+                                                    color: prioritiesColors[1],
+                                                    chipIndex: 1,
+                                                    setState: changeState,
+                                                  ),
+                                                  buildChip(
+                                                    label: prioritiesLabels[2],
+                                                    color: prioritiesColors[2],
+                                                    chipIndex: 2,
+                                                    setState: changeState,
+                                                  ),
+                                                  buildChip(
+                                                    label: prioritiesLabels[3],
+                                                    color: prioritiesColors[3],
+                                                    chipIndex: 3,
+                                                    setState: changeState,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              backgroundColor: cubit.primaryColor,
+                              elevation: 15.0,
+                              shape: RoundedRectangleBorder(
+                                side: BorderSide(
+                                  strokeAlign: 1.0,
+                                  color: cubit.secondaryColor,
+                                ),
+                                borderRadius: const BorderRadius.vertical(
+                                  top: Radius.circular(
+                                    25.0,
+                                  ),
+                                ),
+                              ),
+                            )
+                            .closed
+                            .then((value) {
+                          cubit.changeBottomSheetState(
+                            isShown: false,
+                            icon: Icons.add_task,
+                          );
+                          HomeLayout.choiceIndex = 2;
+                          titleController.clear();
+                          timeController.clear();
+                          dateController.clear();
+                          SystemChrome.setEnabledSystemUIMode(
+                            SystemUiMode.immersiveSticky,
+                          );
+                        });
+                        cubit.changeBottomSheetState(
+                          isShown: true,
+                          icon: Icons.add,
+                        );
+                      }
+                    },
+                    backgroundColor: cubit.secondaryColor,
+                    foregroundColor: cubit.primaryColor,
+                    elevation: 2.0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                        15.0,
+                      ),
+                    ),
+                    child: Icon(
+                      cubit.fabIcon,
+                    ),
+                  ),
+                )
               ],
             ),
           );

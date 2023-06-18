@@ -69,6 +69,7 @@ class AppCubit extends Cubit<AppStates> {
     required String date,
     required int priority,
   }) async {
+    emit(AppGetDatabaseLoadingState());
     return await database.transaction((txn) async {
       txn
           .rawInsert(
@@ -84,28 +85,6 @@ class AppCubit extends Cubit<AppStates> {
     });
   }
 
-  // void getPriorityFromDB(Database database) {
-  //   activeTasks = [];
-  //   doneTasks = [];
-  //   trash = [];
-  //   emit(AppGetDatabaseLoadingState());
-  //   database.rawQuery('SELECT * FROM tasks ORDER BY priority').then((list) {
-  //     for (var element in list) {
-  //       if (element['status'] == 'active') {
-  //         activeTasks.add(element);
-  //         // activeTasks.sort((t1, t2) => DateTime.parse(t1['date']).compareTo(DateTime.parse(t2['date'])));
-  //       } else if (element['status'] == 'done') {
-  //         doneTasks.add(element);
-  //         // doneTasks.sort((t1, t2) => DateTime.parse(t1['date']).compareTo(DateTime.parse(t2['date'])));
-  //       } else {
-  //         trash.add(element);
-  //         // trash.sort((t1, t2) => DateTime.parse(t1['date']).compareTo(DateTime.parse(t2['date'])));
-  //       }
-  //     }
-  //     emit(AppGetDatabaseState());
-  //   });
-  // }
-
   void getDataFromDB(Database database, String query) {
     activeTasks = [];
     doneTasks = [];
@@ -115,13 +94,10 @@ class AppCubit extends Cubit<AppStates> {
       for (var element in list) {
         if (element['status'] == 'active') {
           activeTasks.add(element);
-          // activeTasks.sort((t1, t2) => DateTime.parse(t1['date']).compareTo(DateTime.parse(t2['date'])));
         } else if (element['status'] == 'done') {
           doneTasks.add(element);
-          // doneTasks.sort((t1, t2) => DateTime.parse(t1['date']).compareTo(DateTime.parse(t2['date'])));
         } else {
           trash.add(element);
-          // trash.sort((t1, t2) => DateTime.parse(t1['date']).compareTo(DateTime.parse(t2['date'])));
         }
       }
       emit(AppGetDatabaseState());
@@ -214,5 +190,16 @@ class AppCubit extends Cubit<AppStates> {
     if (isFabEnabled) {
       setFabVisibility(true);
     }
+  }
+
+  bool isSearchTextFieldVisible = false;
+
+  void toggleSearchTextField(bool isVisible) {}
+
+  bool isSettingsRotated = false;
+
+  void toggleSettingsRotation() {
+    isSettingsRotated = !isSettingsRotated;
+    emit(AppRotateSearchState());
   }
 }

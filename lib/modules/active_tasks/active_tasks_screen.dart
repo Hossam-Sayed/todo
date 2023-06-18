@@ -14,7 +14,12 @@ class ActiveTasksScreen extends StatelessWidget {
       builder: (context, state) {
         ScrollController scrollController = ScrollController();
         var tasks = AppCubit.get(context).activeTasks;
-        return tasksBuilder(tasks: tasks, state: state, controller: scrollController);
+        return tasksBuilder(
+          tasks: tasks,
+          state: state,
+          controller: scrollController,
+          isActive: true,
+        );
       },
     );
   }

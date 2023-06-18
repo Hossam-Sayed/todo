@@ -18,6 +18,7 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   final bool? isLight;
+
   const MyApp(this.isLight, {Key? key}) : super(key: key);
 
   // This widget is the root of your application.
@@ -26,6 +27,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: HomeLayout(isLight),
+      theme: ThemeData(
+        fontFamily: 'Nunito',
+      ),
     );
   }
 }
