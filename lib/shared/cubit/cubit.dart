@@ -104,7 +104,7 @@ class AppCubit extends Cubit<AppStates> {
     });
   }
 
-  void updateDB({
+  void updateStatusDB({
     required String status,
     required int id,
   }) async {
@@ -112,6 +112,22 @@ class AppCubit extends Cubit<AppStates> {
         'UPDATE tasks SET status = ? WHERE id = ?', [status, id]).then((value) {
       getDataFromDB(database, 'SELECT * FROM tasks');
       emit(AppUpdateDatabaseState());
+    });
+  }
+
+  void updateTaskDB({
+    required String title,
+    required String date,
+    required String time,
+    required int priority,
+    required int? id,
+  }) async {
+    emit(AppGetDatabaseLoadingState());
+    database.rawUpdate(
+        'UPDATE tasks SET title = ?, date = ?, time = ?, priority = ? WHERE id = ?',
+        [title, date, time, priority, id]).then((value) {
+      getDataFromDB(database, 'SELECT * FROM tasks');
+      emit(AppUpdateTaskDatabaseState());
     });
   }
 
@@ -125,14 +141,20 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   bool isBottomSheetShown = false;
-  IconData fabIcon = Icons.add_task;
+  IconData squareFabIcon = Icons.add_task;
+  IconData circularFabIcon = Icons.edit;
 
   void changeBottomSheetState({
     required bool isShown,
     required IconData icon,
+    required bool isMainFab,
   }) {
     isBottomSheetShown = isShown;
-    fabIcon = icon;
+    if (isMainFab) {
+      squareFabIcon = icon;
+    } else {
+      circularFabIcon = icon;
+    }
     emit(AppChangeBottomSheetState());
   }
 

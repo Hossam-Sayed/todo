@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:home/shared/components/components.dart';
 import 'package:home/shared/cubit/cubit.dart';
 import 'package:home/shared/cubit/states.dart';
-import 'package:intl/intl.dart';
 import '../shared/components/constants.dart';
 
 class HomeLayout extends StatefulWidget {
@@ -32,10 +31,13 @@ class _HomeLayoutState extends State<HomeLayout> {
         ..toggleMode(modeBool: widget.mode),
       child: BlocConsumer<AppCubit, AppStates>(
         listener: (BuildContext context, AppStates state) {
-          if (state is AppInsertDatabaseState) Navigator.pop(context);
+          if (state is AppInsertDatabaseState ||
+              state is AppUpdateTaskDatabaseState) Navigator.pop(context);
+          if (state is AppUpdateTaskDatabaseState) Navigator.pop(context);
         },
         builder: (BuildContext context, AppStates state) {
-          cubit = AppCubit.get(context);
+          AppCubit cubit = AppCubit.get(context);
+          mainCubit = cubit;
           return Scaffold(
             key: scaffoldKey,
             appBar: AppBar(
@@ -185,197 +187,13 @@ class _HomeLayoutState extends State<HomeLayout> {
                   label: '',
                   icon: FloatingActionButton(
                     onPressed: () {
-                      if (cubit.isBottomSheetShown) {
-                        if (formKey.currentState!.validate()) {
-                          cubit.insertToDB(
-                            title: titleController.text,
-                            time: timeController.text,
-                            date: dateController.text,
-                            priority: HomeLayout.choiceIndex,
-                          );
-                        }
-                      } else {
-                        scaffoldKey.currentState
-                            ?.showBottomSheet(
-                              (context) => SingleChildScrollView(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(20.0),
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        height: 5.0,
-                                        width: 50.0,
-                                        decoration: BoxDecoration(
-                                          color: cubit.secondaryColor,
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(5.0)),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 10.0,
-                                      ),
-                                      Form(
-                                        key: formKey,
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            defaultTextFormField(
-                                              controller: titleController,
-                                              type: TextInputType.text,
-                                              validator: (String? value) {
-                                                if (value!.isEmpty) {
-                                                  return 'Title must not be empty';
-                                                }
-                                                return null;
-                                              },
-                                              label: 'Task Title',
-                                              prefixIcon: Icons.title,
-                                            ),
-                                            const SizedBox(
-                                              height: 15.0,
-                                            ),
-                                            defaultTextFormField(
-                                              controller: dateController,
-                                              readOnlyField: true,
-                                              onTap: () {
-                                                showDatePicker(
-                                                  context: context,
-                                                  initialDate: DateTime.now(),
-                                                  firstDate: DateTime.now(),
-                                                  lastDate: DateTime.parse(
-                                                      '2030-01-01'),
-                                                  builder: (context, child) =>
-                                                      applyDatePickerTheme(
-                                                          context, child),
-                                                ).then((value) {
-                                                  if (value != null) {
-                                                    dateController.text =
-                                                        DateFormat.yMMMd()
-                                                            .format(value);
-                                                  }
-                                                });
-                                              },
-                                              type: TextInputType.datetime,
-                                              validator: (String? value) {
-                                                if (value!.isEmpty) {
-                                                  return 'Date must not be empty';
-                                                }
-                                                return null;
-                                              },
-                                              label: 'Task Date',
-                                              prefixIcon: Icons.date_range,
-                                            ),
-                                            const SizedBox(
-                                              height: 15.0,
-                                            ),
-                                            defaultTextFormField(
-                                              controller: timeController,
-                                              readOnlyField: true,
-                                              onTap: () {
-                                                showTimePicker(
-                                                  context: context,
-                                                  initialTime: TimeOfDay.now(),
-                                                  builder: (context, child) =>
-                                                      applyTimePickerTheme(
-                                                          context, child),
-                                                ).then((value) {
-                                                  if (value != null) {
-                                                    timeController.text = value
-                                                        .format(context)
-                                                        .toString();
-                                                  }
-                                                });
-                                              },
-                                              type: TextInputType.datetime,
-                                              validator: (String? value) {
-                                                if (value!.isEmpty) {
-                                                  return 'Time must not be empty';
-                                                }
-                                                return null;
-                                              },
-                                              label: 'Task Time',
-                                              prefixIcon:
-                                                  Icons.watch_later_outlined,
-                                            ),
-                                            const SizedBox(
-                                              height: 15.0,
-                                            ),
-                                            StatefulBuilder(
-                                              builder: (BuildContext context,
-                                                      StateSetter
-                                                          changeState) =>
-                                                  Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  buildChip(
-                                                    label: prioritiesLabels[0],
-                                                    color: prioritiesColors[0],
-                                                    chipIndex: 0,
-                                                    setState: changeState,
-                                                  ),
-                                                  buildChip(
-                                                    label: prioritiesLabels[1],
-                                                    color: prioritiesColors[1],
-                                                    chipIndex: 1,
-                                                    setState: changeState,
-                                                  ),
-                                                  buildChip(
-                                                    label: prioritiesLabels[2],
-                                                    color: prioritiesColors[2],
-                                                    chipIndex: 2,
-                                                    setState: changeState,
-                                                  ),
-                                                  buildChip(
-                                                    label: prioritiesLabels[3],
-                                                    color: prioritiesColors[3],
-                                                    chipIndex: 3,
-                                                    setState: changeState,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              backgroundColor: cubit.primaryColor,
-                              elevation: 15.0,
-                              shape: RoundedRectangleBorder(
-                                side: BorderSide(
-                                  strokeAlign: 1.0,
-                                  color: cubit.secondaryColor,
-                                ),
-                                borderRadius: const BorderRadius.vertical(
-                                  top: Radius.circular(
-                                    25.0,
-                                  ),
-                                ),
-                              ),
-                            )
-                            .closed
-                            .then((value) {
-                          cubit.changeBottomSheetState(
-                            isShown: false,
-                            icon: Icons.add_task,
-                          );
-                          HomeLayout.choiceIndex = 2;
-                          titleController.clear();
-                          timeController.clear();
-                          dateController.clear();
-                          SystemChrome.setEnabledSystemUIMode(
-                            SystemUiMode.immersiveSticky,
-                          );
-                        });
-                        cubit.changeBottomSheetState(
-                          isShown: true,
-                          icon: Icons.add,
-                        );
-                      }
+                      onFabPress(
+                          formKey: formKey,
+                          scaffoldKey: scaffoldKey,
+                          titleController: titleController,
+                          timeController: timeController,
+                          dateController: dateController,
+                          cubit: cubit);
                     },
                     backgroundColor: cubit.secondaryColor,
                     foregroundColor: cubit.primaryColor,
@@ -386,7 +204,7 @@ class _HomeLayoutState extends State<HomeLayout> {
                       ),
                     ),
                     child: Icon(
-                      cubit.fabIcon,
+                      cubit.squareFabIcon,
                     ),
                   ),
                 )
