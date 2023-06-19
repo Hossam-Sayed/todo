@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import '../cubit/cubit.dart';
 
-late AppCubit cubit;
+late AppCubit mainCubit;
 const brightColor = Colors.white;
 const Color darkColor = Color(0xFF171a1c);
 const List<String> prioritiesLabels = ['Critical', 'High', 'Normal', 'Low'];
