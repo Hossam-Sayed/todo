@@ -5,12 +5,12 @@ import 'package:home/shared/components/constants.dart';
 import '../../shared/components/components.dart';
 
 class TaskDetailsScreen extends StatelessWidget {
-  Map task;
-  var scaffoldKey = GlobalKey<ScaffoldState>();
-  var formKey = GlobalKey<FormState>();
-  var titleController = TextEditingController();
-  var timeController = TextEditingController();
-  var dateController = TextEditingController();
+  final Map task;
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController timeController = TextEditingController();
+  final TextEditingController dateController = TextEditingController();
 
   TaskDetailsScreen(this.task, {super.key});
 
