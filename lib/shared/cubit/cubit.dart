@@ -47,15 +47,11 @@ class AppCubit extends Cubit<AppStates> {
             .execute(
                 'CREATE TABLE tasks (id INTEGER PRIMARY KEY, title TEXT, date TEXT, time TEXT, status TEXT, priority INTEGER)')
             .then((value) {
-          print('Table Created');
         }).catchError((error) {
-          print('Error while creating table, ${error.toString()}');
         });
-        print("database created");
       },
       onOpen: (database) {
         getDataFromDB(database, 'SELECT * FROM tasks');
-        print("database opened");
       },
     ).then((value) {
       database = value;
@@ -76,11 +72,9 @@ class AppCubit extends Cubit<AppStates> {
         'INSERT INTO tasks(title, time, date, status, priority) VALUES("$title", "$time", "$date", "active", "$priority")',
       )
           .then((value) {
-        print('$value inserted successfully');
         emit(AppInsertDatabaseState());
         getDataFromDB(database, 'SELECT * FROM tasks');
       }).catchError((error) {
-        print('Error while inserting new record, ${error.toString()}');
       });
     });
   }
