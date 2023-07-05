@@ -9,7 +9,7 @@
   
 [![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com) [![forthebadge](https://forthebadge.com/images/badges/built-for-android.svg)](https://forthebadge.com)
 
-📝 To-Do is a tasks and to-do app, built for Android with Flutter.
+📝 To-Do is a tasks and to-do app built for Android with Flutter.
 </div>
 <!-- 
 <div align=right>
@@ -19,7 +19,7 @@
 -->
 # To-Do App 📝
 
-With To-Do, you'll never miss an important appointment, writing down todos, taking notes and more.
+With To-Do, you'll always attend essential appointments, write down to-dos, take notes, and more.
 
 ### Features :sparkles:
 
@@ -31,12 +31,12 @@ The app supports the following:
 5. Saving deleted tasks to the trash before permanently deleting them.
 6. and many more...
 
-You'll experience all features while enjoying a high quality software design and smooth performance with no glitches.
+You'll experience all features while enjoying a high-quality software design and smooth performance with no glitches.
   
 ### Versions ⚙
 
 The app is still under development 🚧
-  
+
 <div align=right>
 
 **[`↑ To Top`](#top)**
