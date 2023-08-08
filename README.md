@@ -31,6 +31,7 @@ The app supports the following:
 6. and many more...
 
 You'll experience all features while enjoying a high-quality software design and smooth performance with no glitches.
+
   
 ### Versions ⚙
 
