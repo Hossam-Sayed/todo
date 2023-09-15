@@ -34,7 +34,6 @@ The app supports the following:
 
 You'll experience all features while enjoying a high-quality software design and smooth performance with no glitches.
 
-  
 ### Versions ⚙
 
 The app is still under development 🚧
