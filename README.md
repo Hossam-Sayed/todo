@@ -36,6 +36,7 @@ You'll experience all features while enjoying a high-quality software design and
 
 The app is still under development 🚧
 
+
 <div align=right>
 
 **[`↑ To Top`](#top)**
