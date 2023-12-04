@@ -34,10 +34,9 @@ You'll experience all features while enjoying a high-quality software design and
 
 ### Versions ⚙
 
-The app is still under development 🚧
-
+The app is still under development <img src="https://github.com/Hossam-Sayed/todo/assets/83096913/83deec54-db83-41b9-b209-abe5fff5ec3b" width=25>
 
 <div align=right>
-
-**[`↑ To Top`](#top)**
+   
+[<img src="https://github.com/Hossam-Sayed/android-tips/assets/83096913/a772ce20-8886-4aec-bb9a-7dd97746a9fb" width="50">](#top)
 </div>
