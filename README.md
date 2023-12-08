@@ -34,7 +34,7 @@ You'll experience all features while enjoying a high-quality software design and
 
 ### Versions ⚙
 
-The app is still under development <img src="https://github.com/Hossam-Sayed/todo/assets/83096913/83deec54-db83-41b9-b209-abe5fff5ec3b" width=25>
+The app is still under development <img src="https://github.com/Hossam-Sayed/todo/assets/83096913/83deec54-db83-41b9-b209-abe5fff5ec3b" width=30>
 
 <div align=right>
    
