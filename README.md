@@ -32,6 +32,21 @@ The app supports the following:
 
 You'll experience all features while enjoying a high-quality software design and smooth performance with no glitches.
 
+## Screenshots <img src="https://github.com/Hossam-Sayed/todo/assets/83096913/f8a5a882-d217-4268-bc15-742f074c762f" width=40>
+
+<img src="https://github.com/Hossam-Sayed/todo/assets/83096913/bef8d14e-87c6-43e0-a3ea-2d7072cf93aa" width=300>
+<img src="https://github.com/Hossam-Sayed/todo/assets/83096913/87a990ec-f52d-41b3-9b33-bf1fa2b08ce3" width=300>
+<img src="https://github.com/Hossam-Sayed/todo/assets/83096913/613d1e6f-509c-42fc-af20-a9a8e62be8fc" width=300>
+<img src="https://github.com/Hossam-Sayed/todo/assets/83096913/df68a8a3-d6cf-4e48-977f-afaa79d7df0b" width=300>
+<img src="https://github.com/Hossam-Sayed/todo/assets/83096913/e4b9aa1e-5190-4130-80cc-ad99656b5f0e" width=300>
+<img src="https://github.com/Hossam-Sayed/todo/assets/83096913/c3fbef6f-ed70-4997-aabd-e0da7a3bb1c4" width=300>
+<img src="https://github.com/Hossam-Sayed/todo/assets/83096913/c55abe68-2012-40c7-b966-b8b9a4224354" width=300>
+<img src="https://github.com/Hossam-Sayed/todo/assets/83096913/e7960123-5f9a-41be-b798-57ca84e4ed65" width=300>
+<img src="https://github.com/Hossam-Sayed/todo/assets/83096913/5763b0cd-a468-4797-9b7a-b0be3dd5f439" width=300>
+<img src="https://github.com/Hossam-Sayed/todo/assets/83096913/5953b9f1-b341-4f5f-ab9e-cceffad6e994" width=300>
+<img src="https://github.com/Hossam-Sayed/todo/assets/83096913/425fd40b-6af4-437c-9e58-ee17627d17b3" width=300>
+<img src="https://github.com/Hossam-Sayed/todo/assets/83096913/91944e35-095f-40da-8b2f-390be46b8b15" width=300>
+
 ### Versions ⚙
 
 The app is still under development <img src="https://github.com/Hossam-Sayed/todo/assets/83096913/83deec54-db83-41b9-b209-abe5fff5ec3b" width=30>
