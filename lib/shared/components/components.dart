@@ -308,9 +308,9 @@ Widget buildNoTasksActive(AppCubit cubit) => Column(
         const SizedBox(
           height: 10.0,
         ),
-        Row(
+        const Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
+          children: [
             SizedBox(
               width: 160.0,
             ),
@@ -424,6 +424,11 @@ Widget buildChip({
   required setState,
 }) =>
     ChoiceChip(
+      shape: const RoundedRectangleBorder(
+        side: BorderSide(color: Colors.transparent),
+        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+      ),
+      showCheckmark: false,
       labelPadding: const EdgeInsets.all(2.0),
       avatar: const CircleAvatar(
         backgroundColor: Colors.white30,
