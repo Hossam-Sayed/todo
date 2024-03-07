@@ -72,8 +72,8 @@ class _HomeLayoutState extends State<HomeLayout> {
                         cubit.getDataFromDB(cubit.database,
                             'SELECT * FROM tasks ORDER BY priority');
                       },
-                      child: Row(
-                        children: const [
+                      child: const Row(
+                        children: [
                           Icon(
                             Icons.priority_high_rounded,
                             color: Colors.black,
@@ -90,8 +90,8 @@ class _HomeLayoutState extends State<HomeLayout> {
                         cubit.getDataFromDB(cubit.database,
                             'SELECT * FROM tasks ORDER BY date');
                       },
-                      child: Row(
-                        children: const [
+                      child: const Row(
+                        children: [
                           Icon(
                             Icons.timer,
                             color: Colors.black,
@@ -108,8 +108,8 @@ class _HomeLayoutState extends State<HomeLayout> {
                         cubit.getDataFromDB(
                             cubit.database, 'SELECT * FROM tasks');
                       },
-                      child: Row(
-                        children: const [
+                      child: const Row(
+                        children: [
                           Icon(
                             Icons.date_range_rounded,
                             color: Colors.black,
