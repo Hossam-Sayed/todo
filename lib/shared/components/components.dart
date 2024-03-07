@@ -7,20 +7,36 @@ import 'package:home/shared/cubit/states.dart';
 import 'package:intl/intl.dart';
 import 'constants.dart';
 
-Widget defaultTextFormField({
-  required TextEditingController controller,
-  required TextInputType type,
-  required String? Function(String?) validator,
-  required String label,
-  required IconData prefixIcon,
-  required AppCubit cubit,
-  bool readOnlyField = false,
-  VoidCallback? onTap,
-  Function(String)? onFieldSubmitted,
-  Function(String)? onChanged,
-  String? initialValue,
-}) =>
-    TextFormField(
+class DefaultTextFormField extends StatelessWidget {
+  final TextEditingController controller;
+  final TextInputType type;
+  final String? Function(String?) validator;
+  final String label;
+  final IconData prefixIcon;
+  final AppCubit cubit;
+  final bool readOnlyField;
+  final VoidCallback? onTap;
+  final Function(String)? onFieldSubmitted;
+  final Function(String)? onChanged;
+  final String? initialValue;
+  const DefaultTextFormField({
+    super.key,
+    required this.controller,
+    required this.type,
+    required this.validator,
+    required this.label,
+    required this.prefixIcon,
+    required this.cubit,
+    this.readOnlyField = false,
+    this.onTap,
+    this.onFieldSubmitted,
+    this.onChanged,
+    this.initialValue,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
       initialValue: initialValue,
       controller: controller,
       keyboardType: type,
@@ -72,6 +88,8 @@ Widget defaultTextFormField({
         ),
       ),
     );
+  }
+}
 
 Widget tasksBuilder({
   required List<Map> tasks,
@@ -597,7 +615,7 @@ void onFabPress({
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        defaultTextFormField(
+                        DefaultTextFormField(
                           controller: titleController,
                           type: TextInputType.text,
                           validator: (String? value) {
@@ -611,7 +629,7 @@ void onFabPress({
                           cubit: cubit,
                         ),
                         const SizedBox(height: 15.0),
-                        defaultTextFormField(
+                        DefaultTextFormField(
                           controller: dateController,
                           readOnlyField: true,
                           onTap: () {
@@ -643,7 +661,7 @@ void onFabPress({
                         const SizedBox(
                           height: 15.0,
                         ),
-                        defaultTextFormField(
+                        DefaultTextFormField(
                           controller: timeController,
                           readOnlyField: true,
                           onTap: () {
