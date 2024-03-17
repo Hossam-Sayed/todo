@@ -4,11 +4,12 @@
 
 ## To-Do
 
+[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com) 
+<!--[![forthebadge](https://forthebadge.com/images/badges/built-for-android.svg)](https://forthebadge.com)-->
 [![Dart](https://github.com/Hossam-Sayed/fancy-todo-app/actions/workflows/dart.yml/badge.svg)](https://github.com/Hossam-Sayed/fancy-todo-app/actions/workflows/dart.yml) ![GitHub repo size](https://img.shields.io/github/repo-size/Hossam-Sayed/fancy-todo-app) ![GitHub last commit](https://img.shields.io/github/last-commit/Hossam-Sayed/fancy-todo-app) ![GitHub top language](https://img.shields.io/github/languages/top/Hossam-Sayed/fancy-todo-app)
 
-[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com) [![forthebadge](https://forthebadge.com/images/badges/built-for-android.svg)](https://forthebadge.com)
 
-📝 To-Do is a task and to-do app built for Android with Flutter.
+📝 To-Do is a task and to-do app built with Flutter.
 </div>
 <!-- 
 <div align=right>
