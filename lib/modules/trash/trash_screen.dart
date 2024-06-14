@@ -4,7 +4,6 @@ import 'package:home/shared/components/components.dart';
 import 'package:home/shared/cubit/cubit.dart';
 import 'package:home/shared/cubit/states.dart';
 
-import '../../shared/components/constants.dart';
 
 class TrashScreen extends StatelessWidget {
   const TrashScreen({Key? key}) : super(key: key);
@@ -22,7 +21,7 @@ class TrashScreen extends StatelessWidget {
           controller: scrollController,
           isActive: false,
           isDone: false,
-          cubit: mainCubit,
+          cubit: AppCubit.get(context),
         );
       },
     );

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:home/layout/home_layout.dart';
-import 'package:home/shared/components/constants.dart';
+import 'package:home/shared/cubit/cubit.dart';
 
 import '../../shared/components/components.dart';
 
@@ -19,20 +19,20 @@ class TaskDetailsScreen extends StatelessWidget {
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
-        backgroundColor: mainCubit.primaryColor,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
           },
           icon: Icon(
-            color: mainCubit.secondaryColor,
+            color: Theme.of(context).colorScheme.secondary,
             Icons.arrow_back_ios_new_rounded,
           ),
         ),
         title: Text(
           'Task Details',
           style: TextStyle(
-            color: mainCubit.secondaryColor,
+            color: Theme.of(context).colorScheme.secondary,
             fontWeight: FontWeight.bold,
             fontSize: 25.0,
           ),
@@ -41,7 +41,7 @@ class TaskDetailsScreen extends StatelessWidget {
       ),
       body: Container(
         decoration: BoxDecoration(
-          color: mainCubit.primaryColor,
+          color: Theme.of(context).colorScheme.primary,
         ),
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -56,15 +56,13 @@ class TaskDetailsScreen extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 20.0,
                       fontWeight: FontWeight.bold,
-                      color: mainCubit.secondaryColor,
+                      color: Theme.of(context).colorScheme.secondary,
                     ),
                   ),
                   const SizedBox(
                     width: 10.0,
                   ),
-                  Expanded(
-                    child: buildCustomContainer(task['title'], mainCubit),
-                  ),
+                  Expanded(child: buildCustomContainer(task['title'])),
                 ],
               ),
               const SizedBox(
@@ -78,15 +76,13 @@ class TaskDetailsScreen extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 20.0,
                       fontWeight: FontWeight.bold,
-                      color: mainCubit.secondaryColor,
+                      color: Theme.of(context).colorScheme.secondary,
                     ),
                   ),
                   const SizedBox(
                     width: 10.0,
                   ),
-                  Expanded(
-                    child: buildCustomContainer(task['date'], mainCubit),
-                  ),
+                  Expanded(child: buildCustomContainer(task['date'])),
                 ],
               ),
               const SizedBox(
@@ -100,14 +96,14 @@ class TaskDetailsScreen extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 20.0,
                       fontWeight: FontWeight.bold,
-                      color: mainCubit.secondaryColor,
+                      color: Theme.of(context).colorScheme.secondary,
                     ),
                   ),
                   const SizedBox(
                     width: 10.0,
                   ),
                   Expanded(
-                    child: buildCustomContainer(task['time'], mainCubit),
+                    child: buildCustomContainer(task['time']),
                   ),
                 ],
               ),
@@ -122,13 +118,13 @@ class TaskDetailsScreen extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 20.0,
                       fontWeight: FontWeight.bold,
-                      color: mainCubit.secondaryColor,
+                      color: Theme.of(context).colorScheme.secondary,
                     ),
                   ),
                   const SizedBox(
                     width: 10.0,
                   ),
-                  buildPriorityBadge(task['priority'], mainCubit),
+                  PriorityBadge(priority: task['priority']),
                 ],
               ),
             ],
@@ -137,27 +133,26 @@ class TaskDetailsScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          if (!mainCubit.isBottomSheetShown) {
-            titleController.text = task['title'];
-            dateController.text = task['date'];
-            timeController.text = task['time'];
-            HomeLayout.choiceIndex = task['priority'];
-          }
+          titleController.text = task['title'];
+          dateController.text = task['date'];
+          timeController.text = task['time'];
+          HomeLayout.choiceIndex = task['priority'];
           onFabPress(
-              formKey: formKey,
-              scaffoldKey: scaffoldKey,
-              titleController: titleController,
-              dateController: dateController,
-              timeController: timeController,
-              id: task['id'],
-              isInsert: false,
-          cubit: mainCubit);
+            formKey: formKey,
+            context: context,
+            scaffoldKey: scaffoldKey,
+            titleController: titleController,
+            dateController: dateController,
+            timeController: timeController,
+            id: task['id'],
+            isInsert: false,
+          );
         },
-        backgroundColor: mainCubit.secondaryColor,
-        foregroundColor: mainCubit.primaryColor,
-        elevation: 2.0,
+        // backgroundColor: mainCubit.secondaryColor,
+        // foregroundColor: mainCubit.primaryColor,
+        // elevation: 2.0,
         child: Icon(
-          mainCubit.circularFabIcon,
+          AppCubit.get(context).circularFabIcon,
         ),
       ),
     );

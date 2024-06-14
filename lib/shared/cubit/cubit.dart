@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:home/modules/active_tasks/active_tasks_screen.dart';
 import 'package:home/modules/done_tasks/done_tasks_screen.dart';
+import 'package:home/modules/trash/trash_screen.dart';
 import 'package:home/shared/cubit/states.dart';
 import 'package:home/shared/network/local/cache_helper.dart';
 import 'package:sqflite/sqflite.dart';
-import '../../modules/active_tasks/active_tasks_screen.dart';
-import '../../modules/trash/trash_screen.dart';
-import '../components/constants.dart';
 
 class AppCubit extends Cubit<AppStates> {
   AppCubit() : super(AppInitialState());
@@ -46,9 +45,8 @@ class AppCubit extends Cubit<AppStates> {
         database
             .execute(
                 'CREATE TABLE tasks (id INTEGER PRIMARY KEY, title TEXT, date TEXT, time TEXT, status TEXT, priority INTEGER)')
-            .then((value) {
-        }).catchError((error) {
-        });
+            .then((value) {})
+            .catchError((error) {});
       },
       onOpen: (database) {
         getDataFromDB(database, 'SELECT * FROM tasks');
@@ -74,8 +72,7 @@ class AppCubit extends Cubit<AppStates> {
           .then((value) {
         emit(AppInsertDatabaseState());
         getDataFromDB(database, 'SELECT * FROM tasks');
-      }).catchError((error) {
-      });
+      }).catchError((error) {});
     });
   }
 
@@ -134,51 +131,26 @@ class AppCubit extends Cubit<AppStates> {
     });
   }
 
-  bool isBottomSheetShown = false;
-  IconData squareFabIcon = Icons.add_task;
   IconData circularFabIcon = Icons.edit;
 
-  void changeBottomSheetState({
-    required bool isShown,
-    required IconData icon,
-    required bool isMainFab,
-  }) {
-    isBottomSheetShown = isShown;
-    if (isMainFab) {
-      squareFabIcon = icon;
-    } else {
-      circularFabIcon = icon;
-    }
-    emit(AppChangeBottomSheetState());
-  }
-
   bool isLight = true;
-  Color primaryColor = brightColor;
-  Color secondaryColor = darkColor;
 
   void toggleMode({bool? modeBool}) {
     if (modeBool != null) {
       isLight = modeBool;
-      if (isLight) {
-        primaryColor = brightColor;
-        secondaryColor = darkColor;
-      } else {
-        primaryColor = darkColor;
-        secondaryColor = brightColor;
-      }
       emit(AppChangeAppMode());
     } else {
       isLight = !isLight;
       CacheHelper.setModeData(key: 'isLight', value: isLight).then((value) {
-        if (isLight) {
-          primaryColor = brightColor;
-          secondaryColor = darkColor;
-        } else {
-          primaryColor = darkColor;
-          secondaryColor = brightColor;
-        }
         emit(AppChangeAppMode());
       });
     }
+  }
+
+  int choiceIndex = 2; // Default to the first chip
+
+  void changeChoiceIndex(int index) {
+    choiceIndex = index;
+    emit(AppChangeChoiceState()); // Emit a new state to trigger UI update
   }
 }
