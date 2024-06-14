@@ -3,12 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:home/shared/components/components.dart';
 import 'package:home/shared/cubit/cubit.dart';
 import 'package:home/shared/cubit/states.dart';
-import '../shared/components/constants.dart';
 
 class HomeLayout extends StatefulWidget {
-  final bool? mode;
-
-  const HomeLayout(this.mode, {super.key});
+  const HomeLayout({super.key});
 
   @override
   State<HomeLayout> createState() => _HomeLayoutState();
@@ -32,7 +29,6 @@ class _HomeLayoutState extends State<HomeLayout> {
       },
       builder: (BuildContext context, AppStates state) {
         AppCubit cubit = AppCubit.get(context);
-        mainCubit = cubit;
         return Scaffold(
           key: scaffoldKey,
           appBar: AppBar(
@@ -42,12 +38,8 @@ class _HomeLayoutState extends State<HomeLayout> {
                 tooltip: cubit.isLight ? 'Dark Mode' : 'Light Mode',
                 icon: Icon(
                   cubit.isLight ? Icons.dark_mode_rounded : Icons.light_mode,
-                  color: cubit.secondaryColor,
                 ),
-                onPressed: () {
-                  if (cubit.isBottomSheetShown) Navigator.pop(context);
-                  cubit.toggleMode();
-                },
+                onPressed: () => cubit.toggleMode(),
               ),
               PopupMenuButton(
                 enabled: true,
@@ -55,46 +47,33 @@ class _HomeLayoutState extends State<HomeLayout> {
                 icon: const Icon(Icons.sort_rounded),
                 offset: Offset(0.0, AppBar().preferredSize.height),
                 shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(8.0),
-                    bottomRight: Radius.circular(8.0),
-                    topLeft: Radius.circular(8.0),
-                    topRight: Radius.circular(8.0),
-                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
                 ),
                 itemBuilder: (ctx) => [
                   PopupMenuItem(
                     onTap: () {
-                      cubit.getDataFromDB(cubit.database,
-                          'SELECT * FROM tasks ORDER BY priority');
+                      cubit.getDataFromDB(
+                        cubit.database,
+                        'SELECT * FROM tasks ORDER BY priority',
+                      );
                     },
                     child: const Row(
                       children: [
-                        Icon(
-                          Icons.priority_high_rounded,
-                          color: Colors.black,
-                        ),
-                        SizedBox(
-                          width: 10.0,
-                        ),
+                        Icon(Icons.priority_high_rounded),
+                        SizedBox(width: 10.0),
                         Text('Sort by Priority'),
                       ],
                     ),
                   ),
                   PopupMenuItem(
                     onTap: () {
-                      cubit.getDataFromDB(cubit.database,
-                          'SELECT * FROM tasks ORDER BY date');
+                      cubit.getDataFromDB(
+                          cubit.database, 'SELECT * FROM tasks ORDER BY date');
                     },
                     child: const Row(
                       children: [
-                        Icon(
-                          Icons.timer,
-                          color: Colors.black,
-                        ),
-                        SizedBox(
-                          width: 10.0,
-                        ),
+                        Icon(Icons.timer),
+                        SizedBox(width: 10.0),
                         Text('Sort by Task Time'),
                       ],
                     ),
@@ -102,17 +81,14 @@ class _HomeLayoutState extends State<HomeLayout> {
                   PopupMenuItem(
                     onTap: () {
                       cubit.getDataFromDB(
-                          cubit.database, 'SELECT * FROM tasks');
+                        cubit.database,
+                        'SELECT * FROM tasks',
+                      );
                     },
                     child: const Row(
                       children: [
-                        Icon(
-                          Icons.date_range_rounded,
-                          color: Colors.black,
-                        ),
-                        SizedBox(
-                          width: 10.0,
-                        ),
+                        Icon(Icons.date_range_rounded),
+                        SizedBox(width: 10.0),
                         Text('Sort by Date Created'),
                       ],
                     ),
@@ -121,8 +97,6 @@ class _HomeLayoutState extends State<HomeLayout> {
               ),
               const SizedBox(width: 10.0),
             ],
-            backgroundColor: cubit.primaryColor,
-            foregroundColor: cubit.secondaryColor,
             title: Text(
               cubit.titles[cubit.currentIndex],
               style: const TextStyle(
@@ -134,19 +108,13 @@ class _HomeLayoutState extends State<HomeLayout> {
           body: Container(
             child: cubit.screens[cubit.currentIndex],
           ),
-          backgroundColor: cubit.primaryColor,
           bottomNavigationBar: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
             currentIndex: AppCubit.get(context).currentIndex,
             onTap: (index) {
-              AppCubit.get(context).changeIndex(index);
+              if (index < 3) {
+                AppCubit.get(context).changeIndex(index);
+              }
             },
-            elevation: 5.0,
-            unselectedItemColor: const Color(0xFF696c73),
-            selectedItemColor: cubit.secondaryColor,
-            backgroundColor: cubit.primaryColor,
-            showUnselectedLabels: false,
-            selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
             items: [
               const BottomNavigationBarItem(
                 icon: Icon(
@@ -183,26 +151,17 @@ class _HomeLayoutState extends State<HomeLayout> {
                 icon: FloatingActionButton(
                   onPressed: () {
                     onFabPress(
-                        formKey: formKey,
-                        scaffoldKey: scaffoldKey,
-                        titleController: titleController,
-                        timeController: timeController,
-                        dateController: dateController,
-                        cubit: cubit);
+                      formKey: formKey,
+                      context: context,
+                      scaffoldKey: scaffoldKey,
+                      titleController: titleController,
+                      timeController: timeController,
+                      dateController: dateController,
+                    );
                   },
-                  backgroundColor: cubit.secondaryColor,
-                  foregroundColor: cubit.primaryColor,
-                  elevation: 2.0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      15.0,
-                    ),
-                  ),
-                  child: Icon(
-                    cubit.squareFabIcon,
-                  ),
+                  child: const Icon(Icons.add_task),
                 ),
-              )
+              ),
             ],
           ),
         );

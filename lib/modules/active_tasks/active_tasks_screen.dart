@@ -4,7 +4,6 @@ import 'package:home/shared/components/components.dart';
 import 'package:home/shared/cubit/cubit.dart';
 import 'package:home/shared/cubit/states.dart';
 
-import '../../shared/components/constants.dart';
 
 class ActiveTasksScreen extends StatelessWidget {
   const ActiveTasksScreen({Key? key}) : super(key: key);
@@ -21,7 +20,7 @@ class ActiveTasksScreen extends StatelessWidget {
           state: state,
           controller: scrollController,
           isActive: true,
-          cubit: mainCubit,
+          cubit: AppCubit.get(context),
         );
       },
     );

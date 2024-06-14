@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:home/layout/home_layout.dart';
 import 'package:home/modules/task_details/task_details_screen.dart';
 import 'package:home/shared/cubit/cubit.dart';
@@ -13,7 +13,6 @@ class DefaultTextFormField extends StatelessWidget {
   final String? Function(String?) validator;
   final String label;
   final IconData prefixIcon;
-  final AppCubit cubit;
   final bool readOnlyField;
   final VoidCallback? onTap;
   final Function(String)? onFieldSubmitted;
@@ -26,7 +25,6 @@ class DefaultTextFormField extends StatelessWidget {
     required this.validator,
     required this.label,
     required this.prefixIcon,
-    required this.cubit,
     this.readOnlyField = false,
     this.onTap,
     this.onFieldSubmitted,
@@ -47,21 +45,21 @@ class DefaultTextFormField extends StatelessWidget {
       validator: validator,
       onTap: onTap,
       style: TextStyle(
-        color: cubit.secondaryColor,
+        color: Theme.of(context).colorScheme.secondary,
       ),
-      cursorColor: cubit.secondaryColor,
+      cursorColor: Theme.of(context).colorScheme.secondary,
       decoration: InputDecoration(
         labelText: label,
         labelStyle: TextStyle(
-          color: cubit.secondaryColor,
+          color: Theme.of(context).colorScheme.secondary,
         ),
         prefixIcon: Icon(
           prefixIcon,
-          color: cubit.secondaryColor,
+          color: Theme.of(context).colorScheme.secondary,
         ),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color: cubit.secondaryColor,
+            color: Theme.of(context).colorScheme.secondary,
           ),
           borderRadius: const BorderRadius.all(
             Radius.circular(
@@ -71,7 +69,7 @@ class DefaultTextFormField extends StatelessWidget {
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color: cubit.secondaryColor,
+            color: Theme.of(context).colorScheme.secondary,
           ),
           borderRadius: const BorderRadius.all(
             Radius.circular(
@@ -105,8 +103,7 @@ Widget tasksBuilder({
             itemBuilder: (context, index) => buildTaskItem(
               tasks[index],
               context,
-              cubit.secondaryColor,
-              cubit,
+              Theme.of(context).colorScheme.secondary,
             ),
             separatorBuilder: (context, index) => Container(
               margin: const EdgeInsets.only(
@@ -114,24 +111,24 @@ Widget tasksBuilder({
                 right: 20.0,
               ),
               height: 1.0,
-              color: cubit.secondaryColor,
+              color: Theme.of(context).colorScheme.secondary,
             ),
             itemCount: tasks.length,
             physics: const BouncingScrollPhysics(),
           )
         : (state is AppGetDatabaseLoadingState)
-            ? Center(
+            ? const Center(
                 child: CircularProgressIndicator(
-                  color: cubit.secondaryColor,
-                ),
+                    // color: Theme.of(context).colorScheme.secondary,
+                    ),
               )
             : Center(
                 child: isActive
                     ? buildNoTasksActive(cubit)
-                    : buildNoTasksDone(isDone, cubit),
+                    : buildNoTasksDone(isDone),
               );
 
-Widget buildTaskItem(Map task, context, Color color, AppCubit cubit) => InkWell(
+Widget buildTaskItem(Map task, context, Color color) => InkWell(
       onTap: () {
         Navigator.push(
           context,
@@ -259,7 +256,7 @@ Widget buildTaskItem(Map task, context, Color color, AppCubit cubit) => InkWell(
               const SizedBox(
                 width: 20.0,
               ),
-              buildPriorityBadge(task['priority'], cubit),
+              PriorityBadge(priority: task['priority']),
               const SizedBox(
                 width: 10.0,
               ),
@@ -286,36 +283,34 @@ Widget buildTaskItem(Map task, context, Color color, AppCubit cubit) => InkWell(
               id: task['id'],
             );
           }
-
           return Future.value(true);
         },
       ),
     );
 
-Widget buildNoTasksActive(AppCubit cubit) => Column(
+Widget buildNoTasksActive(AppCubit cubit) => const Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const SizedBox(
+        SizedBox(
           height: 150.0,
         ),
-        const Image(
+        Image(
           image: AssetImage(
             "assets/images/no_tasks.png",
           ),
           width: 150.0,
         ),
-        const SizedBox(
+        SizedBox(
           height: 20.0,
         ),
         Text(
           'No Tasks',
           style: TextStyle(
             fontSize: 20.0,
-            color: cubit.secondaryColor,
             fontWeight: FontWeight.bold,
           ),
         ),
-        const Text(
+        Text(
           textAlign: TextAlign.center,
           'Tap the + button below to add\nthe thing you need to do!',
           style: TextStyle(
@@ -323,10 +318,10 @@ Widget buildNoTasksActive(AppCubit cubit) => Column(
             color: Colors.grey,
           ),
         ),
-        const SizedBox(
+        SizedBox(
           height: 10.0,
         ),
-        const Row(
+        Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
@@ -343,7 +338,7 @@ Widget buildNoTasksActive(AppCubit cubit) => Column(
       ],
     );
 
-Widget buildNoTasksDone(bool isDone, AppCubit cubit) => Column(
+Widget buildNoTasksDone(bool isDone) => Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const Image(
@@ -355,11 +350,11 @@ Widget buildNoTasksDone(bool isDone, AppCubit cubit) => Column(
         const SizedBox(
           height: 20.0,
         ),
-        Text(
+        const Text(
           'No Tasks',
           style: TextStyle(
             fontSize: 20.0,
-            color: cubit.secondaryColor,
+            // color: Theme.of(context).colorScheme.secondary,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -376,7 +371,17 @@ Widget buildNoTasksDone(bool isDone, AppCubit cubit) => Column(
       ],
     );
 
-Widget buildPriorityBadge(int priority, AppCubit cubit) => Container(
+class PriorityBadge extends StatelessWidget {
+  final int priority;
+  const PriorityBadge({
+    super.key,
+    required this.priority,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    print('############### Priority: $priority');
+    return Container(
       height: 25.0,
       width: 100.0,
       decoration: BoxDecoration(
@@ -389,10 +394,12 @@ Widget buildPriorityBadge(int priority, AppCubit cubit) => Container(
         style: TextStyle(
           fontSize: 12.0,
           fontWeight: FontWeight.bold,
-          color: cubit.primaryColor,
+          color: Theme.of(context).colorScheme.primary,
         ),
       ),
     );
+  }
+}
 
 Widget showAlert(context, task) => AlertDialog(
       shape: const RoundedRectangleBorder(
@@ -403,12 +410,43 @@ Widget showAlert(context, task) => AlertDialog(
         ),
       ),
       title: (task['status'] == 'delete')
-          ? const Text('Delete Task?')
-          : const Text('Move to Trash?'),
+          ? const Text(
+              'Delete Task?',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            )
+          : const Text(
+              'Move to Trash?',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
       content: (task['status'] == 'delete')
-          ? const Text('Task will be deleted permanently')
-          : const Text('Task will be moved to trash'),
+          ? const Text(
+              'Task will be deleted permanently',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            )
+          : const Text(
+              'Task will be moved to trash',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
       actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: Text(
+            'CANCEL',
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.secondary,
+            ),
+          ),
+        ),
         TextButton(
           onPressed: () {
             (task['status'] == 'delete')
@@ -424,13 +462,11 @@ Widget showAlert(context, task) => AlertDialog(
           child: Text(
             (task['status'] == 'delete') ? 'DELETE' : 'MOVE TO TRASH',
             style: const TextStyle(
+              fontSize: 13,
               color: Colors.red,
+              fontWeight: FontWeight.bold,
             ),
           ),
-        ),
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(false),
-          child: const Text('CANCEL'),
         ),
       ],
     );
@@ -439,112 +475,91 @@ Widget buildChip({
   required String label,
   required Color color,
   required int chipIndex,
-  required setState,
 }) =>
-    ChoiceChip(
-      shape: const RoundedRectangleBorder(
-        side: BorderSide(color: Colors.transparent),
-        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-      ),
-      showCheckmark: false,
-      labelPadding: const EdgeInsets.all(2.0),
-      avatar: const CircleAvatar(
-        backgroundColor: Colors.white30,
-        child: Icon(
-          Icons.priority_high_rounded,
-          color: Colors.white,
-          size: 15.0,
-        ),
-      ),
-      label: Text(
-        label.toUpperCase(),
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 12.0,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      pressElevation: 0.0,
-      backgroundColor: Colors.grey[400],
-      selectedColor: color,
-      padding: const EdgeInsets.all(8.0),
-      selected: HomeLayout.choiceIndex == chipIndex,
-      onSelected: (bool selected) {
-        if (selected) {
-          setState(() {
-            HomeLayout.choiceIndex = chipIndex;
-          });
-        }
+    BlocBuilder<AppCubit, AppStates>(
+      builder: (context, state) {
+        var cubit = AppCubit.get(context);
+        return ChoiceChip(
+          avatar: const CircleAvatar(
+            backgroundColor: Colors.white30,
+            child: Icon(
+              Icons.priority_high_rounded,
+              color: Colors.white,
+              size: 16.0,
+            ),
+          ),
+          label: Padding(
+            padding: const EdgeInsets.only(left: 2.0),
+            child: Text(
+              label.toUpperCase(),
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 12.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          selectedColor: color,
+          selected: cubit.choiceIndex == chipIndex,
+          onSelected: (bool selected) {
+            if (selected) {
+              context.read<AppCubit>().changeChoiceIndex(chipIndex);
+              // cubit.changeChoiceIndex(chipIndex);
+            }
+          },
+        );
       },
     );
 
-Theme applyDatePickerTheme(context, child, AppCubit cubit) => (cubit.isLight)
+Theme applyDatePickerTheme(context, child) => AppCubit.get(context).isLight
     ? Theme(
         data: Theme.of(context).copyWith(
-          colorScheme: ColorScheme.light(
-            primary: cubit.secondaryColor,
-            onPrimary: cubit.primaryColor,
-            onSurface: cubit.secondaryColor,
-          ),
-          textButtonTheme: TextButtonThemeData(
-            style: TextButton.styleFrom(
-              foregroundColor: cubit.secondaryColor,
-            ),
-          ),
+          colorScheme: const ColorScheme.light(primary: Colors.grey),
         ),
         child: child!,
       )
     : Theme(
         data: Theme.of(context).copyWith(
-          colorScheme: ColorScheme.dark(
-            primary: cubit.primaryColor,
-            onPrimary: cubit.secondaryColor,
-            brightness: Brightness.light,
-            onSurface: cubit.primaryColor,
-          ),
-          textButtonTheme: TextButtonThemeData(
-            style: TextButton.styleFrom(
-              foregroundColor: cubit.primaryColor,
-            ),
-          ),
+          colorScheme: const ColorScheme.dark(primary: Colors.grey),
         ),
         child: child!,
       );
 
-Theme applyTimePickerTheme(context, child, AppCubit cubit) => (cubit.isLight)
-    ? Theme(
-        data: Theme.of(context).copyWith(
-          colorScheme: ColorScheme.light(
-            primary: cubit.secondaryColor,
-            onPrimary: cubit.primaryColor,
-            onSurface: cubit.secondaryColor,
-          ),
-          textButtonTheme: TextButtonThemeData(
-            style: TextButton.styleFrom(
-              foregroundColor: cubit.secondaryColor,
-            ),
-          ),
-        ),
-        child: child!,
-      )
-    : Theme(
-        data: Theme.of(context).copyWith(
-          colorScheme: ColorScheme.dark(
-              primary: cubit.secondaryColor,
-              onPrimary: cubit.primaryColor,
-              onSurface: cubit.secondaryColor,
-              surface: cubit.primaryColor),
-          textButtonTheme: TextButtonThemeData(
-            style: TextButton.styleFrom(
-              foregroundColor: cubit.secondaryColor,
-            ),
-          ),
-        ),
-        child: child!,
-      );
+// Theme applyTimePickerTheme(context, child) => (cubit.isLight)
+//     ? Theme(
+//         data: Theme.of(context).copyWith(
+//           colorScheme: ColorScheme.light(
+//             primary: Theme.of(context).colorScheme.secondary,
+//             onPrimary: Theme.of(context).colorScheme.primary,
+//             onSurface: Theme.of(context).colorScheme.secondary,
+//           ),
+//           textButtonTheme: TextButtonThemeData(
+//             style: TextButton.styleFrom(
+//               foregroundColor: Theme.of(context).colorScheme.secondary,
+//             ),
+//           ),
+//         ),
+//         child: child!,
+//       )
+//     : Theme(
+//         data: Theme.of(context).copyWith(
+//           colorScheme: ColorScheme.dark(
+//             primary: Theme.of(context).colorScheme.secondary,
+//             onPrimary: Theme.of(context).colorScheme.primary,
+//             onSurface: Theme.of(context).colorScheme.secondary,
+//             surface: Theme.of(context).colorScheme.primary,
+//           ),
+//           textButtonTheme: TextButtonThemeData(
+//             style: TextButton.styleFrom(
+//               foregroundColor: Theme.of(context).colorScheme.secondary,
+//             ),
+//           ),
+//         ),
+//         child: child!,
+//       );
 // Scrollable.of(context).position.pixels
 
-Widget buildCustomContainer(String name, AppCubit cubit) => Container(
+Widget buildCustomContainer(String name) => Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: const Color(0x668D8D8D),
@@ -555,10 +570,10 @@ Widget buildCustomContainer(String name, AppCubit cubit) => Container(
         padding: const EdgeInsets.only(left: 10.0, right: 10.0),
         child: Text(
           name,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 20.0,
             fontWeight: FontWeight.bold,
-            color: cubit.secondaryColor,
+            // color: Theme.of(context).colorScheme.secondary,
           ),
         ),
       ),
@@ -570,198 +585,214 @@ void onFabPress({
   required TextEditingController titleController,
   required TextEditingController timeController,
   required TextEditingController dateController,
-  required AppCubit cubit,
+  required BuildContext context,
   bool isInsert = true,
   int? id,
 }) {
-  if (cubit.isBottomSheetShown) {
-    if (formKey.currentState!.validate()) {
-      if (isInsert) {
-        cubit.insertToDB(
-          title: titleController.text,
-          time: timeController.text,
-          date: dateController.text,
-          priority: HomeLayout.choiceIndex,
-        );
-      } else {
-        cubit.updateTaskDB(
-            title: titleController.text,
-            date: dateController.text,
-            time: timeController.text,
-            priority: HomeLayout.choiceIndex,
-            id: id);
-      }
-    }
-  } else {
-    scaffoldKey.currentState
-        ?.showBottomSheet(
-          (context) => SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
+  showModalBottomSheet(
+    isDismissible: true,
+    context: context,
+    builder: (context) => SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          children: [
+            Container(
+              height: 5.0,
+              width: 50.0,
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.secondary,
+                borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+              ),
+            ),
+            const SizedBox(height: 10.0),
+            Form(
+              key: formKey,
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Container(
-                    height: 5.0,
-                    width: 50.0,
-                    decoration: BoxDecoration(
-                      color: cubit.secondaryColor,
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(5.0)),
-                    ),
+                  DefaultTextFormField(
+                    controller: titleController,
+                    type: TextInputType.text,
+                    validator: (String? value) {
+                      if (value!.isEmpty) {
+                        return 'Title must not be empty';
+                      }
+                      return null;
+                    },
+                    label: 'Task Title',
+                    prefixIcon: Icons.title,
                   ),
-                  const SizedBox(height: 10.0),
-                  Form(
-                    key: formKey,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
+                  const SizedBox(height: 15.0),
+                  DefaultTextFormField(
+                    controller: dateController,
+                    readOnlyField: true,
+                    onTap: () {
+                      showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime.now(),
+                        lastDate: DateTime.parse('2030-01-01'),
+                        builder: (context, child) =>
+                            applyDatePickerTheme(context, child),
+                      ).then((value) {
+                        if (value != null) {
+                          dateController.text =
+                              DateFormat.yMMMd().format(value);
+                        }
+                      });
+                    },
+                    type: TextInputType.datetime,
+                    validator: (String? value) {
+                      if (value!.isEmpty) {
+                        return 'Date must not be empty';
+                      }
+                      return null;
+                    },
+                    label: 'Task Date',
+                    prefixIcon: Icons.date_range,
+                  ),
+                  const SizedBox(
+                    height: 15.0,
+                  ),
+                  DefaultTextFormField(
+                    controller: timeController,
+                    readOnlyField: true,
+                    onTap: () {
+                      showTimePicker(
+                        context: context,
+                        initialTime: TimeOfDay.now(),
+                      ).then((value) {
+                        if (value != null) {
+                          timeController.text =
+                              value.format(context).toString();
+                        }
+                      });
+                    },
+                    type: TextInputType.datetime,
+                    validator: (String? value) {
+                      if (value!.isEmpty) {
+                        return 'Time must not be empty';
+                      }
+                      return null;
+                    },
+                    label: 'Task Time',
+                    prefixIcon: Icons.watch_later_outlined,
+                  ),
+                  const SizedBox(height: 15.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      buildChip(
+                        label: prioritiesLabels[0],
+                        color: prioritiesColors[0],
+                        chipIndex: 0,
+                      ),
+                      buildChip(
+                        label: prioritiesLabels[1],
+                        color: prioritiesColors[1],
+                        chipIndex: 1,
+                      ),
+                      buildChip(
+                        label: prioritiesLabels[2],
+                        color: prioritiesColors[2],
+                        chipIndex: 2,
+                      ),
+                      buildChip(
+                        label: prioritiesLabels[3],
+                        color: prioritiesColors[3],
+                        chipIndex: 3,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16.0),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (formKey.currentState!.validate()) {
+                        if (isInsert) {
+                          AppCubit.get(context).insertToDB(
+                            title: titleController.text,
+                            time: timeController.text,
+                            date: dateController.text,
+                            priority: HomeLayout.choiceIndex,
+                          );
+                        } else {
+                          AppCubit.get(context).updateTaskDB(
+                              title: titleController.text,
+                              date: dateController.text,
+                              time: timeController.text,
+                              priority: HomeLayout.choiceIndex,
+                              id: id);
+                        }
+                      }
+                    },
+                    style: ButtonStyle(
+                      shape: const MaterialStatePropertyAll(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(16.0),
+                          ),
+                        ),
+                      ),
+                      minimumSize: const MaterialStatePropertyAll(
+                        Size(double.infinity, 60.0),
+                      ),
+                      backgroundColor: MaterialStatePropertyAll(
+                        Theme.of(context).colorScheme.secondary,
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        DefaultTextFormField(
-                          controller: titleController,
-                          type: TextInputType.text,
-                          validator: (String? value) {
-                            if (value!.isEmpty) {
-                              return 'Title must not be empty';
-                            }
-                            return null;
-                          },
-                          label: 'Task Title',
-                          prefixIcon: Icons.title,
-                          cubit: cubit,
-                        ),
-                        const SizedBox(height: 15.0),
-                        DefaultTextFormField(
-                          controller: dateController,
-                          readOnlyField: true,
-                          onTap: () {
-                            showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime.now(),
-                              lastDate: DateTime.parse('2030-01-01'),
-                              builder: (context, child) =>
-                                  applyDatePickerTheme(context, child, cubit),
-                            ).then((value) {
-                              if (value != null) {
-                                dateController.text =
-                                    DateFormat.yMMMd().format(value);
-                              }
-                            });
-                          },
-                          type: TextInputType.datetime,
-                          validator: (String? value) {
-                            if (value!.isEmpty) {
-                              return 'Date must not be empty';
-                            }
-                            return null;
-                          },
-                          label: 'Task Date',
-                          prefixIcon: Icons.date_range,
-                          cubit: cubit,
-                        ),
-                        const SizedBox(
-                          height: 15.0,
-                        ),
-                        DefaultTextFormField(
-                          controller: timeController,
-                          readOnlyField: true,
-                          onTap: () {
-                            showTimePicker(
-                              context: context,
-                              initialTime: TimeOfDay.now(),
-                              builder: (context, child) =>
-                                  applyTimePickerTheme(context, child, cubit),
-                            ).then((value) {
-                              if (value != null) {
-                                timeController.text =
-                                    value.format(context).toString();
-                              }
-                            });
-                          },
-                          type: TextInputType.datetime,
-                          validator: (String? value) {
-                            if (value!.isEmpty) {
-                              return 'Time must not be empty';
-                            }
-                            return null;
-                          },
-                          label: 'Task Time',
-                          prefixIcon: Icons.watch_later_outlined,
-                          cubit: cubit,
-                        ),
-                        const SizedBox(height: 15.0),
-                        StatefulBuilder(
-                          builder:
-                              (BuildContext context, StateSetter changeState) =>
-                                  Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              buildChip(
-                                label: prioritiesLabels[0],
-                                color: prioritiesColors[0],
-                                chipIndex: 0,
-                                setState: changeState,
-                              ),
-                              buildChip(
-                                label: prioritiesLabels[1],
-                                color: prioritiesColors[1],
-                                chipIndex: 1,
-                                setState: changeState,
-                              ),
-                              buildChip(
-                                label: prioritiesLabels[2],
-                                color: prioritiesColors[2],
-                                chipIndex: 2,
-                                setState: changeState,
-                              ),
-                              buildChip(
-                                label: prioritiesLabels[3],
-                                color: prioritiesColors[3],
-                                chipIndex: 3,
-                                setState: changeState,
-                              ),
-                            ],
+                        Icon(isInsert ? Icons.add : Icons.save_rounded),
+                        const SizedBox(width: 8.0),
+                        Text(
+                          isInsert ? 'Add Task' : 'Save Task',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
-          ),
-          backgroundColor: cubit.primaryColor,
-          elevation: 15.0,
-          shape: RoundedRectangleBorder(
-            side: BorderSide(
-              strokeAlign: 1.0,
-              color: cubit.secondaryColor,
-            ),
-            borderRadius: const BorderRadius.vertical(
-              top: Radius.circular(
-                25.0,
-              ),
-            ),
-          ),
-        )
-        .closed
-        .then((value) {
-      cubit.changeBottomSheetState(
-        isShown: false,
-        icon: isInsert ? Icons.add_task : Icons.edit,
-        isMainFab: isInsert,
-      );
-      HomeLayout.choiceIndex = 2;
-      titleController.clear();
-      timeController.clear();
-      dateController.clear();
-      SystemChrome.setEnabledSystemUIMode(
-        SystemUiMode.immersiveSticky,
-      );
-    });
-    cubit.changeBottomSheetState(
-      isShown: true,
-      icon: isInsert ? Icons.add : Icons.save,
-      isMainFab: isInsert,
-    );
-  }
+          ],
+        ),
+      ),
+    ),
+    backgroundColor: Theme.of(context).colorScheme.primary,
+    elevation: 15.0,
+    shape: RoundedRectangleBorder(
+      side: BorderSide(
+        strokeAlign: 1.0,
+        color: Theme.of(context).colorScheme.secondary,
+      ),
+      borderRadius: const BorderRadius.vertical(
+        top: Radius.circular(
+          25.0,
+        ),
+      ),
+    ),
+  );
+  // .closed.then((value) {
+  //   cubit.changeBottomSheetState(
+  //     isShown: false,
+  //     icon: isInsert ? Icons.add_task : Icons.edit,
+  //     isMainFab: isInsert,
+  //   );
+  //   HomeLayout.choiceIndex = 2;
+  //   titleController.clear();
+  //   timeController.clear();
+  //   dateController.clear();
+  //   SystemChrome.setEnabledSystemUIMode(
+  //     SystemUiMode.immersiveSticky,
+  //   );
+  // });
+  // cubit.changeBottomSheetState(
+  //   isShown: true,
+  //   icon: isInsert ? Icons.add : Icons.save,
+  //   isMainFab: isInsert,
+  // );
 }

@@ -6,14 +6,12 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:home/main.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 void main() {
   testWidgets('App starts with Active Tasks screen',
       (WidgetTester tester) async {
-    // Build our app and trigger a frame.
 
     await tester.runAsync(() async {
       databaseFactory = databaseFactoryFfi;
