@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:home/layout/home_layout.dart';
+import 'package:home/shared/components/components.dart';
 import 'package:home/shared/cubit/cubit.dart';
-
-import '../../shared/components/components.dart';
 
 class TaskDetailsScreen extends StatelessWidget {
   final Map task;
@@ -19,7 +17,7 @@ class TaskDetailsScreen extends StatelessWidget {
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        // backgroundColor: Theme.of(context).colorScheme.primary,
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
@@ -39,96 +37,91 @@ class TaskDetailsScreen extends StatelessWidget {
         ),
         elevation: 0.0,
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primary,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    'Title',
-                    style: TextStyle(
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  'Title',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
-                  const SizedBox(
-                    width: 10.0,
+                ),
+                const SizedBox(
+                  width: 10.0,
+                ),
+                Expanded(child: buildCustomContainer(task['title'])),
+              ],
+            ),
+            const SizedBox(
+              height: 20.0,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  'Date',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
-                  Expanded(child: buildCustomContainer(task['title'])),
-                ],
-              ),
-              const SizedBox(
-                height: 20.0,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    'Date',
-                    style: TextStyle(
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
+                ),
+                const SizedBox(
+                  width: 10.0,
+                ),
+                Expanded(child: buildCustomContainer(task['date'])),
+              ],
+            ),
+            const SizedBox(
+              height: 20.0,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  'Time',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
-                  const SizedBox(
-                    width: 10.0,
+                ),
+                const SizedBox(
+                  width: 10.0,
+                ),
+                Expanded(
+                  child: buildCustomContainer(task['time']),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 20.0,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  'Priority',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
-                  Expanded(child: buildCustomContainer(task['date'])),
-                ],
-              ),
-              const SizedBox(
-                height: 20.0,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    'Time',
-                    style: TextStyle(
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 10.0,
-                  ),
-                  Expanded(
-                    child: buildCustomContainer(task['time']),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 20.0,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    'Priority',
-                    style: TextStyle(
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 10.0,
-                  ),
-                  PriorityBadge(priority: task['priority']),
-                ],
-              ),
-            ],
-          ),
+                ),
+                const SizedBox(
+                  width: 10.0,
+                ),
+                PriorityBadge(priority: task['priority']),
+              ],
+            ),
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -136,16 +129,14 @@ class TaskDetailsScreen extends StatelessWidget {
           titleController.text = task['title'];
           dateController.text = task['date'];
           timeController.text = task['time'];
-          HomeLayout.choiceIndex = task['priority'];
+          AppCubit.get(context).changeChoiceIndex(task['priority']);
           onFabPress(
             formKey: formKey,
             context: context,
-            scaffoldKey: scaffoldKey,
             titleController: titleController,
             dateController: dateController,
             timeController: timeController,
             id: task['id'],
-            isInsert: false,
           );
         },
         // backgroundColor: mainCubit.secondaryColor,

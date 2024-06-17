@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:home/layout/home_layout.dart';
 import 'package:home/modules/task_details/task_details_screen.dart';
 import 'package:home/shared/cubit/cubit.dart';
 import 'package:home/shared/cubit/states.dart';
@@ -380,13 +379,12 @@ class PriorityBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('############### Priority: $priority');
     return Container(
       height: 25.0,
       width: 100.0,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5.0),
-        color: prioritiesColors[priority],
+        color: Priority.fromInt(priority),
       ),
       alignment: AlignmentDirectional.center,
       child: Text(
@@ -503,7 +501,7 @@ Widget buildChip({
           selected: cubit.choiceIndex == chipIndex,
           onSelected: (bool selected) {
             if (selected) {
-              context.read<AppCubit>().changeChoiceIndex(chipIndex);
+              AppCubit.get(context).changeChoiceIndex(chipIndex);
               // cubit.changeChoiceIndex(chipIndex);
             }
           },
@@ -581,31 +579,35 @@ Widget buildCustomContainer(String name) => Container(
 
 void onFabPress({
   required GlobalKey<FormState> formKey,
-  required GlobalKey<ScaffoldState> scaffoldKey,
   required TextEditingController titleController,
   required TextEditingController timeController,
   required TextEditingController dateController,
   required BuildContext context,
-  bool isInsert = true,
   int? id,
 }) {
   showModalBottomSheet(
-    isDismissible: true,
+    showDragHandle: true,
+    isScrollControlled: true,
     context: context,
     builder: (context) => SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.only(
+          left: 16.0,
+          right: 16.0,
+          bottom: 16.0,
+        ),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              height: 5.0,
-              width: 50.0,
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.secondary,
-                borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-              ),
-            ),
-            const SizedBox(height: 10.0),
+            // Container(
+            //   height: 5.0,
+            //   width: 50.0,
+            //   decoration: BoxDecoration(
+            //     color: Theme.of(context).colorScheme.secondary,
+            //     borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+            //   ),
+            // ),
+            // const SizedBox(height: 10.0),
             Form(
               key: formKey,
               child: Column(
@@ -637,8 +639,7 @@ void onFabPress({
                             applyDatePickerTheme(context, child),
                       ).then((value) {
                         if (value != null) {
-                          dateController.text =
-                              DateFormat.yMMMd().format(value);
+                          dateController.text = DateFormat.yMMMd().format(value);
                         }
                       });
                     },
@@ -664,8 +665,7 @@ void onFabPress({
                         initialTime: TimeOfDay.now(),
                       ).then((value) {
                         if (value != null) {
-                          timeController.text =
-                              value.format(context).toString();
+                          timeController.text = value.format(context).toString();
                         }
                       });
                     },
@@ -684,23 +684,23 @@ void onFabPress({
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       buildChip(
-                        label: prioritiesLabels[0],
-                        color: prioritiesColors[0],
+                        label: Priority.critical.label,
+                        color: Priority.critical.color,
                         chipIndex: 0,
                       ),
                       buildChip(
-                        label: prioritiesLabels[1],
-                        color: prioritiesColors[1],
+                        label: Priority.high.label,
+                        color: Priority.high.color,
                         chipIndex: 1,
                       ),
                       buildChip(
-                        label: prioritiesLabels[2],
-                        color: prioritiesColors[2],
+                        label: Priority.normal.label,
+                        color: Priority.normal.color,
                         chipIndex: 2,
                       ),
                       buildChip(
-                        label: prioritiesLabels[3],
-                        color: prioritiesColors[3],
+                        label: Priority.low.label,
+                        color: Priority.low.color,
                         chipIndex: 3,
                       ),
                     ],
@@ -709,45 +709,45 @@ void onFabPress({
                   ElevatedButton(
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
-                        if (isInsert) {
+                        if (id == null) {
                           AppCubit.get(context).insertToDB(
                             title: titleController.text,
                             time: timeController.text,
                             date: dateController.text,
-                            priority: HomeLayout.choiceIndex,
+                            priority: AppCubit.get(context).choiceIndex,
                           );
                         } else {
                           AppCubit.get(context).updateTaskDB(
                               title: titleController.text,
                               date: dateController.text,
                               time: timeController.text,
-                              priority: HomeLayout.choiceIndex,
+                              priority: AppCubit.get(context).choiceIndex,
                               id: id);
                         }
                       }
                     },
                     style: ButtonStyle(
-                      shape: const MaterialStatePropertyAll(
+                      shape: const WidgetStatePropertyAll(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(
                             Radius.circular(16.0),
                           ),
                         ),
                       ),
-                      minimumSize: const MaterialStatePropertyAll(
+                      minimumSize: const WidgetStatePropertyAll(
                         Size(double.infinity, 60.0),
                       ),
-                      backgroundColor: MaterialStatePropertyAll(
+                      backgroundColor: WidgetStatePropertyAll(
                         Theme.of(context).colorScheme.secondary,
                       ),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(isInsert ? Icons.add : Icons.save_rounded),
+                        Icon(id == null ? Icons.add : Icons.save_rounded),
                         const SizedBox(width: 8.0),
                         Text(
-                          isInsert ? 'Add Task' : 'Save Task',
+                          id == null ? 'Add Task' : 'Save Task',
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
@@ -775,24 +775,5 @@ void onFabPress({
         ),
       ),
     ),
-  );
-  // .closed.then((value) {
-  //   cubit.changeBottomSheetState(
-  //     isShown: false,
-  //     icon: isInsert ? Icons.add_task : Icons.edit,
-  //     isMainFab: isInsert,
-  //   );
-  //   HomeLayout.choiceIndex = 2;
-  //   titleController.clear();
-  //   timeController.clear();
-  //   dateController.clear();
-  //   SystemChrome.setEnabledSystemUIMode(
-  //     SystemUiMode.immersiveSticky,
-  //   );
-  // });
-  // cubit.changeBottomSheetState(
-  //   isShown: true,
-  //   icon: isInsert ? Icons.add : Icons.save,
-  //   isMainFab: isInsert,
-  // );
+  ).then((value) => AppCubit.get(context).changeChoiceIndex(2));
 }
