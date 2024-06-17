@@ -4,20 +4,13 @@ import 'package:home/shared/components/components.dart';
 import 'package:home/shared/cubit/cubit.dart';
 import 'package:home/shared/cubit/states.dart';
 
-class HomeLayout extends StatefulWidget {
-  const HomeLayout({super.key});
+class HomeLayout extends StatelessWidget {
+  HomeLayout({super.key});
 
-  @override
-  State<HomeLayout> createState() => _HomeLayoutState();
-  static int choiceIndex = 2;
-}
-
-class _HomeLayoutState extends State<HomeLayout> {
-  var scaffoldKey = GlobalKey<ScaffoldState>();
-  var formKey = GlobalKey<FormState>();
-  var titleController = TextEditingController();
-  var timeController = TextEditingController();
-  var dateController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+  final titleController = TextEditingController();
+  final timeController = TextEditingController();
+  final dateController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +23,6 @@ class _HomeLayoutState extends State<HomeLayout> {
       builder: (BuildContext context, AppStates state) {
         AppCubit cubit = AppCubit.get(context);
         return Scaffold(
-          key: scaffoldKey,
           appBar: AppBar(
             elevation: 0.0,
             actions: [
@@ -153,7 +145,6 @@ class _HomeLayoutState extends State<HomeLayout> {
                     onFabPress(
                       formKey: formKey,
                       context: context,
-                      scaffoldKey: scaffoldKey,
                       titleController: titleController,
                       timeController: timeController,
                       dateController: dateController,

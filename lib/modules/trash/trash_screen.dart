@@ -4,7 +4,6 @@ import 'package:home/shared/components/components.dart';
 import 'package:home/shared/cubit/cubit.dart';
 import 'package:home/shared/cubit/states.dart';
 
-
 class TrashScreen extends StatelessWidget {
   const TrashScreen({Key? key}) : super(key: key);
 
