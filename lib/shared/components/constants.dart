@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 const brightColor = Colors.white;
 // const Color darkColor = Color(0xFF171a1c);
 const Color darkColor = Colors.black;
-const List<String> prioritiesLabels = ['Critical', 'High', 'Normal', 'Low'];
 
 enum Priority {
   critical(
@@ -32,16 +31,16 @@ enum Priority {
     required this.color,
   });
 
-  static Color fromInt(int typeAsInt) {
+  static Priority fromInt(int typeAsInt) {
     switch (typeAsInt) {
       case 0:
-        return Priority.critical.color;
+        return Priority.critical;
       case 1:
-        return Priority.high.color;
+        return Priority.high;
       case 2:
-        return Priority.normal.color;
+        return Priority.normal;
       default:
-        return Priority.low.color;
+        return Priority.low;
     }
   }
 }

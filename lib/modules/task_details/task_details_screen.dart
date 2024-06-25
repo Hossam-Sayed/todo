@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:home/shared/components/components.dart';
+import 'package:home/shared/components/priority_badge.dart';
+import 'package:home/shared/components/sizedboxes.dart';
 import 'package:home/shared/cubit/cubit.dart';
 
 class TaskDetailsScreen extends StatelessWidget {
@@ -53,15 +55,11 @@ class TaskDetailsScreen extends StatelessWidget {
                     color: Theme.of(context).colorScheme.secondary,
                   ),
                 ),
-                const SizedBox(
-                  width: 10.0,
-                ),
+                defaultHorizontalSizedBox,
                 Expanded(child: buildCustomContainer(task['title'])),
               ],
             ),
-            const SizedBox(
-              height: 20.0,
-            ),
+            defaultVerticalSizedBox,
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -73,15 +71,11 @@ class TaskDetailsScreen extends StatelessWidget {
                     color: Theme.of(context).colorScheme.secondary,
                   ),
                 ),
-                const SizedBox(
-                  width: 10.0,
-                ),
+                defaultHorizontalSizedBox,
                 Expanded(child: buildCustomContainer(task['date'])),
               ],
             ),
-            const SizedBox(
-              height: 20.0,
-            ),
+            defaultVerticalSizedBox,
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -93,17 +87,13 @@ class TaskDetailsScreen extends StatelessWidget {
                     color: Theme.of(context).colorScheme.secondary,
                   ),
                 ),
-                const SizedBox(
-                  width: 10.0,
-                ),
+                defaultHorizontalSizedBox,
                 Expanded(
                   child: buildCustomContainer(task['time']),
                 ),
               ],
             ),
-            const SizedBox(
-              height: 20.0,
-            ),
+            defaultVerticalSizedBox,
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -115,9 +105,7 @@ class TaskDetailsScreen extends StatelessWidget {
                     color: Theme.of(context).colorScheme.secondary,
                   ),
                 ),
-                const SizedBox(
-                  width: 10.0,
-                ),
+                defaultHorizontalSizedBox,
                 PriorityBadge(priority: task['priority']),
               ],
             ),

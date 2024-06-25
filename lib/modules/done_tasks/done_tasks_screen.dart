@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:home/shared/components/components.dart';
+import 'package:home/modules/trash/trash_screen.dart';
+import 'package:home/shared/components/tasks_builder.dart';
 import 'package:home/shared/cubit/cubit.dart';
 import 'package:home/shared/cubit/states.dart';
 
@@ -14,11 +15,11 @@ class DoneTasksScreen extends StatelessWidget {
       builder: (context, state) {
         ScrollController scrollController = ScrollController();
         var tasks = AppCubit.get(context).doneTasks;
-        return tasksBuilder(
+        return TasksBuilder(
           tasks: tasks,
           state: state,
           controller: scrollController,
-          isActive: false,
+          type: TaskType.done,
           cubit: AppCubit.get(context),
         );
       },
