@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:home/shared/components/components.dart';
+import 'package:home/shared/components/sizedboxes.dart';
 import 'package:home/shared/cubit/cubit.dart';
 import 'package:home/shared/cubit/states.dart';
 
@@ -52,7 +53,7 @@ class HomeLayout extends StatelessWidget {
                     child: const Row(
                       children: [
                         Icon(Icons.priority_high_rounded),
-                        SizedBox(width: 10.0),
+                        defaultHorizontalSizedBox,
                         Text('Sort by Priority'),
                       ],
                     ),
@@ -65,7 +66,7 @@ class HomeLayout extends StatelessWidget {
                     child: const Row(
                       children: [
                         Icon(Icons.timer),
-                        SizedBox(width: 10.0),
+                        defaultHorizontalSizedBox,
                         Text('Sort by Task Time'),
                       ],
                     ),
@@ -80,14 +81,14 @@ class HomeLayout extends StatelessWidget {
                     child: const Row(
                       children: [
                         Icon(Icons.date_range_rounded),
-                        SizedBox(width: 10.0),
+                        defaultHorizontalSizedBox,
                         Text('Sort by Date Created'),
                       ],
                     ),
                   ),
                 ],
               ),
-              const SizedBox(width: 10.0),
+              defaultHorizontalSizedBox,
             ],
             title: Text(
               cubit.titles[cubit.currentIndex],
