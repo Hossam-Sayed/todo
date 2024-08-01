@@ -2,7 +2,7 @@
 
 <img src="https://github.com/Hossam-Sayed/fancy-todo-app/blob/master/to_do_logo.svg" width="200"/>
 
-## To-Do
+# To-Do
 
 [![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com) 
 <!--[![forthebadge](https://forthebadge.com/images/badges/built-for-android.svg)](https://forthebadge.com)-->
@@ -17,6 +17,7 @@
 **[`↑ To Top`](#top)**
 </div>
 -->
+
 # To-Do App 📝
 
 With To-Do, you'll always attend essential appointments, write down to-dos, take notes, and more.
